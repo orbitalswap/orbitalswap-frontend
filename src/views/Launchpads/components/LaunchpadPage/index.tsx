@@ -46,18 +46,6 @@ const OwnerActivityContainer = styled(Flex)`
   gap: 22px;
 `
 
-const getRibbonComponent = (status: LaunchpadStatus, TranslateString: (fallback: string) => any) => {
-  if (status === 'upcoming') {
-    return <CardRibbon variantColor="textDisabled" text={TranslateString('Coming Soon')} />
-  }
-
-  if (status === 'live') {
-    return <CardRibbon variantColor="primary" text={TranslateString('LIVE NOW!')} />
-  }
-
-  return null
-}
-
 const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
   const [statusChanged, changeStatus] = useState(false)
 
@@ -65,7 +53,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
     changeStatus(!statusChanged)
   }
 
-  const ifoPublicData = useLaunchpadPublicData(ifo, statusChanged)
+  const ifoPublicData = useLaunchpadPublicData(ifo)
   const ifoUserData = useLaunchpadUserData(ifo, statusChanged)
 
   const { 
@@ -73,6 +61,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
     name,
     description,
     subTitle,
+    liquidityPercent,
     softcap, 
     hardcap,
     totalSold,
@@ -115,10 +104,10 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
 
   const { t } = useTranslation()
 
-  const Ribbon = getRibbonComponent(state.status, t)
 
   const isActive = state.status === 'live'
   const isFinished = state.status === 'finished'
+  //
 
   const { isMobile } = useMatchBreakpoints()
   

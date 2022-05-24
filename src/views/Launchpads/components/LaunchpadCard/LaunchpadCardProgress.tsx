@@ -29,24 +29,23 @@ const ProgressBar = styled.div`
 `
 const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised }) => {
   const progress1 = raised / hardcap * 100
-  const progress2 = softcap / hardcap * 100
   return (
     <StyledProgress>
       <Item>
         <Display>Soft/Hard Cap:</Display>
       </Item>
       <Item>
-        <Text color='failure'>1000 BNB - 2000 BNB</Text>
+        <Text color='failure'>{softcap} BNB - {hardcap} BNB</Text>
       </Item>
       <Item>
         <Text>Progress ({progress1.toFixed(2)}%)</Text>
       </Item>
       <ProgressBar>
-        <Progress primaryStep={progress1} secondaryStep={progress2}/>
+        <Progress primaryStep={progress1} />
       </ProgressBar>
       <Item>
-        <Display>1000 BNB</Display>
-        <Text fontSize='14px'>2000 BNB</Text>
+        <Display>{softcap} BNB</Display>
+        <Text fontSize='14px'>{hardcap} BNB</Text>
       </Item>
       <Item>
         <Display>Liquidity %: </Display>

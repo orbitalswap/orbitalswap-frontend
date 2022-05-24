@@ -48,7 +48,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ ifo }) => {
     changeStatus(!statusChanged)
   }
 
-  const ifoPublicData = useLaunchpadPublicData(ifo, statusChanged)
+  const ifoPublicData = useLaunchpadPublicData(ifo)
   const ifoUserData = useLaunchpadUserData(ifo, statusChanged)
 
   const { 
@@ -56,6 +56,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ ifo }) => {
     name,
     description,
     subTitle,
+    liquidityPercent,
     softcap, 
     hardcap,
     totalSold,

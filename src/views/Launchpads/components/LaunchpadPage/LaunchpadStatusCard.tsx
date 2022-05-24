@@ -28,6 +28,7 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData 
     presalePrice,
     minPerTx,
     maxPerUser,
+    liquidityPercent,
     hardcap,
     softcap,
     totalSold
@@ -45,19 +46,23 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData 
         </Item>
         <Item>
           <Display>{t('Sale type')}</Display>
-          <Text>0.05 USD</Text>
+          <Text>Public</Text>
         </Item>
         <Item>
           <Display>{t('Minimum Buy')}</Display>
-          <Text>0.1 BNB</Text>
+          <Text>{minPerTx.toNumber()} BNB</Text>
         </Item>
         <Item>
           <Display>{t('Maximum Buy')}</Display>
-          <Text>10 BNB</Text>
+          <Text>{maxPerUser.toNumber()} BNB</Text>
+        </Item>
+        <Item>
+          <Display>{t('Total Contributors')}</Display>
+          <Text>{maxPerUser.toNumber()} BNB</Text>
         </Item>
         <Item>
           <Display>{t('You Purchased')}</Display>
-          <Text>{contributedAmount.toNumber()} BNB</Text>
+          <Text>{contributedAmount?.toNumber() || 0} BNB</Text>
         </Item>
       </StyledLaunchpadStatus>
     </>

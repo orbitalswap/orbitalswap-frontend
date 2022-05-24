@@ -9,6 +9,7 @@ export interface PublicLaunchpadData extends Launchpad {
   isLoading: boolean
   startDateNum: number
   endDateNum: number
+  liquidityPercent: BigNumber
   hardcap: BigNumber
   softcap: BigNumber
   presalePrice: BigNumber
