@@ -1,21 +1,34 @@
 import { LaunchpadStatus } from 'config/constants/types'
 
-export const getStatus = (currentBlock: number, startBlock: number, endBlock: number): LaunchpadStatus => {
-  // Add an extra check to currentBlock because it takes awhile to fetch so the initial value is 0
+export const getStatus = (currentTime: number, startTime: number, endTime: number, raised: number, softcap: number, hardcap: number, status: number): LaunchpadStatus => {
+  // Add an extra check to currentTime because it takes awhile to fetch so the initial value is 0
   // making the UI change to an inaccurate status
-  if (currentBlock === 0) {
+  if (currentTime === 0) {
     return 'upcoming'
   }
 
-  if (currentBlock < startBlock) {
+  if (status === 1)
+    return 'cancelled'
+  
+  if (status === 2)
+  return 'ended'
+
+  if (currentTime < startTime) {
     return 'upcoming'
   }
 
-  if (currentBlock >= startBlock && currentBlock <= endBlock) {
+  if (currentTime > endTime) {
+    if (status === 2)
+      return 'ended'
+  }
+
+  if (currentTime >= startTime && currentTime <= endTime) {
+    if (status === 2)
+      return 'ended'
     return 'live'
   }
 
-  if (currentBlock > endBlock) {
+  if (raised >= hardcap) {
     return 'filled'
   }
 

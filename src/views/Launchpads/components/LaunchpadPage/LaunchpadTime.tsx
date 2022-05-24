@@ -50,23 +50,22 @@ const LaunchpadTime: React.FC<LaunchpadTimeProps> = ({ isLoading, status, second
   const {t} = useTranslation()
   const countdownToUse = status === 'upcoming' ? secondsUntilStart : secondsUntilEnd
   const timeUntil = getTimePeriods(countdownToUse)
-  const suffix = status === 'upcoming' ? 'start' : 'finish'
 
   if (isLoading) {
     return <Details>{t('Loading...')}</Details>
   }
 
-  if (countdownToUse <= 0) {
+  if (status === 'cancelled' || status === 'ended' || status === 'filled') {
     return (
       <Details>
-        <Text bold>{t('Finished!')}</Text>
+        <Text bold>{t(`This pool has ${status}.`)}</Text>
       </Details>
     )
   }
 
   return (
     <Details>
-      <Item>Presale Ends in</Item>
+      <Item>{status === 'upcoming' ? 'Presale Starts in' : 'Presale Ends in'}</Item>
       <Countdown>
         <strong>
           <TimerSpan >{timeUntil.days.toString().padStart(2, '0')}</TimerSpan>

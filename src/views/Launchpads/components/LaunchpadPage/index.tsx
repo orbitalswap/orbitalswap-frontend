@@ -6,7 +6,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
-import { Launchpad, LaunchpadStatus } from 'config/constants/types'
+import { Launchpad, LaunchpadStatus, PresaleStatus } from 'config/constants/types'
 import { getStatus } from 'views/Launchpads/hooks/helpers'
 import { PublicLaunchpadData } from 'views/Launchpads/types'
 import LaunchpadLayout, { LaunchpadLayoutWrapper } from '../LaunchpadLayout'
@@ -69,6 +69,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
     startDateNum, 
     endDateNum, 
     releaseAt,
+    presaleStatus,
   } = ifoPublicData
 
   const [state, setState] = useState({
@@ -84,7 +85,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
     const interval = setInterval(async () => {
       if (!isLoading) {
         const currentTime = Math.floor(Date.now() / 1000)
-        const status = getStatus(currentTime, startDateNum, endDateNum)
+        const status = getStatus(currentTime, startDateNum, endDateNum, totalSold.toNumber(), softcap.toNumber(), hardcap.toNumber(), presaleStatus)
         const totalSeconds = endDateNum - startDateNum
         const secondsRemaining = endDateNum - currentTime
   
@@ -107,6 +108,10 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
 
   const isActive = state.status === 'live'
   const isFinished = state.status === 'finished'
+  const presalestats = PresaleStatus[presaleStatus]
+
+  console.log(presalestats, presaleStatus,  '56565656')
+
   //
 
   const { isMobile } = useMatchBreakpoints()

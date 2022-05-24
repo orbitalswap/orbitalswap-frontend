@@ -3,7 +3,7 @@ import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 
 
-import { Launchpad } from 'config/constants/types'
+import { Launchpad, PresaleStatus } from 'config/constants/types'
 // PoolCharacteristics retrieved from the contract
 export interface PublicLaunchpadData extends Launchpad {
   isLoading: boolean
@@ -16,6 +16,7 @@ export interface PublicLaunchpadData extends Launchpad {
   minPerTx: BigNumber
   maxPerUser: BigNumber
   totalSold: BigNumber
+  presaleStatus: number
 }
 
 export interface UserLaunchpadData {

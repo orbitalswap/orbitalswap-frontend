@@ -43,7 +43,7 @@ const LaunchpadCardHeader: React.FC<LaunchpadCardHeaderProps> = ({ ifoId, name, 
     <StyledLaunchpadCardHeader mb="24px">
       <img src={`/images/launchpads/${theme.isDark ? ifoId : `${ifoId}-white`}.svg`} alt={ifoId} width="158px" height="29px" />
       <Item>
-        <LaunchpadStateTag launchpadState='live' />
+        <LaunchpadStateTag launchpadState='cancelled' />
       </Item>
     </StyledLaunchpadCardHeader>
   )

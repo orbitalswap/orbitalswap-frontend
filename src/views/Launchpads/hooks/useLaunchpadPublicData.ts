@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import launchpadAbi from 'config/abi/launchpad.json'
-import { Launchpad } from 'config/constants/types'
+import { Launchpad, PresaleStatus } from 'config/constants/types'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getAddress } from 'utils/addressHelpers'
@@ -22,18 +22,20 @@ const useLaunchpadPublicData = (ifo: Launchpad, dependency?: any): PublicLaunchp
     minPerTx: BIG_ZERO,
     maxPerUser: BIG_ZERO,
     totalSold: BIG_ZERO,
+    presaleStatus: 0
   })
 
   const ifoAddress = getAddress(ifo.address)
 
   useEffect(() => {
     const fetchLaunchpadPublicData = async () => {
-      const ifoCalls = ['startTime', 'endTime', 'LIQUIDITY_PERCENT', 'HARD_CAP', 'SOFT_CAP', 'TOKEN_PRICE', 'CONTRIBUTION_MIN', 'CONTRIBUTION_MAX', 'totalSold'].map((method) => ({
+      const ifoCalls = ['startTime', 'endTime', 'LIQUIDITY_PERCENT', 'HARD_CAP', 'SOFT_CAP', 'TOKEN_PRICE', 'CONTRIBUTION_MIN', 'CONTRIBUTION_MAX', 'totalSold', 'status'].map((method) => ({
         address: ifoAddress,
         name: method
       }))
-      const [startDate, endDate, liquidityPercent, hardcap, softcap, presalePrice, minPerTx, maxPerUser, totalSold] = await multicall(launchpadAbi, ifoCalls)
+      const [startDate, endDate, liquidityPercent, hardcap, softcap, presalePrice, minPerTx, maxPerUser, totalSold, status] = await multicall(launchpadAbi, ifoCalls)
 
+      console.log(status[0], new BigNumber(totalSold).toNumber(), new BigNumber(softcap).toNumber())
       const startDateNum = parseInt(startDate, 10)
       const endDateNum = parseInt(endDate, 10)
       
@@ -47,6 +49,7 @@ const useLaunchpadPublicData = (ifo: Launchpad, dependency?: any): PublicLaunchp
         minPerTx: getBalanceAmount(new BigNumber(minPerTx)),
         maxPerUser: getBalanceAmount(new BigNumber(maxPerUser)),
         totalSold: getBalanceAmount(new BigNumber(totalSold)),
+        presaleStatus: status[0],
         endDateNum,
         startDateNum
       })
