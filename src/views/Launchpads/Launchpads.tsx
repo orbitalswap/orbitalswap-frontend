@@ -32,7 +32,7 @@ const Launchpads = () => {
   return (
     <>
       <PageMeta />
-      <SubMenuItems
+      {/* <SubMenuItems
           items={[
             {
               label: t('All launchpads'),
@@ -44,7 +44,7 @@ const Launchpads = () => {
             },
           ]}
           activeItem={isExact ? '/launchpads' : '/launchpads/history'}
-        />
+        /> */}
         <PageHeader>  
           <Heading scale="xl">{t('Current Presale')}</Heading>
         </PageHeader>

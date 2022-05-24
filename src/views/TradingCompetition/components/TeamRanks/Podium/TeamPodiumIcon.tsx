@@ -35,7 +35,7 @@ const TeamPodiumIcon: React.FC<PodiumIconProps> = ({ teamId, teamPosition }) => 
   const teamData = {
     1: { imgSrc: 'syrup-storm-lg.png', stickerCol: '#38D7CD' },
     2: { imgSrc: 'fearsome-flippers-lg.png', stickerCol: '#452A7A' },
-    3: { imgSrc: 'chaotic-cakers-lg.png', stickerCol: '#FFB237' },
+    3: { imgSrc: 'chaotic-cakers-lg.png', stickerCol: '#F56513' },
   }
 
   const imageSize = () => (teamPosition === 1 ? 128 : 113)

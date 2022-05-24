@@ -273,7 +273,7 @@ exports[`renders correctly 1`] = `
 }
 
 .c15 {
-  color: #ED4B9E;
+  color: #F92A68;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
@@ -281,7 +281,7 @@ exports[`renders correctly 1`] = `
 }
 
 .c19 {
-  color: #FFB237;
+  color: #F56513;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
@@ -303,7 +303,7 @@ exports[`renders correctly 1`] = `
 }
 
 .c63 {
-  color: #FFB237;
+  color: #F56513;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
@@ -406,7 +406,7 @@ exports[`renders correctly 1`] = `
   -webkit-align-self: center;
   -ms-flex-item-align: center;
   align-self: center;
-  fill: #FFB237;
+  fill: #F56513;
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
@@ -516,9 +516,9 @@ exports[`renders correctly 1`] = `
   border-radius: 16px;
   padding: 0 8px;
   border: 2px solid;
-  border-color: #ED4B9E;
+  border-color: #F92A68;
   box-shadow: none;
-  color: #ED4B9E;
+  color: #F92A68;
   margin-left: 8px;
 }
 
@@ -526,9 +526,9 @@ exports[`renders correctly 1`] = `
   border-radius: 16px;
   padding: 0 8px;
   border: 2px solid;
-  border-color: #FFB237;
+  border-color: #F56513;
   box-shadow: none;
-  color: #FFB237;
+  color: #F56513;
   margin-left: 8px;
 }
 
@@ -1034,7 +1034,7 @@ exports[`renders correctly 1`] = `
 .c14:after {
   content: "";
   border-radius: 100%;
-  background: #ED4B9E;
+  background: #F92A68;
   height: 8px;
   width: 8px;
   margin-left: 12px;
@@ -1065,7 +1065,7 @@ exports[`renders correctly 1`] = `
 .c17:after {
   content: "";
   border-radius: 100%;
-  background: #FFB237;
+  background: #F56513;
   height: 8px;
   width: 8px;
   margin-left: 12px;
@@ -2229,7 +2229,7 @@ exports[`renders correctly 1`] = `
                 >
                   <a
                     class="c63 c61"
-                    color="#FFB237"
+                    color="#F56513"
                     href="https://pancakeswap.creator-spring.com/"
                     rel="noreferrer noopener"
                     target="_blank"

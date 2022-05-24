@@ -22,6 +22,8 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
     basePath = '/voting/proposal'
   } else if (path.startsWith('/nfts/collections')) {
     basePath = '/nfts/collections'
+  } else if (path.startsWith('/launchpads')) {
+    basePath = '/launchpads'
   } else if (path.startsWith('/nfts/profile')) {
     basePath = '/nfts/profile'
   } else if (path.startsWith('/pancake-squad')) {
@@ -138,9 +140,9 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
       return {
         title: `${t('Pancake Squad')} | ${t('OrbitalSwap')}`,
       }
-    case '/launchpad':
+    case '/launchpads':
       return {
-        title: `${t('Tytan Presale Launchpad')} | ${t('OrbitalSwap')}`,
+        title: `${t('Presale Launchpad')} | ${t('OrbitalSwap')}`,
       }
     default:
       return null

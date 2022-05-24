@@ -17,8 +17,8 @@ const InputsContainer = styled.div<{ focused: boolean; isDuplicate: boolean }>`
   ${({ isDuplicate }) =>
     isDuplicate &&
     `
-    border: 1px solid #FFB237;
-    box-shadow: 0px 0px 0px 2px #FFB237;
+    border: 1px solid #F56513;
+    box-shadow: 0px 0px 0px 2px #F56513;
   `}
   ${({ focused }) =>
     focused &&

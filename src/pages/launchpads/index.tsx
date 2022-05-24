@@ -3,8 +3,6 @@ import { getLaunchpads } from 'state/launchpads/helpers'
 import { SWRConfig } from 'swr'
 import { launchpadsById } from 'utils/launchpadsById'
 import Launchpads from 'views/Launchpads/Launchpads'
-import { LaunchpadPageLayout } from '../../views/Launchpads'
-import Launchpad from '../../views/Launchpads/Launchpad'
 
 const LaunchpadsPage = ({ fallback }: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Heading, Text, Flex } from '@pancakeswap/uikit'
+import useTheme from 'hooks/useTheme'
 
 interface LaunchpadHeaderProps {
   ifoId: string
@@ -29,9 +30,10 @@ const Description = styled(Text)`
 `
 
 const LaunchpadHeader: React.FC<LaunchpadHeaderProps> = ({ ifoId, name, subTitle }) => {
+  const { theme } = useTheme()
   return (
     <StyledLaunchpadHeader mb="24px" alignItems="center">
-      <img src={`/images/launchpads/${ifoId}.png`} alt={ifoId} width="64px" height="64px" />
+      <img src={`/images/launchpads/${theme.isDark ? ifoId : `${ifoId}-white`}.svg`} alt={ifoId} width="158px" height="29px" />
       <div>
         <Name>{name}</Name>
         <Description>{subTitle}</Description>

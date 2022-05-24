@@ -28,7 +28,7 @@ it("renders correctly", () => {
       pointer-events: none;
       border: 2px solid #FFFFFF;
       border-radius: 50%;
-      background-color: #ED4B9E;
+      background-color: #F92A68;
     }
 
     <span

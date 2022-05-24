@@ -11,9 +11,9 @@ const launchpads: Launchpad[] = [
     },
     isActive: true,
     name: 'Tytan',
-    subTitle: 'First Come First Served',
+    subTitle: 'Auto-Staking & Compounding From the Future',
     description:
-      "We've travelled the wormholes of the rebase galaxy far & wide. Only to find the future is TYTAN. With immediately utility on launch. Strap in and feel the G-force of rebase at its finest.",
+      "We've travelled the wormholes of the rebase galaxy far & wide. Only to find the future is TYTAN. With immediate utility on launch. Strap in and feel the G-force of rebase at its finest.",
     projectSiteUrl: 'https://tytan.finance/',
     releaseAt: 1652986800,
     idoToken: 'TYTAN',

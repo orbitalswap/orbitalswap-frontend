@@ -48,7 +48,7 @@ const DefaultSlice = styled.circle<SliceProps>`
 `
 
 export const LostSlice = styled(DefaultSlice)`
-  stroke: #ed4b9e;
+  stroke: #F92A68;
   animation: ${DrawAnimation} 1s ease;
 `
 

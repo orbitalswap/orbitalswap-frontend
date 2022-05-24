@@ -56,8 +56,8 @@ const TopRightImgWrapper = styled(Flex)`
 
 const PredictionCardData: IconCardData = {
   icon: <PredictionsIcon width="36px" color="inverseContrast" />,
-  background: 'linear-gradient(180deg, #ffb237 0%, #ffcd51 51.17%, #ffe76a 100%);',
-  borderColor: '#ffb237',
+  background: 'linear-gradient(180deg, #F56513 0%, #ffcd51 51.17%, #ffe76a 100%);',
+  borderColor: '#F56513',
   rotation: '-2.36deg',
 }
 

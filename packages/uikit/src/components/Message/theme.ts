@@ -1,10 +1,10 @@
 const variants = {
   warning: {
-    background: "#FFB23719",
+    background: "#F5651319",
     borderColor: "warning",
   },
   danger: {
-    background: "#ED4B9E19",
+    background: "#F92A6819",
     borderColor: "failure",
   },
   success: {

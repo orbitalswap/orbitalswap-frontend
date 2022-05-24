@@ -12,7 +12,7 @@ export const LaunchpadPageLayout = ({ children }) => {
   return (
     <>
       <PageMeta />
-      <SubMenuItems
+      {/* <SubMenuItems
         items={[
           {
             label: t('All launchpads'),
@@ -24,7 +24,7 @@ export const LaunchpadPageLayout = ({ children }) => {
           },
         ]}
         activeItem={isExact ? '/launchpads' : '/launchpads/history'}
-      />
+      /> */}
       <Hero />
       {children}
     </>

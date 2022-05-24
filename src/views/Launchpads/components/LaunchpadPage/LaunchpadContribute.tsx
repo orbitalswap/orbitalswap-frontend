@@ -56,29 +56,6 @@ const LaunchpadContribute: React.FC<Props> = ({
   const isFinished = status === 'filled'
   const percentOfUserContribution = contributedAmount.div(raisingAmount).times(100)
 
-  // if (allowance.isZero()) {
-  //   return (
-  //     <Button
-  //       width='100%'
-  //       disabled={pendingTx || isFinished}
-  //       onClick={async () => {
-  //         try {
-  //           setPendingTx(true)
-  //           await onApprove()
-  //           toggleStatus()
-  //         } catch (e) {
-  //           console.error(e)
-  //         } finally {
-  //           toggleStatus()
-  //           setPendingTx(false)
-  //         }
-  //       }}
-  //     >
-  //       Approve
-  //     </Button>
-  //   )
-  // }
-
   return (
     <>
       <LabelButton
