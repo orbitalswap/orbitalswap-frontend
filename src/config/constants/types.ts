@@ -244,3 +244,9 @@ export enum FetchStatus {
   Fetched = 'FETCHED',
   Failed = 'FAILED',
 }
+
+export enum PresaleStatus {
+  Started = 'Started',
+  Canceled = 'Canceled',
+  Finished = 'Finished',
+}
