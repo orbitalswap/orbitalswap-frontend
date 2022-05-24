@@ -74,7 +74,7 @@ const FallingBunnies: React.FC<FallingBunniesProps> = ({
   const bunnies = [...Array(count)].map((_, index) => (
     // eslint-disable-next-line react/no-array-index-key
     <Bunny key={String(index)} position={Math.random() * 100} iterations={iterations} duration={duration}>
-      <BunnyIcon width={size} height={size} />
+      <BunnyIcon isDark={false} width={size} height={size} />
     </Bunny>
   ));
 
