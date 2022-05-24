@@ -77,18 +77,7 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ ifo }) => {
             {`(${totalSold.div(softcap).times(100).toFixed(2)}%)`}
           </Text>
         </Item>
-        <Item>
-          <Display>{t('1st IDO Price')}</Display>
-          <Text>0.00032 USD</Text>
-        </Item>
-        <Item>
-          <Display>{t('2nd IDO Price')}</Display>
-          <Text>0.00034 USD</Text>
-        </Item>
-        <Item>
-          <Display>{t('3rd IDO Price')}</Display>
-          <Text>0.00038 USD</Text>
-        </Item>
+
       </StyledLaunchpadDetails>
       <LinkExternal href={projectSiteUrl} style={{ margin: 'auto' }}>
         {t('View project site')}

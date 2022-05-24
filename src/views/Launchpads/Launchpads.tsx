@@ -26,14 +26,13 @@ const Launchpads = () => {
   const { data, status} = useSWR('launhcpads', async ()=> getLaunchpads())
   const launchpadList = data? Object.values(data) : []
 
-  console.log(launchpadList, '4444')
   const router = useRouter()
   const isExact = router.route === '/launchpads'
   
   return (
     <>
       <PageMeta />
-      {/* <SubMenuItems
+      <SubMenuItems
           items={[
             {
               label: t('All launchpads'),
@@ -45,7 +44,7 @@ const Launchpads = () => {
             },
           ]}
           activeItem={isExact ? '/launchpads' : '/launchpads/history'}
-        /> */}
+        />
         <PageHeader>  
           <Heading scale="xl">{t('Current Presale')}</Heading>
         </PageHeader>

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { Text, LinkExternal, Link } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
-import { PublicLaunchpadData, UserLaunchpadData } from 'views/Launchpad/types'
+import { PublicLaunchpadData, UserLaunchpadData } from 'views/Launchpads/types'
 import { Item } from '../LaunchpadLayout'
 
 export interface LaunchpadStatusProps {

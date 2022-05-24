@@ -8,6 +8,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
 import { Launchpad, LaunchpadStatus } from 'config/constants/types'
 import { getStatus } from 'views/Launchpads/hooks/helpers'
+import { PublicLaunchpadData } from 'views/Launchpads/types'
 import LaunchpadLayout, { LaunchpadLayoutWrapper } from '../LaunchpadLayout'
 import LaunchpadHeader from './LaunchpadHeader'
 import LaunchpadProgress from './LaunchpadProgress'
@@ -160,7 +161,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
           <StatusCard>
             <CardBody>
               <LaunchpadStatusCard 
-                ifo={ifo} 
+                ifo={ifoPublicData} 
                 ifoUserData={ifoUserData}
               />
             </CardBody>

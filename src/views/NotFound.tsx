@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Button, Heading, Text, LogoIcon } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
 import { useTranslation } from 'contexts/Localization'
+import useTheme from 'hooks/useTheme'
 import Link from 'next/link'
 
 const StyledNotFound = styled.div`
@@ -14,11 +15,12 @@ const StyledNotFound = styled.div`
 
 const NotFound = () => {
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   return (
     <Page>
       <StyledNotFound>
-        <LogoIcon width="64px" mb="8px" />
+        <LogoIcon isDark={theme.isDark} width="64px" mb="8px" />
         <Heading scale="xxl">404</Heading>
         <Text mb="16px">{t('Oops, page not found.')}</Text>
         <Link href="/" passHref>

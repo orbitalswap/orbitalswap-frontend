@@ -15,7 +15,7 @@ export default function ErrorBoundary({ children }) {
         return (
           <Page>
             <Flex flexDirection="column" justifyContent="center" alignItems="center">
-              <LogoIcon width="64px" mb="8px" />
+              <LogoIcon isDark={false} width="64px" mb="8px" />
               <Text mb="16px">{t('Oops, something wrong.')}</Text>
               {eventId && (
                 <Flex flexDirection="column" style={{ textAlign: 'center' }} mb="8px">

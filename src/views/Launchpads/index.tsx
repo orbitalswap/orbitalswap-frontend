@@ -15,7 +15,7 @@ export const LaunchpadPageLayout = ({ children }) => {
       <SubMenuItems
         items={[
           {
-            label: t('All launchpads111111'),
+            label: t('All launchpads'),
             href: '/launchpads',
           },
           {

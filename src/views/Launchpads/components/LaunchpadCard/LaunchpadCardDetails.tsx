@@ -7,6 +7,7 @@ import { useTranslation } from 'contexts/Localization'
 import getTimePeriods from 'utils/getTimePeriods'
 import { PublicLaunchpadData } from 'views/Launchpads/types'
 import { ChainId } from '@orbitalswap/sdk'
+import { LaunchpadStatus } from 'config/constants/types'
 
 export interface LaunchpadCardDetailsProps {
   ifo: PublicLaunchpadData,

@@ -2,7 +2,6 @@ import { launchpadsConfig } from 'config/constants'
 import { useRouter } from 'next/router'
 import LaunchpadPage from './components/LaunchpadPage'
 
-// import Launchpad from './components/Launchpad'
 
 /**
  * Note: currently there should be only 1 active IFO at a time
