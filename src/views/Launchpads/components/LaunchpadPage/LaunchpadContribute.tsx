@@ -53,14 +53,14 @@ const LaunchpadContribute: React.FC<Props> = ({
     }
   }
 
-  const isFinished = status === 'ended'
+  const isFinished = status === 'upcoming'
   const percentOfUserContribution = contributedAmount.div(raisingAmount).times(100)
 
   return (
     <>
       <LabelButton
-        disabled={pendingTx || (isFinished && claimed)}
-        buttonLabel={isFinished ? (claimed ? 'Claimed' : 'Claim') : 'Contribute'}
+        disabled={isFinished}
+        buttonLabel={!isFinished ? (claimed ? 'Claimed' : 'Claim') : 'Buy with BNB'}
         label="Your contribution (BNB)"
         value={
           // eslint-disable-next-line no-nested-ternary

@@ -41,7 +41,6 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData 
 
   
   const purchaseTokenAmount = (presalePrice.toNumber())*(contributedAmount?.toNumber()) || 0
-  console.log(presalePrice.toNumber(), contributedAmount.toNumber(), purchaseTokenAmount.toFixed(2), 'dfdsfsdfsdfsfdsf')
   return (
     <>
       <StyledLaunchpadStatus>

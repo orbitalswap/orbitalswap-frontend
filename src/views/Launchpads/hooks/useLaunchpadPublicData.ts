@@ -53,7 +53,6 @@ const useLaunchpadPublicData = (ifo: Launchpad, dependency?: any): PublicLaunchp
       }))
       const [startDate, endDate, liquidityPercent, hardcap, softcap, presalePrice, minPerTx, maxPerUser, totalSold, status, totalRaised, fundersCounter] = await multicall(launchpadAbi, ifoCalls)
 
-      console.log(status[0], new BigNumber(totalSold).toNumber(), new BigNumber(softcap).toNumber())
       const startDateNum = parseInt(startDate, 10)
       const endDateNum = parseInt(endDate, 10)
 

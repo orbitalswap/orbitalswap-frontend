@@ -30,7 +30,6 @@ const useLaunchpadUserData = (ifo: Launchpad, dependency?: any): UserLaunchpadDa
       const [contributeData] = await multicall(launchpadAbi, ifoCalls)
 
       setContributedAmount(getBalanceAmount(new BigNumber(contributeData.amount?._hex)))
-      console.log(getBalanceAmount(new BigNumber(contributeData)).toNumber(), new BigNumber(contributeData).toNumber(), 'contributedAmount in BNB')
       setClaimed(contributeData.claimed)
     }
 
