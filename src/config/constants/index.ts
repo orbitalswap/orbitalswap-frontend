@@ -3,7 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { mainnetTokens, testnetTokens } from './tokens'
 
 export const ROUTER_ADDRESS = {
-  [ChainId.MAINNET]: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
+  [ChainId.MAINNET]: '0x6B45064F128cA5ADdbf79825186F4e3e3c9E7EB5',
   [ChainId.TESTNET]: '0x8d1cb76584f997CD2B8A7C200490fd7FA30dc746',
 }
 
@@ -58,9 +58,10 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
   [ChainId.MAINNET]: [
-    [mainnetTokens.cake, mainnetTokens.wbnb],
-    [mainnetTokens.busd, mainnetTokens.usdt],
-    [mainnetTokens.dai, mainnetTokens.usdt],
+    [mainnetTokens.tytan, mainnetTokens.wbnb],
+    // [mainnetTokens.cake, mainnetTokens.wbnb],
+    // [mainnetTokens.busd, mainnetTokens.usdt],
+    // [mainnetTokens.dai, mainnetTokens.usdt],
   ],
 }
 

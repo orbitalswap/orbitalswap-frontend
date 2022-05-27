@@ -30,6 +30,14 @@ export const mainnetTokens = defineTokens({
     'OrbitalSwap Token',
     'https://pancakeswap.finance/',
   ),
+  tytan: new Token(
+    MAINNET,
+    '0x912F594Fd096E67e0c0A18D496A9f70E3171c330',
+    5,
+    'TYTAN',
+    'Tytan',
+    'https://tytan.finance/',
+  ),
   unc: new Token(
     MAINNET,
     '0x81d5791E65e0dB42687e2cAF205F14A5E550C2aF',
