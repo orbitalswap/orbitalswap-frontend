@@ -31,12 +31,17 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData 
     liquidityPercent,
     hardcap,
     softcap,
-    totalSold
+    totalSold,
+    fundersCounter,
+    raised
   } = ifo
 
-  const { contributedAmount, claimed } = ifoUserData
+  const { contributedAmount } = ifoUserData
   const buyTokenSymbol = 'BNB'
 
+  
+  const purchaseTokenAmount = (presalePrice.toNumber())*(contributedAmount?.toNumber()) || 0
+  console.log(presalePrice.toNumber(), contributedAmount.toNumber(), purchaseTokenAmount.toFixed(2), 'dfdsfsdfsdfsfdsf')
   return (
     <>
       <StyledLaunchpadStatus>
@@ -58,11 +63,11 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData 
         </Item>
         <Item>
           <Display>{t('Total Contributors')}</Display>
-          <Text>{maxPerUser.toNumber()} BNB</Text>
+          <Text>{fundersCounter.toNumber()}</Text>
         </Item>
         <Item>
           <Display>{t('You Purchased')}</Display>
-          <Text>{contributedAmount?.toNumber() || 0} BNB</Text>
+          <Text>{purchaseTokenAmount.toFixed(2) || 0}</Text>
         </Item>
       </StyledLaunchpadStatus>
     </>

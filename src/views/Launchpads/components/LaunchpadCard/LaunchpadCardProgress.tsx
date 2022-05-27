@@ -5,7 +5,8 @@ import { Progress, Text } from '@pancakeswap/uikit'
 interface LaunchpadProgressProps {
   softcap: number,
   hardcap: number,
-  raised: number
+  raised: number,
+  liquidityPercent: number
 }
 
 const StyledProgress = styled.div`
@@ -27,7 +28,7 @@ const ProgressBar = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
 `
-const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised }) => {
+const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised, liquidityPercent }) => {
   const progress1 = raised / hardcap * 100
   return (
     <StyledProgress>
@@ -49,7 +50,7 @@ const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hard
       </Item>
       <Item>
         <Display>Liquidity %: </Display>
-        <Text>51 %</Text>
+        <Text>{liquidityPercent} %</Text>
       </Item>
       <Item>
         <Display>Lockup Time %:</Display>

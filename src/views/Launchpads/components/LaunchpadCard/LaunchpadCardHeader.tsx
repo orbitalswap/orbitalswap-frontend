@@ -2,12 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { Heading, Text, Flex } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
+import { LaunchpadStatus } from 'config/constants/types'
 import { LaunchpadStateTag } from './tags'
 
 interface LaunchpadCardHeaderProps {
   ifoId: string
   name: string
   subTitle: string
+  status: LaunchpadStatus
 }
 
 const StyledLaunchpadCardHeader = styled(Flex)`
@@ -37,13 +39,13 @@ const Item = styled.div`
 `
 
 
-const LaunchpadCardHeader: React.FC<LaunchpadCardHeaderProps> = ({ ifoId, name, subTitle }) => {
+const LaunchpadCardHeader: React.FC<LaunchpadCardHeaderProps> = ({ ifoId, name, subTitle, status }) => {
   const theme = useTheme();
   return (
     <StyledLaunchpadCardHeader mb="24px">
       <img src={`/images/launchpads/${theme.isDark ? ifoId : `${ifoId}-white`}.svg`} alt={ifoId} width="158px" height="29px" />
       <Item>
-        <LaunchpadStateTag launchpadState='cancelled' />
+        <LaunchpadStateTag launchpadState={status} />
       </Item>
     </StyledLaunchpadCardHeader>
   )

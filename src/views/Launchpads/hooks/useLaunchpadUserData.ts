@@ -7,6 +7,7 @@ import { getBalanceAmount } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getAddress } from 'utils/addressHelpers'
 import multicall from 'utils/multicall'
+import useRefresh from 'hooks/useRefresh'
 import { UserLaunchpadData } from '../types'
 
 // Retrieve IFO allowance
@@ -17,6 +18,8 @@ const useLaunchpadUserData = (ifo: Launchpad, dependency?: any): UserLaunchpadDa
   const [contributedAmount, setContributedAmount] = useState<BigNumber>(BIG_ZERO)
   const [claimed, setClaimed] = useState(false)
 
+  const { fastRefresh } = useRefresh()
+  
   useEffect(() => {
     const fetchContributedAmount = async () => {
       const ifoCalls = [{
@@ -27,12 +30,13 @@ const useLaunchpadUserData = (ifo: Launchpad, dependency?: any): UserLaunchpadDa
       const [contributeData] = await multicall(launchpadAbi, ifoCalls)
 
       setContributedAmount(getBalanceAmount(new BigNumber(contributeData.amount?._hex)))
+      console.log(getBalanceAmount(new BigNumber(contributeData)).toNumber(), new BigNumber(contributeData).toNumber(), 'contributedAmount in BNB')
       setClaimed(contributeData.claimed)
     }
 
     if (account)
       fetchContributedAmount()
-  }, [ifoAddress, account, dependency])
+  }, [ifoAddress, account, fastRefresh, dependency])
 
   return { contributedAmount, claimed }
 }

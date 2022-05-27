@@ -4,7 +4,7 @@ import { mainnetTokens, testnetTokens } from './tokens'
 
 export const ROUTER_ADDRESS = {
   [ChainId.MAINNET]: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
-  [ChainId.TESTNET]: '0x0c9104c562139D68c520DFe916129C6c8A7Fd9d5',
+  [ChainId.TESTNET]: '0x8d1cb76584f997CD2B8A7C200490fd7FA30dc746',
 }
 
 // a list of tokens by chain

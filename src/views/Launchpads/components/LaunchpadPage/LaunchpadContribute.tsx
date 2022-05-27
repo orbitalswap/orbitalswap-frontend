@@ -53,7 +53,7 @@ const LaunchpadContribute: React.FC<Props> = ({
     }
   }
 
-  const isFinished = status === 'filled'
+  const isFinished = status === 'ended'
   const percentOfUserContribution = contributedAmount.div(raisingAmount).times(100)
 
   return (
@@ -64,7 +64,7 @@ const LaunchpadContribute: React.FC<Props> = ({
         label="Your contribution (BNB)"
         value={
           // eslint-disable-next-line no-nested-ternary
-          contributedAmount.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 })
+          contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
         }
         onClick={isFinished ? claim : onPresentContributeModal}
       />

@@ -102,7 +102,7 @@ const SoonTag: React.FC<TagProps> = (props) => {
 const ClosedTag: React.FC<TagProps> = (props) => {
   const { t } = useTranslation()
   return (
-    <Tag variant="textDisabled" startIcon={<BlockIcon width="18px" color="textDisabled" mr="4px" />} {...props}>
+    <Tag variant="textSubtle" startIcon={<BlockIcon width="18px" color="textDisabled" mr="4px" />} {...props}>
       {t('Closed')}
     </Tag>
   )
@@ -111,7 +111,7 @@ const ClosedTag: React.FC<TagProps> = (props) => {
 const UpcomingTag: React.FC<TagProps> = (props) => {
   const { t } = useTranslation()
   return (
-    <Tag variant="textDisabled" startIcon={<SmallDotIcon width="12px" color="textDisabled" mr="4px" />} {...props}>
+    <Tag variant="warning" startIcon={<SmallDotIcon width="12px" color="textDisabled" mr="4px" />} {...props}>
       {t('Upcoming')}
     </Tag>
   )
@@ -129,7 +129,7 @@ const LiveTag: React.FC<TagProps> = (props) => {
 const FilledTag: React.FC<TagProps> = (props) => {
   const { t } = useTranslation()
   return (
-    <Tag variant="textDisabled" startIcon={<SmallDotIcon width="12px" color="textDisabled" mr="4px" />} {...props}>
+    <Tag variant="warning" startIcon={<SmallDotIcon width="12px" color="textDisabled" mr="4px" />} {...props}>
       {t('Filled')}
     </Tag>
   )
@@ -138,7 +138,7 @@ const FilledTag: React.FC<TagProps> = (props) => {
 const EndedTag: React.FC<TagProps> = (props) => {
   const { t } = useTranslation()
   return (
-    <Tag variant="textDisabled" startIcon={<SmallDotIcon width="12px" color="textDisabled" mr="4px" />} {...props}>
+    <Tag variant="success" startIcon={<SmallDotIcon width="12px" color="textDisabled" mr="4px" />} {...props}>
       {t('Ended')}
     </Tag>
   )

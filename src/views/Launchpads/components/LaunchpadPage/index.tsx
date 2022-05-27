@@ -6,9 +6,8 @@ import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
-import { Launchpad, LaunchpadStatus, PresaleStatus } from 'config/constants/types'
+import { Launchpad} from 'config/constants/types'
 import { getStatus } from 'views/Launchpads/hooks/helpers'
-import { PublicLaunchpadData } from 'views/Launchpads/types'
 import LaunchpadLayout, { LaunchpadLayoutWrapper } from '../LaunchpadLayout'
 import LaunchpadHeader from './LaunchpadHeader'
 import LaunchpadProgress from './LaunchpadProgress'
@@ -35,7 +34,6 @@ const StyledLaunchpad = styled(Card)`
 const StatusCard = styled(Card)`
   background-repeat: no-repeat;
   background-size: contain;
-  // padding-top: 112px;
   margin-left: auto;
   margin-right: auto;
   max-width: 437px;
@@ -65,10 +63,12 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
     softcap, 
     hardcap,
     totalSold,
+    raised,
     isLoading, 
     startDateNum, 
     endDateNum, 
     releaseAt,
+    fundersCounter,
     presaleStatus,
   } = ifoPublicData
 
@@ -101,16 +101,15 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
       }
     }, 1000)
     return () => clearInterval(interval)
-  }, [isLoading, startDateNum, endDateNum, releaseAt])
+  }, [isLoading, startDateNum, endDateNum, totalSold, softcap, hardcap, presaleStatus, releaseAt])
 
   const { t } = useTranslation()
 
 
-  const isActive = state.status === 'live'
+  const isActive = state.status === 'live' || state.status === 'filled'
   const isFinished = state.status === 'finished'
-  const presalestats = PresaleStatus[presaleStatus]
 
-  console.log(presalestats, presaleStatus,  '56565656')
+
 
   //
 
@@ -139,9 +138,9 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
                 secondsUntilEnd={state.secondsUntilEnd}
                 block={isActive || isFinished ? endDateNum : startDateNum}
               />
-              <LaunchpadProgress softcap={softcap.toNumber()} hardcap={hardcap.toNumber()} raised={totalSold.toNumber()}/>
+              <LaunchpadProgress softcap={softcap.toNumber()} hardcap={hardcap.toNumber()} raised={raised.toNumber()}/>
               {!account && <ConnectWalletButton width="100%" />}
-              {account && (isActive || isFinished) && (
+              {account && (
                 <LaunchpadContribute
                   ifoPublicData={ifoPublicData}
                   ifoUserData={ifoUserData}

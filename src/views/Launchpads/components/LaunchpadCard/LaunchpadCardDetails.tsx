@@ -55,7 +55,7 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({ ifo, status
       <StyledLaunchpadCardDetails>
         <Item>
           <Display>
-            <Text>Sale Ends in:</Text>
+            <Text>{status === 'upcoming' ? 'Sale Starts in' : 'Sale Ends in'}</Text>
             <Text>{timeUntil.days.toString().padStart(2, '0')}:{timeUntil.hours.toString().padStart(2, '0')}:{timeUntil.minutes.toString().padStart(2, '0')}:{timeUntil.seconds.toString().padStart(2, '0')}</Text>
           </Display>
           <div>

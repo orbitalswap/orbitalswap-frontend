@@ -29,10 +29,11 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ ifo }) => {
     maxPerUser,
     hardcap,
     softcap,
-    totalSold
+    raised
   } = ifo
 
   const buyTokenSymbol = 'BNB'
+  const presaleTokenSymbol = 'TYTAN'
 
   return (
     <>
@@ -60,7 +61,7 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ ifo }) => {
         </Item>
         <Item>
           <Display>{t('TokenPrice')}</Display>
-          <Text>{presalePrice.toNumber().toLocaleString('en-US', { maximumFractionDigits: 9 })} {buyTokenSymbol}</Text>
+          <Text>{presalePrice.toNumber().toLocaleString('en-US', { maximumFractionDigits: 9 })} {presaleTokenSymbol}</Text>
         </Item>
         <Item>
           <Display>{t('Min Buy')}</Display>
@@ -73,8 +74,8 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ ifo }) => {
         <Item>
           <Display>{t('Total raised (% of target)')}</Display>
           <Text>
-            {`${totalSold.toNumber().toLocaleString('en-US', { maximumFractionDigits: 1 })} ${buyTokenSymbol}`}
-            {`(${totalSold.div(softcap).times(100).toFixed(2)}%)`}
+            {`${raised.toNumber().toLocaleString('en-US', { maximumFractionDigits: 1 })} ${buyTokenSymbol}`}
+            {`(${raised.div(hardcap).times(100).toFixed(2)}%)`}
           </Text>
         </Item>
 

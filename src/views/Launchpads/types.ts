@@ -16,6 +16,8 @@ export interface PublicLaunchpadData extends Launchpad {
   minPerTx: BigNumber
   maxPerUser: BigNumber
   totalSold: BigNumber
+  raised: BigNumber
+  fundersCounter: BigNumber
   presaleStatus: number
 }
 

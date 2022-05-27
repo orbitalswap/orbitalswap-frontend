@@ -59,11 +59,13 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ ifo }) => {
     liquidityPercent,
     softcap, 
     hardcap,
+    raised,
     totalSold,
     isLoading, 
     startDateNum, 
     endDateNum, 
     releaseAt,
+    presaleStatus
   } = ifoPublicData
 
   const [state, setState] = useState({
@@ -79,7 +81,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ ifo }) => {
     const interval = setInterval(async () => {
       if (!isLoading) {
         const currentTime = Math.floor(Date.now() / 1000)
-        const status = getStatus(currentTime, startDateNum, endDateNum)
+        const status = getStatus(currentTime, startDateNum, endDateNum, raised.toNumber(), softcap.toNumber(), hardcap.toNumber(), presaleStatus)
         const totalSeconds = endDateNum - startDateNum
         const secondsRemaining = endDateNum - currentTime
   
@@ -102,8 +104,8 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ ifo }) => {
   return (
     <StyledLaunchpadCard ifoId={id}>
       <CardBody>
-        <LaunchpadCardHeader ifoId={id} name={name} subTitle={subTitle} />
-        <LaunchpadCardProgress softcap={softcap.toNumber()} hardcap={hardcap.toNumber()} raised={totalSold.toNumber()}/>
+        <LaunchpadCardHeader ifoId={id} name={name} subTitle={subTitle} status={state.status} />
+        <LaunchpadCardProgress softcap={softcap.toNumber()} hardcap={hardcap.toNumber()} raised={raised.toNumber()} liquidityPercent={liquidityPercent.toNumber()}/>
         <LaunchpadCardDetails 
           ifo={ifoPublicData} 
           status={state.status}

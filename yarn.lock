@@ -3029,10 +3029,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@orbitalswap/sdk@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@orbitalswap/sdk/-/sdk-1.0.0.tgz#564ff92c544ef3bfb97716abc74cb22e2b4d89b1"
-  integrity sha512-kO82axLcHTzvNfjUJ6gFHgpjCiig0e7NC3+ZYNjX+VOpZ1MI3ZZ49V9sqhUN9cBsCq2fjbzLFOt+WFTrbuANgw==
+"@orbitalswap/sdk@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@orbitalswap/sdk/-/sdk-1.0.1.tgz#6e9fc9f57a3ed8c5085c8fa1bfaad866222783b8"
+  integrity sha512-W+5fHbyVaSC30qf+D22gobmIg3cb8+WI/F91123hTb+BJEFQRWdF0A4FIjH92L519ycuIV7hu59tQdJgzk0MnQ==
   dependencies:
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
