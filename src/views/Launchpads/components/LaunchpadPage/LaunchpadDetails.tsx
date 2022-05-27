@@ -46,8 +46,8 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ ifo }) => {
               day: 'numeric',
               hour: 'numeric',
               minute: '2-digit',
-              timeZone: 'Asia/Dubai',
-            })} (GST)`
+              timeZone: 'America/Toronto',
+            })} (EDT)`
             }
           </Text>
         </Item>
