@@ -8,15 +8,18 @@ const LaunchpadLayout = styled(Box)`
 `
 
 export const LaunchpadLayoutWrapper = styled(Flex)`
-  gap: 22px;
+column-gap: 32px;
+display: grid;
+grid-template-columns: 1fr;
+
+${({ theme }) => theme.mediaQueries.md} {
+  grid-template-columns: minmax(300px, 2fr) minmax(462px, 1fr);
+}
+
+> div {
+  margin: 0 auto;
   align-items: flex-start;
-  & > div:first-child {
-    flex: 2;
-    gap: 20px;
-  }
-  & > div:last-child {
-    flex: 1;
-  }
+}
 `
 
 export const Item = styled.div`
