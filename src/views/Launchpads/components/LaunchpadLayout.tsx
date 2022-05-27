@@ -13,7 +13,7 @@ display: grid;
 grid-template-columns: 1fr;
 
 ${({ theme }) => theme.mediaQueries.md} {
-  grid-template-columns: minmax(300px, 2fr) minmax(462px, 1fr);
+  grid-template-columns: minmax(462px, 2fr) minmax(462px, 1fr);
 }
 
 > div {

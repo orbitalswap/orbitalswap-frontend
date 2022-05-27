@@ -29,6 +29,11 @@ const StyledLaunchpad = styled(Card)`
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin-top: 0px;
+  }
+  margin-top:24px;
+
 `
 
 const StatusCard = styled(Card)`
@@ -36,7 +41,7 @@ const StatusCard = styled(Card)`
   background-size: contain;
   margin-left: auto;
   margin-right: auto;
-  max-width: 437px;
+  // max-width: 437px;
   width: 100%;
 `
 
@@ -120,45 +125,45 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
       <Container>
         <LaunchpadLayoutWrapper>
           <Flex flexDirection="column" width="100%">
-          <StyledLaunchpad>
-            <CardBody>
-              <LaunchpadHeader ifoId={id} name={name} subTitle={subTitle} />
-              <LaunchpadDescription description={description} />
-              <LaunchpadDetails ifo={ifoPublicData} />
-            </CardBody>
+            <StyledLaunchpad>
+              <CardBody>
+                <LaunchpadHeader ifoId={id} name={name} subTitle={subTitle} />
+                <LaunchpadDescription description={description} />
+                <LaunchpadDetails ifo={ifoPublicData} />
+              </CardBody>
             </StyledLaunchpad>
           </Flex>
           <OwnerActivityContainer flexDirection="column" width="100%">
-          <StyledLaunchpad>
-            <CardBody>
-              <LaunchpadTime
-                isLoading={isLoading}
-                status={state.status}
-                secondsUntilStart={state.secondsUntilStart}
-                secondsUntilEnd={state.secondsUntilEnd}
-                block={isActive || isFinished ? endDateNum : startDateNum}
-              />
-              <LaunchpadProgress softcap={softcap.toNumber()} hardcap={hardcap.toNumber()} raised={raised.toNumber()}/>
-              {!account && <ConnectWalletButton width="100%" />}
-              {account && (
-                <LaunchpadContribute
-                  ifoPublicData={ifoPublicData}
-                  ifoUserData={ifoUserData}
+            <StyledLaunchpad>
+              <CardBody>
+                <LaunchpadTime
+                  isLoading={isLoading}
                   status={state.status}
-                  raisingAmount={softcap}
-                  toggleStatus={toggleStatus}
+                  secondsUntilStart={state.secondsUntilStart}
+                  secondsUntilEnd={state.secondsUntilEnd}
+                  block={isActive || isFinished ? endDateNum : startDateNum}
                 />
-              )}
-            </CardBody>
-          </StyledLaunchpad>
-          <StatusCard>
-            <CardBody>
-              <LaunchpadStatusCard 
-                ifo={ifoPublicData} 
-                ifoUserData={ifoUserData}
-              />
-            </CardBody>
-          </StatusCard>
+                <LaunchpadProgress softcap={softcap.toNumber()} hardcap={hardcap.toNumber()} raised={raised.toNumber()}/>
+                {!account && <ConnectWalletButton width="100%" />}
+                {account && (
+                  <LaunchpadContribute
+                    ifoPublicData={ifoPublicData}
+                    ifoUserData={ifoUserData}
+                    status={state.status}
+                    raisingAmount={softcap}
+                    toggleStatus={toggleStatus}
+                  />
+                )}
+              </CardBody>
+            </StyledLaunchpad>
+            <StatusCard>
+              <CardBody>
+                <LaunchpadStatusCard 
+                  ifo={ifoPublicData} 
+                  ifoUserData={ifoUserData}
+                />
+              </CardBody>
+            </StatusCard>
           </OwnerActivityContainer>
         </LaunchpadLayoutWrapper>
       </Container>
