@@ -54,7 +54,7 @@ const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hard
       </Item>
       <Item>
         <Display>Lockup Time %:</Display>
-        <Text>365 days</Text>
+        <Text>180 days</Text>
       </Item>
     </StyledProgress>
   )
