@@ -22,6 +22,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
     label: 'Launchpads',
     href: '/launchpads',
     icon: TrophyIcon,
+    showItemsOnMobile: false,
     items: []
   },
   {
