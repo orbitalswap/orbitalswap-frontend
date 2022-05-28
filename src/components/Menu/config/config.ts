@@ -56,12 +56,12 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
       },
       {
         label: t('Blog'),
-        href: 'https://medium.com/pancakeswap',
+        href: 'https://medium.com/orbitalswap',
         type: DropdownMenuItemType.EXTERNAL_LINK,
       },
       {
         label: t('Docs'),
-        href: 'https://docs.pancakeswap.finance',
+        href: 'https://docs.tytan.finance',
         type: DropdownMenuItemType.EXTERNAL_LINK,
       },
     ],
