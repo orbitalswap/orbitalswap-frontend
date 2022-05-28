@@ -49,11 +49,11 @@ const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hard
         <Text fontSize='14px'>{hardcap} BNB</Text>
       </Item>
       <Item>
-        <Display>Liquidity %: </Display>
+        <Display>Liquidity %</Display>
         <Text>{liquidityPercent} %</Text>
       </Item>
       <Item>
-        <Display>Liquidity Lockup Time:</Display>
+        <Display>Liquidity Lockup Time</Display>
         <Text>180 days</Text>
       </Item>
     </StyledProgress>
