@@ -13,9 +13,9 @@ export async function middleware(req: NextRequest) {
 
   const shouldBlock: boolean = BLOCK_COUNTRIES[country] || BLOCK_REGIONS[`${country}-${region}`]
 
-  if (shouldBlock) {
-    return new Response('Unavailable for legal reasons', { status: 451 })
-  }
+  // if (shouldBlock) {
+  //   return new Response('Unavailable for legal reasons', { status: 451 })
+  // }
 
   return res
 }
