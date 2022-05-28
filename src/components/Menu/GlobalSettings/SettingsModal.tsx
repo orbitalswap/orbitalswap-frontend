@@ -127,7 +127,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
             }}
           />
         </Flex>
-        <Flex justifyContent="space-between" alignItems="center">
+        {/* <Flex justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
             <Text>{t('Flippy sounds')}</Text>
             <QuestionHelper
@@ -136,8 +136,8 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
               ml="4px"
             />
           </Flex>
-          {/* <PancakeToggle checked={audioPlay} onChange={toggleSetAudioMode} scale="md" /> */}
-        </Flex>
+          <PancakeToggle checked={audioPlay} onChange={toggleSetAudioMode} scale="md" />
+        </Flex> */}
       </ScrollableContainer>
     </Modal>
   )

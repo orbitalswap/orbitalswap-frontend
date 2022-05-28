@@ -54,11 +54,11 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
       {
         type: DropdownMenuItemType.DIVIDER,
       },
-      {
-        label: t('Blog'),
-        href: 'https://medium.com/orbitalswap',
-        type: DropdownMenuItemType.EXTERNAL_LINK,
-      },
+      // {
+      //   label: t('Blog'),
+      //   href: 'https://medium.com/orbitalswap',
+      //   type: DropdownMenuItemType.EXTERNAL_LINK,
+      // },
       {
         label: t('Docs'),
         href: 'https://docs.tytan.finance',
