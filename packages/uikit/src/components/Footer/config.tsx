@@ -80,12 +80,12 @@ export const socials = [
   {
     label: "Twitter",
     icon: TwitterIcon,
-    href: "https://twitter.com/orbitalswap",
+    href: "https://twitter.com/TYTANFI",
   },
   {
     label: "Telegram",
     icon: TelegramIcon,
-    href: "https://t.me/orbitalswap"
+    href: "https://t.me/tytanfi"
     // items: [
     //   {
     //     label: "English",
@@ -167,7 +167,7 @@ export const socials = [
   {
     label: "Discord",
     icon: DiscordIcon,
-    href: "https://discord.gg/",
+    href: "https://discord.gg/rC83Q7WZuc",
   },
   // {
   //   label: "Medium",
