@@ -5,6 +5,7 @@ import {
   SwapFillIcon,
   EarnFillIcon,
   EarnIcon,
+  LaunchpadIcon,
   TrophyIcon,
   TrophyFillIcon,
   NftIcon,
@@ -21,7 +22,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
   {
     label: 'Launchpads',
     href: '/launchpads',
-    icon: TrophyIcon,
+    icon: LaunchpadIcon,
     showItemsOnMobile: false,
     items: []
   },

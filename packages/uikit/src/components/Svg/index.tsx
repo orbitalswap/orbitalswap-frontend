@@ -61,6 +61,7 @@ export { default as IfoIcon } from "./Icons/Ifo";
 export { default as InfoIcon } from "./Icons/Info";
 export { default as InstagramIcon } from "./Icons/Instagram";
 export { default as LanguageCurrencyIcon } from "./Icons/LanguageCurrency";
+export { default as LaunchpadIcon } from "./Icons/Launchpad";
 export { default as LanguageIcon } from "./Icons/Language";
 export { default as LaurelLeftIcon } from "./Icons/LaurelLeft";
 export { default as LaurelRightIcon } from "./Icons/LaurelRight";
