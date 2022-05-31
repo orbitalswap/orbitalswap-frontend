@@ -150,7 +150,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
                     ifoPublicData={ifoPublicData}
                     ifoUserData={ifoUserData}
                     status={state.status}
-                    raisingAmount={softcap}
+                    raisingAmount={raised}
                     toggleStatus={toggleStatus}
                   />
                 )}

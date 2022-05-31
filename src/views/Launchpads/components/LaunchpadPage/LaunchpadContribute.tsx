@@ -25,7 +25,7 @@ const LaunchpadContribute: React.FC<Props> = ({
   toggleStatus
 }) => {
   const [pendingTx, setPendingTx] = useState(false)
-  const { address, minPerTx, maxPerUser } = ifoPublicData
+  const { address, minPerTx, maxPerUser, presaleStatus, softcap, hardcap, raised } = ifoPublicData
   const { contributedAmount, claimed } = ifoUserData
   const ifoContract = useLaunchpadContract(getAddress(address))
   const onClaim = useLaunchpadClaim(ifoContract)
@@ -55,6 +55,74 @@ const LaunchpadContribute: React.FC<Props> = ({
 
   const isFinished = status === 'upcoming'
   const percentOfUserContribution = contributedAmount.div(raisingAmount).times(100)
+
+  if (status === 'live') {
+    return (
+      <>
+        <LabelButton
+          disabled={claimed}
+          buttonLabel='Buy with BNB'
+          label="Your contribution (BNB)"
+          value={
+            // eslint-disable-next-line no-nested-ternary
+            contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
+          }
+          onClick={claimed ? claim : onPresentContributeModal}
+        />
+        <Text fontSize="14px" color="textSubtle">
+          {isFinished
+            ? `You'll get tokens when you claim`
+            : `${percentOfUserContribution.toFixed(5)}% of total`}
+        </Text>
+      </>
+    )
+  }
+
+  if (status === 'filled') {
+    return (
+      <>
+        <LabelButton
+          disabled
+          buttonLabel={claimed ? 'Claimed' : 'Claim'}
+          label="Your contribution (BNB)"
+          value={
+            // eslint-disable-next-line no-nested-ternary
+            contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
+          }
+          onClick={claim}
+        />
+        <Text fontSize="14px" color="textSubtle">
+          {isFinished
+            ? `You'll get tokens when you claim`
+            : `${percentOfUserContribution.toFixed(5)}% of total`}
+        </Text>
+      </>
+    )
+  }
+
+  if (status === 'ended') {
+    const claimable = contributedAmount.toNumber() > 0 && !claimed
+    const noContribute = contributedAmount.toNumber() === 0 && !claimed
+    return (
+      <>
+        <LabelButton
+          disabled={!claimable}
+          buttonLabel={!noContribute? (claimable ? 'Claim' : 'Claimed') : 'Buy with BNB'}
+          label="Your contribution (BNB)"
+          value={
+            // eslint-disable-next-line no-nested-ternary
+            contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
+          }
+          onClick={claim}
+        />
+        <Text fontSize="14px" color="textSubtle">
+          {isFinished
+            ? `You'll get tokens when you claim`
+            : `${percentOfUserContribution.toFixed(5)}% of total`}
+        </Text>
+      </>
+    )
+  }
 
   return (
     <>

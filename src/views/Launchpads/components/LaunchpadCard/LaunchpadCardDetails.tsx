@@ -50,6 +50,31 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({ ifo, status
   
   const buyTokenSymbol = 'BNB'
 
+  if (status === 'filled' || status === 'ended') {
+    return (
+      <>
+        <StyledLaunchpadCardDetails>
+          <Item>
+            <Display>
+              <Text>Presale:</Text>
+              <Text>{status === 'filled' ? 'Filled' : 'Ended'}</Text>
+            </Display>
+            <div>
+            <Link href={`/launchpads/${ifo?.address[ChainId.MAINNET]}`} passHref>
+              <Button as="a" variant="primary">
+                {t('View Pool')}
+              </Button>
+            </Link>
+            </div>
+        </Item>
+        </StyledLaunchpadCardDetails>
+        <LinkExternal href={projectSiteUrl} style={{ margin: 'auto' }}>
+          {t('View project site')}
+        </LinkExternal>
+      </>
+    )
+  }
+
   return (
     <>
       <StyledLaunchpadCardDetails>

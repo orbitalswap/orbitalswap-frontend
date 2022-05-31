@@ -6,8 +6,8 @@ const launchpads: Launchpad[] = [
   {
     id: 'tytan-public-sale',
     address: {
-      97: '0x6dC5C1b2Baf81f76E5BCb468E1496c6416841370',
-      56: '0x6dC5C1b2Baf81f76E5BCb468E1496c6416841370'
+      97: '0xBa809c35E9314E89a82de6d7Ccf9DC3f4C0CA28E',
+      56: '0xBa809c35E9314E89a82de6d7Ccf9DC3f4C0CA28E'
     },
     isActive: true,
     name: 'Tytan',

@@ -25,15 +25,11 @@ export const getStatus = (currentTime: number, startTime: number, endTime: numbe
   if (currentTime >= startTime && currentTime <= endTime) {
     if (status === 2)
       return 'ended'
+    if (raised >= hardcap) {
+        return 'filled'
+    }
     return 'live'
   }
-
-  if (raised >= hardcap) {
-    return 'filled'
-  }
-
   return 'upcoming'
 }
-
-
 export default null
