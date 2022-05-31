@@ -85,9 +85,9 @@ const ConnectModal: React.FC<Props> = ({ login, onDismiss = () => null, displayC
           </Grid>
         </WalletWrapper>
         <Box p="24px">
-          <Text textAlign="center" color="textSubtle" as="p" mb="16px">
+          {/* <Text textAlign="center" color="textSubtle" as="p" mb="16px">
             {t("Haven’t got a crypto wallet yet?")}
-          </Text>
+          </Text> */}
           {/* <Button
             as="a"
             href="https://docs.pancakeswap.finance/get-started/connection-guide"
