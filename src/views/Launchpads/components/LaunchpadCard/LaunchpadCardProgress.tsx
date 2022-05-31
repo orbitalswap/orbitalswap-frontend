@@ -45,7 +45,7 @@ const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hard
         <Progress primaryStep={progress1} />
       </ProgressBar>
       <Item>
-        <Display>{softcap} BNB</Display>
+        <Display>{raised} BNB</Display>
         <Text fontSize='14px'>{hardcap} BNB</Text>
       </Item>
       <Item>
