@@ -161,6 +161,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
                 <LaunchpadStatusCard 
                   ifo={ifoPublicData} 
                   ifoUserData={ifoUserData}
+                  status={state.status}
                 />
               </CardBody>
             </StatusCard>

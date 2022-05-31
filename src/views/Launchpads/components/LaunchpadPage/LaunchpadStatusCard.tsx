@@ -4,11 +4,13 @@ import BigNumber from 'bignumber.js'
 import { Text, LinkExternal, Link } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { PublicLaunchpadData, UserLaunchpadData } from 'views/Launchpads/types'
+import { LaunchpadStatus } from 'config/constants/types'
 import { Item } from '../LaunchpadLayout'
 
 export interface LaunchpadStatusProps {
   ifo: PublicLaunchpadData,
-  ifoUserData: UserLaunchpadData
+  ifoUserData: UserLaunchpadData,
+  status: LaunchpadStatus
 }
 
 const StyledLaunchpadStatus = styled.div`
@@ -20,7 +22,7 @@ const Display = styled(Text)`
   flex: 1;
 `
 
-const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData }) => {
+const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData, status }) => {
   const { t } = useTranslation()
   const {
     startDateNum,
@@ -46,7 +48,7 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData 
       <StyledLaunchpadStatus>
         <Item>
           <Display>{t('Status')}</Display>
-          <Text>incoming</Text>
+          <Text>{status}</Text>
         </Item>
         <Item>
           <Display>{t('Sale type')}</Display>
