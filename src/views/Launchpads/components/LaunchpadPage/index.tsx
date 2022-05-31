@@ -90,7 +90,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
     const interval = setInterval(async () => {
       if (!isLoading) {
         const currentTime = Math.floor(Date.now() / 1000)
-        const status = getStatus(currentTime, startDateNum, endDateNum, totalSold.toNumber(), softcap.toNumber(), hardcap.toNumber(), presaleStatus)
+        const status = getStatus(currentTime, startDateNum, endDateNum, raised.toNumber(), softcap.toNumber(), hardcap.toNumber(), presaleStatus)
         const totalSeconds = endDateNum - startDateNum
         const secondsRemaining = endDateNum - currentTime
   
