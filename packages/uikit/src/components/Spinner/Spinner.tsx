@@ -23,7 +23,7 @@ const Container = styled.div`
 `;
 
 const FloatingPanIcon = styled(PanIcon)`
-position: absolute;
+// position: absolute;
 top: 0;
 left: 0;
 animation: ${pulse} 5s linear infinite;
