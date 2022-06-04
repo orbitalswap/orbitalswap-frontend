@@ -37,7 +37,7 @@ export const connectorsByName = {
     return new WalletLinkConnector({
       url: rpcUrl,
       appName: 'OrbitalSwap',
-      appLogoUrl: 'https://pancakeswap.com/logo.png',
+      appLogoUrl: 'https://orbitalswap.com/logo.png',
       supportedChainIds: [ChainId.MAINNET, ChainId.TESTNET],
     })
   },
