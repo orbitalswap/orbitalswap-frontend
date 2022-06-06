@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { Token } from '@orbitalswap/sdk'
+import { ChainId, Token } from '@orbitalswap/sdk'
 
 export type TranslatableText =
   | string
@@ -11,7 +11,7 @@ export type TranslatableText =
     }
 export interface Address {
   97?: string
-  56: string
+  56?: string
 }
 
 export interface SerializedToken {
@@ -60,6 +60,7 @@ export interface Ifo {
 
 export interface Launchpad {
   id: string
+  chainId: ChainId
   isActive: boolean
   address: Address
   name: string

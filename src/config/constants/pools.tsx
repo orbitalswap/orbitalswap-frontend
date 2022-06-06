@@ -1,6 +1,5 @@
 import Trans from 'components/Trans'
 import { VaultKey } from 'state/types'
-import { CHAIN_ID } from './networks'
 import tokens, { serializeTokens } from './tokens'
 import { SerializedPoolConfig, PoolCategory } from './types'
 
@@ -3706,6 +3705,6 @@ const pools: SerializedPoolConfig[] = [
     sortOrder: 999,
     tokenPerBlock: '7.502',
   },
-].filter((p) => !!p.contractAddress[CHAIN_ID])
+]
 
 export default pools

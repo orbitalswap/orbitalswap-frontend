@@ -21,7 +21,7 @@ const useGetVotingPower = (block?: number, isActive = true): State & { isLoading
   const { data, status, error } = useSWRImmutable(
     account && isActive ? [account, block, 'votingPower'] : null,
     async () => {
-      const blockNumber = block || (await simpleRpcProvider.getBlockNumber())
+      const blockNumber = block || (await simpleRpcProvider().getBlockNumber())
       const eligiblePools = await getActivePools(blockNumber)
       const poolAddresses = eligiblePools.map(({ contractAddress }) => getAddress(contractAddress))
       const { cakeBalance, cakeBnbLpBalance, cakePoolBalance, total, poolsBalance, cakeVaultBalance, ifoPoolBalance } =

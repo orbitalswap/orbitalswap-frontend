@@ -1,6 +1,6 @@
 import { ChainId, Token } from '@orbitalswap/sdk'
 import { serializeToken } from 'state/user/hooks/helpers'
-import { CHAIN_ID } from './networks'
+import { DEFAULT_CHAIN_ID } from './networks'
 import { SerializedToken } from './types'
 
 const { BSC_MAINNET, BSC_TESTNET } = ChainId
@@ -2316,10 +2316,10 @@ export const testnetTokens = defineTokens({
 } as const)
 
 const tokens = () => {
-  const chainId = CHAIN_ID
+  const chainId = DEFAULT_CHAIN_ID
 
   // If BSC_TESTNET - return list comprised of testnetTokens wherever they exist, and mainnetTokens where they don't
-  if (parseInt(chainId, 10) === ChainId.BSC_TESTNET) {
+  if (chainId === ChainId.BSC_TESTNET) {
     return Object.keys(mainnetTokens).reduce((accum, key) => {
       return { ...accum, [key]: testnetTokens[key] || mainnetTokens[key] }
     }, {} as typeof testnetTokens & typeof mainnetTokens)

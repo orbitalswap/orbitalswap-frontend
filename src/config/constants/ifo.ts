@@ -2,10 +2,10 @@ import { Token, ChainId } from '@orbitalswap/sdk'
 import tokens from './tokens'
 import farms from './farms'
 import { Ifo } from './types'
-import { CHAIN_ID } from './networks'
+import { DEFAULT_CHAIN_ID } from './networks'
 
 export const cakeBnbLpToken =
-  CHAIN_ID === String(ChainId.BSC_MAINNET)
+  DEFAULT_CHAIN_ID === ChainId.BSC_MAINNET
     ? new Token(ChainId.BSC_MAINNET, farms[1].lpAddresses[ChainId.BSC_MAINNET], 18, farms[1].lpSymbol)
     : new Token(ChainId.BSC_MAINNET, farms[0].lpAddresses[ChainId.BSC_MAINNET], 18, farms[0].lpSymbol)
 

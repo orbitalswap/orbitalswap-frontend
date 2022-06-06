@@ -7,7 +7,7 @@ import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import tokens from 'config/constants/tokens'
-import { CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import { ChainId } from '@orbitalswap/sdk'
 import { parseUnits, formatEther } from '@ethersproject/units'
 import { useERC20, useNftMarketContract } from 'hooks/useContract'
@@ -38,7 +38,7 @@ interface BuyModalProps extends InjectedModalProps {
 
 // NFT WBNB in testnet contract is different
 const wbnbAddress =
-  CHAIN_ID === String(ChainId.BSC_MAINNET) ? tokens.wbnb.address : '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
+  DEFAULT_CHAIN_ID === ChainId.BSC_MAINNET ? tokens.wbnb.address : '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
 const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   const [stage, setStage] = useState(BuyingStage.REVIEW)

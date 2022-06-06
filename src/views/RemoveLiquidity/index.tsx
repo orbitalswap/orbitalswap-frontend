@@ -9,7 +9,7 @@ import { Currency, currencyEquals, Percent, WNATIVE } from '@orbitalswap/sdk'
 import { Button, Text, AddIcon, ArrowDownIcon, CardBody, Slider, Box, Flex, useModal } from '@pancakeswap/uikit'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useTranslation } from 'contexts/Localization'
-import { CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import { AutoColumn, ColumnCenter } from '../../components/Layout/Column'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import { MinimalPositionCard } from '../../components/PositionCard'
@@ -104,7 +104,7 @@ export default function RemoveLiquidity() {
 
   // allowance handling
   const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
-  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS[CHAIN_ID])
+  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS[DEFAULT_CHAIN_ID])
 
   async function onAttemptToApprove() {
     if (!pairContract || !pair || !library || !deadline) throw new Error('missing dependencies')
@@ -138,7 +138,7 @@ export default function RemoveLiquidity() {
     ]
     const message = {
       owner: account,
-      spender: ROUTER_ADDRESS[CHAIN_ID],
+      spender: ROUTER_ADDRESS[DEFAULT_CHAIN_ID],
       value: liquidityAmount.raw.toString(),
       nonce: nonce.toHexString(),
       deadline: deadline.toNumber(),

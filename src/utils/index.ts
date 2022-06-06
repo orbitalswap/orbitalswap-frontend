@@ -7,7 +7,7 @@ import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
 import IPancakeRouter02ABI from 'config/abi/IPancakeRouter02.json'
 import { IPancakeRouter02 } from 'config/abi/types/IPancakeRouter02'
-import { CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import { JSBI, Percent, Token, CurrencyAmount, Currency } from '@orbitalswap/sdk'
 import { TokenAddressMap } from 'state/types'
 import { ROUTER_ADDRESS } from '../config/constants'
@@ -28,7 +28,7 @@ export function getBscScanLink(
   type: 'transaction' | 'token' | 'address' | 'block' | 'countdown',
   chainIdOverride?: number,
 ): string {
-  const chainId = chainIdOverride || CHAIN_ID
+  const chainId = chainIdOverride || DEFAULT_CHAIN_ID
   switch (type) {
     case 'transaction': {
       return `${BASE_BSC_SCAN_URLS[chainId]}/tx/${data}`
@@ -49,7 +49,7 @@ export function getBscScanLink(
 }
 
 export function getBscScanLinkForNft(collectionAddress: string, tokenId: string): string {
-  const chainId = CHAIN_ID
+  const chainId = DEFAULT_CHAIN_ID
   return `${BASE_BSC_SCAN_URLS[chainId]}/token/${collectionAddress}?a=${tokenId}`
 }
 
@@ -89,13 +89,13 @@ export function getContract(address: string, ABI: any, signer?: Signer | Provide
     throw Error(`Invalid 'address' parameter '${address}'.`)
   }
 
-  return new Contract(address, ABI, signer ?? simpleRpcProvider)
+  return new Contract(address, ABI, signer ?? simpleRpcProvider())
 }
 
 // account is optional
 export function getRouterContract(_: number, library: Web3Provider, account?: string) {
   return getContract(
-    ROUTER_ADDRESS[CHAIN_ID],
+    ROUTER_ADDRESS[DEFAULT_CHAIN_ID],
     IPancakeRouter02ABI,
     getProviderOrSigner(library, account),
   ) as IPancakeRouter02

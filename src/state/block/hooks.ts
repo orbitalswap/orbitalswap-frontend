@@ -11,7 +11,7 @@ export const usePollBlockNumber = () => {
   const { data } = useSWR(
     'blockNumber',
     async () => {
-      const blockNumber = await simpleRpcProvider.getBlockNumber()
+      const blockNumber = await simpleRpcProvider().getBlockNumber()
       if (!cache.get('initialBlockNumber')) {
         mutate('initialBlockNumber', blockNumber)
       }

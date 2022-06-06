@@ -4,7 +4,7 @@ import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import { SerializedPool } from 'state/types'
 import { transformPool } from 'state/pools/helpers'
 import { getCakeContract } from 'utils/contractHelpers'
-import { CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import { PoolCategory } from 'config/constants/types'
 import { serializeTokens } from 'config/constants/tokens'
 import { fetchUserStakeBalances, fetchUserPendingRewards } from './fetchPoolsUser'
@@ -46,7 +46,7 @@ export const useFetchUserPools = (account) => {
           const [stakedBalances, pendingRewards, totalStaking] = await Promise.all([
             fetchUserStakeBalances(account),
             fetchUserPendingRewards(account),
-            cakeContract.balanceOf(initialData.data.contractAddress[CHAIN_ID]),
+            cakeContract.balanceOf(initialData.data.contractAddress[DEFAULT_CHAIN_ID]),
           ])
 
           const userData = {

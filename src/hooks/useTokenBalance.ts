@@ -55,7 +55,7 @@ export const useBurnedBalance = (tokenAddress: string) => {
 export const useGetBnbBalance = () => {
   const { account } = useWeb3React()
   const { status, data, mutate } = useSWR([account, 'bnbBalance'], async () => {
-    return simpleRpcProvider.getBalance(account)
+    return simpleRpcProvider().getBalance(account)
   })
 
   return { balance: data || Zero, fetchStatus: status, refresh: mutate }
@@ -63,7 +63,7 @@ export const useGetBnbBalance = () => {
 
 export const useGetBnbBalanceForPresale = (address: string) => {
   const { status, data, mutate } = useSWR([address, 'bnbBalance'], async () => {
-    return simpleRpcProvider.getBalance(address)
+    return simpleRpcProvider().getBalance(address)
   })
 
   return { balance: data || Zero, fetchStatus: status, refresh: mutate }

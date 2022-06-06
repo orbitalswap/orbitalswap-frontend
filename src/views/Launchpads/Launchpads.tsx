@@ -12,19 +12,14 @@ import PageSection from 'components/PageSection'
 import { FetchStatus } from 'config/constants/types'
 import PageLoader from 'components/Loader/PageLoader'
 import LaunchpadCard from './components/LaunchpadCard'
-
-
-/**
- * Note: currently there should be only 1 active IFO at a time
- */
-const activeLaunchpad = launchpadsConfig.find((launchpad) => launchpad.isActive)
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const Launchpads = () => {
-  
+  const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { data, status} = useSWR('launhcpads', async ()=> getLaunchpads())
-  const launchpadList = data? Object.values(data) : []
+  const launchpadList = data? Object.values(data).filter(l => l.chainId === chainId) : []
 
   const router = useRouter()
   const isExact = router.route === '/launchpads'

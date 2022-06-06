@@ -14,7 +14,7 @@ const useNftClaimStatusCheck = () => {
   useEffect(() => {
     const checkClaimStatus = async () => {
       try {
-        const canClaim = await getBunnySpecialXmasContract(simpleRpcProvider).canClaim(account)
+        const canClaim = await getBunnySpecialXmasContract(simpleRpcProvider()).canClaim(account)
         if (canClaim) {
           onPresentNftClaimModal()
           setHasDisplayedModal(true)

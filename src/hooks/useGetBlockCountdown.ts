@@ -11,7 +11,7 @@ const useBlockCountdown = (blockNumber: number) => {
 
   useEffect(() => {
     const startCountdown = async () => {
-      const currentBlock = await simpleRpcProvider.getBlockNumber()
+      const currentBlock = await simpleRpcProvider().getBlockNumber()
 
       if (blockNumber > currentBlock) {
         setSecondsRemaining((blockNumber - currentBlock) * BSC_BLOCK_TIME)

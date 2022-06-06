@@ -4,7 +4,7 @@ import { parseBytes32String } from '@ethersproject/strings'
 import { Currency, currencyEquals, NATIVE_CURRENCIES, Token } from '@orbitalswap/sdk'
 import { createSelector } from '@reduxjs/toolkit'
 import { GELATO_NATIVE } from 'config/constants'
-import { CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
@@ -20,8 +20,8 @@ import { isAddress } from '../utils'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 
 const mapWithoutUrls = (tokenMap: TokenAddressMap) =>
-  Object.keys(tokenMap[CHAIN_ID]).reduce<{ [address: string]: Token }>((newMap, address) => {
-    newMap[address] = tokenMap[CHAIN_ID][address].token
+  Object.keys(tokenMap[DEFAULT_CHAIN_ID]).reduce<{ [address: string]: Token }>((newMap, address) => {
+    newMap[address] = tokenMap[DEFAULT_CHAIN_ID][address].token
     return newMap
   }, {})
 

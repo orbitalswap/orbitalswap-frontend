@@ -115,7 +115,7 @@ import type {
 } from 'config/abi/types'
 
 export const getContract = (abi: any, address: string, signer?: Signer | Provider) => {
-  const signerOrProvider = signer ?? simpleRpcProvider
+  const signerOrProvider = signer ?? simpleRpcProvider()
   return new Contract(address, abi, signerOrProvider)
 }
 
@@ -203,7 +203,7 @@ export const getChainlinkOracleContract = (signer?: Signer | Provider) => {
   return getContract(chainlinkOracleAbi, getChainlinkOracleAddress(), signer) as ChainlinkOracle
 }
 export const getMulticallContract = () => {
-  return getContract(MultiCallAbi, getMulticallAddress(), simpleRpcProvider) as Multicall
+  return getContract(MultiCallAbi, getMulticallAddress(), simpleRpcProvider()) as Multicall
 }
 export const getBunnySpecialCakeVaultContract = (signer?: Signer | Provider) => {
   return getContract(bunnySpecialCakeVaultAbi, getBunnySpecialCakeVaultAddress(), signer) as BunnySpecialCakeVault

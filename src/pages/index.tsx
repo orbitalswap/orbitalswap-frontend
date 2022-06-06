@@ -7,7 +7,7 @@ import { bitQueryServerClient, infoServerClient } from 'utils/graphql'
 import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { getCakeVaultAddress } from 'utils/addressHelpers'
 import { getCakeContract } from 'utils/contractHelpers'
-import { CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import { formatEther } from '@ethersproject/units'
 
 import Home from '../views/Home'
@@ -60,13 +60,13 @@ export const getStaticProps: GetStaticProps = async () => {
       }
 
       const totalTx = await infoServerClient.request(totalTxQuery, {
-        id: FACTORY_ADDRESS_MAP[CHAIN_ID],
+        id: FACTORY_ADDRESS_MAP[DEFAULT_CHAIN_ID],
       })
       const totalTx30DaysAgo = await infoServerClient.request(totalTxQuery, {
         block: {
           number: days30AgoBlock.number,
         },
-        id: FACTORY_ADDRESS_MAP[CHAIN_ID],
+        id: FACTORY_ADDRESS_MAP[DEFAULT_CHAIN_ID],
       })
 
       if (

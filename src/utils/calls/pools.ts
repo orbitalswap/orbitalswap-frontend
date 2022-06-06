@@ -13,7 +13,7 @@ export const getActivePools = async (block?: number) => {
   const eligiblePools = poolsConfig
     .filter((pool) => pool.sousId !== 0)
     .filter((pool) => pool.isFinished === false || pool.isFinished === undefined)
-  const blockNumber = block || (await simpleRpcProvider.getBlockNumber())
+  const blockNumber = block || (await simpleRpcProvider().getBlockNumber())
   const startBlockCalls = eligiblePools.map(({ contractAddress }) => ({
     address: getAddress(contractAddress),
     name: 'startBlock',

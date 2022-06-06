@@ -55,13 +55,13 @@ const useSubgraphHealth = (subgraphName: string) => {
           `,
           )
 
-          const currentBlock = currentBlockNumber || (await simpleRpcProvider.getBlockNumber())
+          const currentBlock = currentBlockNumber || (await simpleRpcProvider().getBlockNumber())
           const isHealthy = indexingStatusForCurrentVersion.health === 'healthy'
           const chainHeadBlock = parseInt(indexingStatusForCurrentVersion.chains[0].chainHeadBlock.number)
           const latestBlock = parseInt(indexingStatusForCurrentVersion.chains[0].latestBlock.number)
           const blockDifference = currentBlock - latestBlock
           // Sometimes subgraph might report old block as chainHeadBlock, so its important to compare
-          // it with block retrieved from simpleRpcProvider.getBlockNumber()
+          // it with block retrieved from simpleRpcProvider().getBlockNumber()
           const chainHeadBlockDifference = currentBlock - chainHeadBlock
           if (
             !isHealthy ||

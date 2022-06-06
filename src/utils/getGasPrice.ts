@@ -1,5 +1,5 @@
 import { ChainId } from '@orbitalswap/sdk'
-import { CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import store from 'state'
 import { GAS_PRICE_GWEI } from 'state/types'
 
@@ -7,10 +7,10 @@ import { GAS_PRICE_GWEI } from 'state/types'
  * Function to return gasPrice outwith a react component
  */
 const getGasPrice = (): string => {
-  const chainId = CHAIN_ID
+  const chainId = DEFAULT_CHAIN_ID
   const state = store.getState()
   const userGas = state.user.gasPrice || GAS_PRICE_GWEI.default
-  return chainId === ChainId.BSC_MAINNET.toString() ? userGas : GAS_PRICE_GWEI.testnet
+  return chainId === ChainId.BSC_MAINNET ? userGas : GAS_PRICE_GWEI.testnet
 }
 
 export default getGasPrice

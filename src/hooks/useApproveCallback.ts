@@ -1,7 +1,7 @@
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Trade, TokenAmount, CurrencyAmount } from '@orbitalswap/sdk'
-import { CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import { useCallback, useMemo } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { logError } from 'utils/sentry'
@@ -128,7 +128,7 @@ export function useApproveCallbackFromTrade(trade?: Trade, allowedSlippage = 0) 
     [trade, allowedSlippage],
   )
 
-  return useApproveCallback(amountToApprove, ROUTER_ADDRESS[CHAIN_ID])
+  return useApproveCallback(amountToApprove, ROUTER_ADDRESS[DEFAULT_CHAIN_ID])
 }
 
 // Wraps useApproveCallback in the context of a Gelato Limit Orders

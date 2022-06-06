@@ -85,7 +85,7 @@ const getDateForBlock = async (currentBlock: number, block: number) => {
   // if block already happened we can get timestamp via .getBlock(block)
   if (currentBlock > block) {
     try {
-      const { timestamp } = await simpleRpcProvider.getBlock(block)
+      const { timestamp } = await simpleRpcProvider().getBlock(block)
       return toDate(timestamp * 1000)
     } catch {
       add(new Date(), { seconds: secondsUntilStart })
@@ -106,7 +106,7 @@ export const processAuctionData = async (auctionId: number, auctionResponse: Auc
   }
 
   // Get all required data and blocks
-  const currentBlock = await simpleRpcProvider.getBlockNumber()
+  const currentBlock = await simpleRpcProvider().getBlockNumber()
   const startDate = await getDateForBlock(currentBlock, processedAuctionData.startBlock)
   const endDate = await getDateForBlock(currentBlock, processedAuctionData.endBlock)
 

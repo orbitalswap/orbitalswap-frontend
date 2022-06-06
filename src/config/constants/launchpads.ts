@@ -1,3 +1,4 @@
+import { ChainId } from '@orbitalswap/sdk'
 import tokens from './tokens'
 import { Launchpad } from './types'
 
@@ -5,8 +6,8 @@ import { Launchpad } from './types'
 const launchpads: Launchpad[] = [
   {
     id: 'tytan-public-sale',
+    chainId: ChainId.BSC_MAINNET,
     address: {
-      97: '0xBa809c35E9314E89a82de6d7Ccf9DC3f4C0CA28E',
       56: '0xBa809c35E9314E89a82de6d7Ccf9DC3f4C0CA28E'
     },
     isActive: true,

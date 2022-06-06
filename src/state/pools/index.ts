@@ -105,7 +105,7 @@ export const fetchPoolsPublicDataAsync = (currentBlockNumber: number) => async (
     const profileRequirements = await fetchPoolsProfileRequirement()
     let currentBlock = currentBlockNumber
     if (!currentBlock) {
-      currentBlock = await simpleRpcProvider.getBlockNumber()
+      currentBlock = await simpleRpcProvider().getBlockNumber()
     }
 
     const activePriceHelperLpsConfig = priceHelperLpsConfig.filter((priceHelperLpConfig) => {
