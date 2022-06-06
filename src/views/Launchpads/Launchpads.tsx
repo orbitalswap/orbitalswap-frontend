@@ -61,7 +61,7 @@ const Launchpads = () => {
           <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
             {launchpadList.slice(0,6).map((launchpad)=> {
               return (
-                <LaunchpadCard ifo={launchpad} />
+                <LaunchpadCard key={launchpad.id} ifo={launchpad} />
               )
             })}
           </Grid>

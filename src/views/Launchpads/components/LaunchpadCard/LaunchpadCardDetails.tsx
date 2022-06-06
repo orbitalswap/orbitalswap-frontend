@@ -56,11 +56,11 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({
               <Text>{status === 'filled' ? 'Filled' : 'Ended'}</Text>
             </Display>
             <div>
-              <Link href={`/launchpads/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
-                <Button as="a" variant="primary">
+              <Button variant="primary">
+                <Link href={`/launchpads/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
                   {t('View Pool')}
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </Item>
         </StyledLaunchpadCardDetails>
@@ -83,11 +83,11 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({
             </Text>
           </Display>
           <div>
-            <Link href={`/launchpads/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
-              <Button as="a" variant="primary">
+            <Button variant="primary">
+              <Link href={`/launchpads/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
                 {t('View Pool')}
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </Item>
       </StyledLaunchpadCardDetails>
