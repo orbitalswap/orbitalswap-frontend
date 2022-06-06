@@ -40,7 +40,7 @@ export default function useWrapCallback(
 
     const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
 
-    if (inputCurrency.isNative && currencyEquals(WNATIVE[chainId], outputCurrency)) {
+    if (inputCurrency?.isNative && currencyEquals(WNATIVE[chainId], outputCurrency)) {
       return {
         wrapType: WrapType.WRAP,
         execute:
@@ -59,7 +59,7 @@ export default function useWrapCallback(
         inputError: sufficientBalance ? undefined : t('Insufficient BNB balance'),
       }
     }
-    if (currencyEquals(WNATIVE[chainId], inputCurrency) && outputCurrency.isNative) {
+    if (currencyEquals(WNATIVE[chainId], inputCurrency) && outputCurrency?.isNative) {
       return {
         wrapType: WrapType.UNWRAP,
         execute:

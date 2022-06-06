@@ -502,8 +502,8 @@ export default function RemoveLiquidity() {
                     <RowBetween style={{ justifyContent: 'flex-end', fontSize: '14px' }}>
                       {oneCurrencyIsBNB ? (
                         <StyledInternalLink
-                          href={`/remove/${currencyA.isNative ? WNATIVE[chainId].address : currencyIdA}/${
-                            currencyB.isNative ? WNATIVE[chainId].address : currencyIdB
+                          href={`/remove/${currencyA?.isNative ? WNATIVE[chainId].address : currencyIdA}/${
+                            currencyB?.isNative ? WNATIVE[chainId].address : currencyIdB
                           }`}
                         >
                           {t('Receive WBNB')}

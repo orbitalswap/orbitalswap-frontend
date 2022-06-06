@@ -1,7 +1,7 @@
 import { ChainId, Currency, CurrencyAmount, NATIVE_CURRENCIES, Token, TokenAmount, WNATIVE } from '@orbitalswap/sdk'
 
 export function wrappedCurrency(currency: Currency | undefined, chainId: ChainId | undefined): Token | undefined {
-  return chainId && currency.isNative ? WNATIVE[chainId] : currency instanceof Token ? currency : undefined
+  return chainId && currency?.isNative ? WNATIVE[chainId] : currency instanceof Token ? currency : undefined
 }
 
 export function wrappedCurrencyAmount(

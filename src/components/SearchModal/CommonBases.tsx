@@ -44,11 +44,11 @@ export default function CommonBases({
       <AutoRow gap="auto">
         <BaseWrapper
           onClick={() => {
-            if (!selectedCurrency || !selectedCurrency.isNative) {
+            if (!selectedCurrency || !selectedCurrency?.isNative) {
               onSelect(NATIVE_CURRENCIES[chainId])
             }
           }}
-          disable={selectedCurrency.isNative}
+          disable={selectedCurrency?.isNative}
         >
           <CurrencyLogo currency={NATIVE_CURRENCIES[chainId]} style={{ marginRight: 8 }} />
           <Text>BNB</Text>

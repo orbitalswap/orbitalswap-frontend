@@ -107,7 +107,7 @@ export function useCurrencyBalances(
   )
 
   const tokenBalances = useTokenBalances(account, tokens)
-  const containsBNB: boolean = useMemo(() => currencies?.some((currency) => currency.isNative) ?? false, [currencies])
+  const containsBNB: boolean = useMemo(() => currencies?.some((currency) => currency?.isNative) ?? false, [currencies])
   const bnbBalance = useBNBBalances(containsBNB ? [account] : [])
 
   return useMemo(
