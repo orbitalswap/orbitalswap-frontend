@@ -1,4 +1,4 @@
-import { CurrencyAmount, Fraction, JSBI, Percent, Price, TokenAmount, Trade } from '@orbitalswap/sdk'
+import { CurrencyAmount, Fraction, JSBI, NATIVE_CURRENCIES, Percent, Price, TokenAmount, Trade } from '@orbitalswap/sdk'
 import {
   BLOCKED_PRICE_IMPACT_NON_EXPERT,
   ALLOWED_PRICE_IMPACT_HIGH,
@@ -43,7 +43,10 @@ export function computeTradePriceBreakdown(trade?: Trade | null): {
     trade &&
     (trade.inputAmount instanceof TokenAmount
       ? new TokenAmount(trade.inputAmount.token, realizedLPFee.multiply(trade.inputAmount.raw).quotient)
-      : CurrencyAmount.ether(realizedLPFee.multiply(trade.inputAmount.raw).quotient))
+      : new CurrencyAmount(
+          NATIVE_CURRENCIES[trade.inputAmount.currency.chainId],
+          realizedLPFee.multiply(trade.inputAmount.raw).quotient,
+        ))
 
   return { priceImpactWithoutFee: priceImpactWithoutFeePercent, realizedLPFee: realizedLPFeeAmount }
 }

@@ -1,4 +1,4 @@
-import { Currency, currencyEquals, ETHER, WETH } from '@orbitalswap/sdk'
+import { Currency, currencyEquals, WNATIVE } from '@orbitalswap/sdk'
 import { useMemo } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTranslation } from 'contexts/Localization'
@@ -40,7 +40,7 @@ export default function useWrapCallback(
 
     const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
 
-    if (inputCurrency === ETHER && currencyEquals(WETH[chainId], outputCurrency)) {
+    if (inputCurrency.isNative && currencyEquals(WNATIVE[chainId], outputCurrency)) {
       return {
         wrapType: WrapType.WRAP,
         execute:
@@ -59,7 +59,7 @@ export default function useWrapCallback(
         inputError: sufficientBalance ? undefined : t('Insufficient BNB balance'),
       }
     }
-    if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
+    if (currencyEquals(WNATIVE[chainId], inputCurrency) && outputCurrency.isNative) {
       return {
         wrapType: WrapType.UNWRAP,
         execute:

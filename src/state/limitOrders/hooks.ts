@@ -1,7 +1,7 @@
 import JSBI from 'jsbi'
 import { useDispatch, useSelector } from 'react-redux'
 import { ParsedUrlQuery } from 'querystring'
-import { Currency, CurrencyAmount, TokenAmount, Trade, Token, Price, ETHER } from '@orbitalswap/sdk'
+import { Currency, CurrencyAmount, TokenAmount, Trade, Token, Price, NATIVE_CURRENCIES } from '@orbitalswap/sdk'
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -41,7 +41,7 @@ const getDesiredInput = (
     const invertedResultAsAmount =
       inputCurrency instanceof Token
         ? new TokenAmount(inputCurrency, invertedResultAsFraction.toFixed(0))
-        : CurrencyAmount.ether(invertedResultAsFraction.toFixed(0))
+        : new CurrencyAmount(NATIVE_CURRENCIES[inputCurrency.chainId], invertedResultAsFraction.toFixed(0))
 
     return invertedResultAsAmount
   }
@@ -51,7 +51,7 @@ const getDesiredInput = (
   const resultAsAmount =
     inputCurrency instanceof Token
       ? new TokenAmount(inputCurrency, resultAsFraction.quotient.toString())
-      : CurrencyAmount.ether(resultAsFraction.quotient.toString())
+      : new CurrencyAmount(NATIVE_CURRENCIES[inputCurrency.chainId], resultAsFraction.quotient.toString())
   return resultAsAmount
 }
 
@@ -80,7 +80,7 @@ const getDesiredOutput = (
     const invertedResultAsAmount =
       outputCurrency instanceof Token
         ? new TokenAmount(outputCurrency, invertedResultAsFraction.toFixed(0))
-        : CurrencyAmount.ether(invertedResultAsFraction.toFixed(0))
+        : new CurrencyAmount(NATIVE_CURRENCIES[outputCurrency.chainId], invertedResultAsFraction.toFixed(0))
 
     return invertedResultAsAmount
   }
@@ -91,7 +91,7 @@ const getDesiredOutput = (
   const resultAsAmount =
     outputCurrency instanceof Token
       ? new TokenAmount(outputCurrency, resultAsFraction.quotient.toString())
-      : CurrencyAmount.ether(resultAsFraction.quotient.toString())
+      : new CurrencyAmount(NATIVE_CURRENCIES[outputCurrency.chainId], resultAsFraction.quotient.toString())
   return resultAsAmount
 }
 
@@ -113,7 +113,7 @@ export const useOrderActionHandlers = (): {
       dispatch(
         selectCurrency({
           field,
-          currencyId: currency instanceof Token ? currency.address : currency === ETHER ? 'BNB' : '',
+          currencyId: currency instanceof Token ? currency.address : currency.isNative ? currency.symbol : '',
         }),
       )
     },
@@ -412,13 +412,13 @@ export const useDerivedOrderInfo = (): DerivedOrderInfo => {
     () => ({
       input: inputCurrency
         ? parsedAmounts.input
-            ?.multiply(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(inputCurrency.decimals)))
+            ?.multiply(new CurrencyAmount(inputCurrency, JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(inputCurrency.decimals))))
             .toFixed(0)
         : undefined,
 
       output: outputCurrency
         ? parsedAmounts.output
-            ?.multiply(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals)))
+            ?.multiply(new CurrencyAmount(outputCurrency, JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals))))
             .toFixed(0)
         : undefined,
     }),

@@ -1,4 +1,8 @@
-const getTokenLogoURL = (address: string) =>
-  `https://assets.trustwalletapp.com/blockchains/smartchain/assets/${address}/logo.png`
+import { ChainId } from "@orbitalswap/sdk"
+import { NETWORK_KEYS } from "config/constants"
+import { ASSET_PATH } from "config/constants/endpoints"
+
+const getTokenLogoURL = (address: string, chainId: ChainId) =>
+  `${ASSET_PATH}/${NETWORK_KEYS[chainId]}/assets/${address}/logo.png`
 
 export default getTokenLogoURL

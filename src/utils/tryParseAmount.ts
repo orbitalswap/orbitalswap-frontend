@@ -1,5 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, JSBI, Token, TokenAmount } from '@orbitalswap/sdk'
+import { Currency, CurrencyAmount, JSBI, NATIVE_CURRENCIES, Token, TokenAmount } from '@orbitalswap/sdk'
 
 // try to parse a user entered amount for a given token
 const tryParseAmount = (value?: string, currency?: Currency): CurrencyAmount | TokenAmount | undefined => {
@@ -12,7 +12,7 @@ const tryParseAmount = (value?: string, currency?: Currency): CurrencyAmount | T
     if (typedValueParsed !== '0') {
       return currency instanceof Token
         ? new TokenAmount(currency, JSBI.BigInt(typedValueParsed))
-        : CurrencyAmount.ether(JSBI.BigInt(typedValueParsed))
+        : new CurrencyAmount(NATIVE_CURRENCIES[currency.chainId], JSBI.BigInt(typedValueParsed))
     }
   } catch (error) {
     // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)

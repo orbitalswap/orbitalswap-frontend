@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { arrayify } from '@ethersproject/bytes'
 import { parseBytes32String } from '@ethersproject/strings'
-import { Currency, currencyEquals, ETHER, Token } from '@orbitalswap/sdk'
+import { Currency, currencyEquals, NATIVE_CURRENCIES, Token } from '@orbitalswap/sdk'
 import { createSelector } from '@reduxjs/toolkit'
 import { GELATO_NATIVE } from 'config/constants'
 import { CHAIN_ID } from 'config/constants/networks'
@@ -169,7 +169,14 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 }
 
 export function useCurrency(currencyId: string | undefined): Currency | Token | null | undefined {
-  const isBNB = currencyId?.toUpperCase() === 'BNB' || currencyId?.toLowerCase() === GELATO_NATIVE
+  const { chainId } = useActiveWeb3React()
+  
+  const isBNB =
+    currencyId?.toUpperCase() === 'BNB' ||
+    Object.values(NATIVE_CURRENCIES)
+      .map((c) => c.symbol)
+      .includes(currencyId?.toUpperCase()) ||
+    currencyId?.toLowerCase() === GELATO_NATIVE
   const token = useToken(isBNB ? undefined : currencyId)
-  return isBNB ? ETHER : token
+  return isBNB ? NATIVE_CURRENCIES[chainId] : token
 }

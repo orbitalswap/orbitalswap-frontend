@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Order } from '@gelatonetwork/limit-orders-lib'
-import { Currency, CurrencyAmount, Price, Token, TokenAmount } from '@orbitalswap/sdk'
+import { Currency, CurrencyAmount, NATIVE_CURRENCIES, Price, Token, TokenAmount } from '@orbitalswap/sdk'
 import { useCurrency } from 'hooks/Tokens'
 import useGelatoLimitOrdersLib from 'hooks/limitOrders/useGelatoLimitOrdersLib'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -53,7 +53,7 @@ const useFormattedOrderData = (order: Order): FormattedOrderData => {
       if (inputToken instanceof Token) {
         return new TokenAmount(inputToken, order.inputAmount)
       }
-      return CurrencyAmount.ether(order.inputAmount)
+      return new CurrencyAmount(NATIVE_CURRENCIES[inputToken.chainId], order.inputAmount)
     }
     return undefined
   }, [inputToken, order.inputAmount])
@@ -73,7 +73,7 @@ const useFormattedOrderData = (order: Order): FormattedOrderData => {
       if (outputToken instanceof Token) {
         return new TokenAmount(outputToken, rawMinReturn)
       }
-      return CurrencyAmount.ether(rawMinReturn)
+      return new CurrencyAmount(NATIVE_CURRENCIES[outputToken.chainId], rawMinReturn)
     }
     return undefined
   }, [outputToken, rawMinReturn])

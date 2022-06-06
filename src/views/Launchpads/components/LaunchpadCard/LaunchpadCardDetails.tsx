@@ -2,18 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import Link from 'next/link'
+import { ChainId } from '@orbitalswap/sdk'
 import { Text, LinkExternal, Button } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import getTimePeriods from 'utils/getTimePeriods'
 import { PublicLaunchpadData } from 'views/Launchpads/types'
-import { ChainId } from '@orbitalswap/sdk'
 import { LaunchpadStatus } from 'config/constants/types'
 
 export interface LaunchpadCardDetailsProps {
-  ifo: PublicLaunchpadData,
+  ifo: PublicLaunchpadData
   status: LaunchpadStatus
-  secondsUntilStart: number,
-  secondsUntilEnd: number,
+  secondsUntilStart: number
+  secondsUntilEnd: number
 }
 
 const StyledLaunchpadCardDetails = styled.div`
@@ -32,22 +32,18 @@ const Display = styled(Text)`
   flex: 1;
 `
 
-const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({ ifo, status, secondsUntilStart, secondsUntilEnd }) => {
+const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({
+  ifo,
+  status,
+  secondsUntilStart,
+  secondsUntilEnd,
+}) => {
   const { t } = useTranslation()
-  const {
-    startDateNum,
-    projectSiteUrl,
-    presalePrice,
-    minPerTx,
-    maxPerUser,
-    hardcap,
-    softcap,
-    totalSold
-  } = ifo
+  const { startDateNum, projectSiteUrl, presalePrice, minPerTx, maxPerUser, hardcap, softcap, totalSold } = ifo
 
   const countdownToUse = status === 'upcoming' ? secondsUntilStart : secondsUntilEnd
   const timeUntil = getTimePeriods(countdownToUse)
-  
+
   const buyTokenSymbol = 'BNB'
 
   if (status === 'filled' || status === 'ended') {
@@ -60,13 +56,13 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({ ifo, status
               <Text>{status === 'filled' ? 'Filled' : 'Ended'}</Text>
             </Display>
             <div>
-            <Link href={`/launchpads/${ifo?.address[ChainId.MAINNET]}`} passHref>
-              <Button as="a" variant="primary">
-                {t('View Pool')}
-              </Button>
-            </Link>
+              <Link href={`/launchpads/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
+                <Button as="a" variant="primary">
+                  {t('View Pool')}
+                </Button>
+              </Link>
             </div>
-        </Item>
+          </Item>
         </StyledLaunchpadCardDetails>
         <LinkExternal href={projectSiteUrl} style={{ margin: 'auto' }}>
           {t('View project site')}
@@ -81,16 +77,19 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({ ifo, status
         <Item>
           <Display>
             <Text>{status === 'upcoming' ? 'Sale Starts in' : 'Sale Ends in'}</Text>
-            <Text>{timeUntil.days.toString().padStart(2, '0')}:{timeUntil.hours.toString().padStart(2, '0')}:{timeUntil.minutes.toString().padStart(2, '0')}:{timeUntil.seconds.toString().padStart(2, '0')}</Text>
+            <Text>
+              {timeUntil.days.toString().padStart(2, '0')}:{timeUntil.hours.toString().padStart(2, '0')}:
+              {timeUntil.minutes.toString().padStart(2, '0')}:{timeUntil.seconds.toString().padStart(2, '0')}
+            </Text>
           </Display>
           <div>
-          <Link href={`/launchpads/${ifo?.address[ChainId.MAINNET]}`} passHref>
-            <Button as="a" variant="primary">
-              {t('View Pool')}
-            </Button>
-          </Link>
+            <Link href={`/launchpads/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
+              <Button as="a" variant="primary">
+                {t('View Pool')}
+              </Button>
+            </Link>
           </div>
-      </Item>
+        </Item>
       </StyledLaunchpadCardDetails>
       <LinkExternal href={projectSiteUrl} style={{ margin: 'auto' }}>
         {t('View project site')}

@@ -1,5 +1,4 @@
-import { Currency, ETHER, Token } from '@orbitalswap/sdk'
-import { BinanceIcon } from '@pancakeswap/uikit'
+import { Currency, Token } from '@orbitalswap/sdk'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 import { WrappedTokenInfo } from 'state/types'
@@ -25,20 +24,17 @@ export default function CurrencyLogo({
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
 
   const srcs: string[] = useMemo(() => {
-    if (currency === ETHER) return []
+    if (currency?.isNative) return [getTokenLogoURL(currency.wrapped.address, currency.chainId)]
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, getTokenLogoURL(currency.address)]
+        return [...uriLocations, getTokenLogoURL(currency.address, currency.chainId)]
       }
-      return [getTokenLogoURL(currency.address)]
+      return [getTokenLogoURL(currency.address, currency.chainId)]
     }
     return []
   }, [currency, uriLocations])
 
-  if (currency === ETHER) {
-    return <BinanceIcon width={size} style={style} />
-  }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
 }

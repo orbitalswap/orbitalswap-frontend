@@ -1,4 +1,4 @@
-import { CurrencyAmount, ETHER, JSBI } from '@orbitalswap/sdk'
+import { CurrencyAmount, JSBI, NATIVE_CURRENCIES } from '@orbitalswap/sdk'
 import { MIN_BNB } from '../config/constants'
 
 /**
@@ -7,11 +7,11 @@ import { MIN_BNB } from '../config/constants'
  */
 export function maxAmountSpend(currencyAmount?: CurrencyAmount): CurrencyAmount | undefined {
   if (!currencyAmount) return undefined
-  if (currencyAmount.currency === ETHER) {
+  if (currencyAmount.currency.isNative) {
     if (JSBI.greaterThan(currencyAmount.raw, MIN_BNB)) {
-      return CurrencyAmount.ether(JSBI.subtract(currencyAmount.raw, MIN_BNB))
+      return new CurrencyAmount(NATIVE_CURRENCIES[currencyAmount.currency.chainId], JSBI.subtract(currencyAmount.raw, MIN_BNB))
     }
-    return CurrencyAmount.ether(JSBI.BigInt(0))
+    return new CurrencyAmount(NATIVE_CURRENCIES[currencyAmount.currency.chainId], JSBI.BigInt(0))
   }
   return currencyAmount
 }

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { formatUnits } from '@ethersproject/units'
-import { CurrencyAmount, Price, Token, TokenAmount, JSBI, ETHER } from '@orbitalswap/sdk'
+import { CurrencyAmount, Price, Token, TokenAmount, JSBI, NATIVE_CURRENCIES } from '@orbitalswap/sdk'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useTradeExactIn } from 'hooks/Trades'
 import tryParseAmount from 'utils/tryParseAmount'
@@ -23,9 +23,11 @@ export default function useGasOverhead(
 
   const gasPrice = getGasPrice()
   const requiredGas = formatUnits(gasPrice ? BigNumber.from(gasPrice).mul(GENERIC_GAS_LIMIT_ORDER_EXECUTION) : '0')
-  const requiredGasAsCurrencyAmount = tryParseAmount(requiredGas, ETHER)
+  const requiredGasAsCurrencyAmount = tryParseAmount(requiredGas, NATIVE_CURRENCIES[chainId])
 
-  const inputIsBNB = inputAmount?.currency.symbol === 'BNB'
+  const inputIsBNB = Object.values(NATIVE_CURRENCIES)
+    .map((c) => c.symbol)
+    .includes(inputAmount?.currency.symbol)
 
   const gasCostInInputTokens = useTradeExactIn(requiredGasAsCurrencyAmount, inputIsBNB ? null : inputAmount?.currency)
 

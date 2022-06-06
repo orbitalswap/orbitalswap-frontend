@@ -2,9 +2,11 @@ import { ChainId, JSBI, Percent, Token } from '@orbitalswap/sdk'
 import { BigNumber } from '@ethersproject/bignumber'
 import { mainnetTokens, testnetTokens } from './tokens'
 
+export * from './networks'
+
 export const ROUTER_ADDRESS = {
-  [ChainId.MAINNET]: '0x6B45064F128cA5ADdbf79825186F4e3e3c9E7EB5',
-  [ChainId.TESTNET]: '0x8d1cb76584f997CD2B8A7C200490fd7FA30dc746',
+  [ChainId.BSC_MAINNET]: '0x6B45064F128cA5ADdbf79825186F4e3e3c9E7EB5',
+  [ChainId.BSC_TESTNET]: '0x8d1cb76584f997CD2B8A7C200490fd7FA30dc746',
 }
 
 // a list of tokens by chain
@@ -14,7 +16,7 @@ type ChainTokenList = {
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
-  [ChainId.MAINNET]: [
+  [ChainId.BSC_MAINNET]: [
     mainnetTokens.wbnb,
     mainnetTokens.cake,
     mainnetTokens.busd,
@@ -24,7 +26,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     mainnetTokens.eth,
     mainnetTokens.usdc,
   ],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
+  [ChainId.BSC_TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
 }
 
 /**
@@ -32,32 +34,32 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
  * @example { [WBTC.address]: [renBTC], [renBTC.address]: [WBTC] }
  */
 export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
-  [ChainId.MAINNET]: {},
+  [ChainId.BSC_MAINNET]: {},
 }
 
 /**
  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
  * tokens.
- * @example [AMPL.address]: [DAI, WETH[ChainId.MAINNET]]
+ * @example [AMPL.address]: [DAI, WETH[ChainId.BSC_MAINNET]]
  */
 export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
-  [ChainId.MAINNET]: {},
+  [ChainId.BSC_MAINNET]: {},
 }
 
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
-  [ChainId.MAINNET]: [mainnetTokens.busd, mainnetTokens.btcb],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
+  [ChainId.BSC_MAINNET]: [mainnetTokens.busd, mainnetTokens.btcb],
+  [ChainId.BSC_TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-  [ChainId.MAINNET]: [mainnetTokens.wbnb, mainnetTokens.dai, mainnetTokens.busd, mainnetTokens.usdt],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
+  [ChainId.BSC_MAINNET]: [mainnetTokens.wbnb, mainnetTokens.dai, mainnetTokens.busd, mainnetTokens.usdt],
+  [ChainId.BSC_TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
-  [ChainId.MAINNET]: [
+  [ChainId.BSC_MAINNET]: [
     [mainnetTokens.tytan, mainnetTokens.wbnb],
     // [mainnetTokens.cake, mainnetTokens.wbnb],
     // [mainnetTokens.busd, mainnetTokens.usdt],

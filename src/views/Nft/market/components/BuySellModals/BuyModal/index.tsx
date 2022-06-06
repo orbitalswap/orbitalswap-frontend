@@ -38,7 +38,7 @@ interface BuyModalProps extends InjectedModalProps {
 
 // NFT WBNB in testnet contract is different
 const wbnbAddress =
-  CHAIN_ID === String(ChainId.MAINNET) ? tokens.wbnb.address : '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
+  CHAIN_ID === String(ChainId.BSC_MAINNET) ? tokens.wbnb.address : '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
 const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   const [stage, setStage] = useState(BuyingStage.REVIEW)

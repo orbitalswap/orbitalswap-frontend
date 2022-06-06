@@ -5,7 +5,7 @@ import tokens from './tokens'
 import { FarmAuctionBidderConfig } from './types'
 
 export const whitelistedBidders: FarmAuctionBidderConfig[] =
-  Number(CHAIN_ID) === ChainId.MAINNET
+  Number(CHAIN_ID) === ChainId.BSC_MAINNET
     ? [
         {
           account: '0x9Ed5a62535A5Dd2dB2d9bB21bAc42035Af47F630',

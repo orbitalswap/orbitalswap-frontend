@@ -38,7 +38,7 @@ export const connectorsByName = {
       url: rpcUrl,
       appName: 'OrbitalSwap',
       appLogoUrl: 'https://orbitalswap.com/logo.png',
-      supportedChainIds: [ChainId.MAINNET, ChainId.TESTNET],
+      supportedChainIds: [ChainId.BSC_MAINNET, ChainId.BSC_TESTNET],
     })
   },
 } as const

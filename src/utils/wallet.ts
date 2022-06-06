@@ -7,13 +7,13 @@ import { BASE_BSC_SCAN_URLS } from 'config'
 import { nodes } from './getRpcUrl'
 
 const NETWORK_CONFIG = {
-  [ChainId.MAINNET]: {
+  [ChainId.BSC_MAINNET]: {
     name: 'BNB Smart Chain Mainnet',
-    scanURL: BASE_BSC_SCAN_URLS[ChainId.MAINNET],
+    scanURL: BASE_BSC_SCAN_URLS[ChainId.BSC_MAINNET],
   },
-  [ChainId.TESTNET]: {
+  [ChainId.BSC_TESTNET]: {
     name: 'BNB Smart Chain Testnet',
-    scanURL: BASE_BSC_SCAN_URLS[ChainId.TESTNET],
+    scanURL: BASE_BSC_SCAN_URLS[ChainId.BSC_TESTNET],
   },
 }
 

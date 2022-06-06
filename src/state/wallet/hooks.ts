@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount } from '@orbitalswap/sdk'
+import { Currency, CurrencyAmount, JSBI, NATIVE_CURRENCIES, Token, TokenAmount } from '@orbitalswap/sdk'
 import { useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import ERC20_INTERFACE from 'config/abi/erc20'
@@ -7,6 +7,7 @@ import { useMulticallContract } from 'hooks/useContract'
 import { isAddress } from 'utils'
 import orderBy from 'lodash/orderBy'
 import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 /**
  * Returns a map of the given addresses to their eventually consistent BNB balances.
@@ -14,6 +15,7 @@ import { useSingleContractMultipleData, useMultipleContractSingleData } from '..
 export function useBNBBalances(uncheckedAddresses?: (string | undefined)[]): {
   [address: string]: CurrencyAmount | undefined
 } {
+  const { chainId } = useActiveWeb3React()
   const multicallContract = useMulticallContract()
 
   const addresses: string[] = useMemo(
@@ -32,7 +34,7 @@ export function useBNBBalances(uncheckedAddresses?: (string | undefined)[]): {
     () =>
       addresses.reduce<{ [address: string]: CurrencyAmount }>((memo, address, i) => {
         const value = results?.[i]?.result?.[0]
-        if (value) memo[address] = CurrencyAmount.ether(JSBI.BigInt(value.toString()))
+        if (value) memo[address] = new CurrencyAmount(NATIVE_CURRENCIES[chainId], JSBI.BigInt(value.toString()))
         return memo
       }, {}),
     [addresses, results],
@@ -105,7 +107,7 @@ export function useCurrencyBalances(
   )
 
   const tokenBalances = useTokenBalances(account, tokens)
-  const containsBNB: boolean = useMemo(() => currencies?.some((currency) => currency === ETHER) ?? false, [currencies])
+  const containsBNB: boolean = useMemo(() => currencies?.some((currency) => currency.isNative) ?? false, [currencies])
   const bnbBalance = useBNBBalances(containsBNB ? [account] : [])
 
   return useMemo(
@@ -113,7 +115,7 @@ export function useCurrencyBalances(
       currencies?.map((currency) => {
         if (!account || !currency) return undefined
         if (currency instanceof Token) return tokenBalances[currency.address]
-        if (currency === ETHER) return bnbBalance[account]
+        if (currency.isNative) return bnbBalance[account]
         return undefined
       }) ?? [],
     [account, currencies, bnbBalance, tokenBalances],

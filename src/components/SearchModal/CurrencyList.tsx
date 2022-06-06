@@ -1,5 +1,5 @@
 import { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
-import { Currency, CurrencyAmount, currencyEquals, ETHER, Token } from '@orbitalswap/sdk'
+import { Currency, CurrencyAmount, currencyEquals, NATIVE_CURRENCIES, Token } from '@orbitalswap/sdk'
 import { Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { FixedSizeList } from 'react-window'
@@ -19,7 +19,7 @@ import { isTokenOnList } from '../../utils'
 import ImportRow from './ImportRow'
 
 function currencyKey(currency: Currency): string {
-  return currency instanceof Token ? currency.address : currency === ETHER ? 'ETHER' : ''
+  return currency instanceof Token ? currency.address : currency.isNative ? 'ETHER' : ''
 }
 
 const StyledBalanceText = styled(Text)`
@@ -124,19 +124,19 @@ export default function CurrencyList({
   setImportToken: (token: Token) => void
   breakIndex: number | undefined
 }) {
+  const { chainId } = useActiveWeb3React()
+  const { t } = useTranslation()
+
   const itemData: (Currency | undefined)[] = useMemo(() => {
     let formatted: (Currency | undefined)[] = showBNB
-      ? [Currency.ETHER, ...currencies, ...inactiveCurrencies]
+      ? [NATIVE_CURRENCIES[chainId], ...currencies, ...inactiveCurrencies]
       : [...currencies, ...inactiveCurrencies]
     if (breakIndex !== undefined) {
       formatted = [...formatted.slice(0, breakIndex), undefined, ...formatted.slice(breakIndex, formatted.length)]
     }
     return formatted
-  }, [breakIndex, currencies, inactiveCurrencies, showBNB])
+  }, [breakIndex, currencies, inactiveCurrencies, showBNB, chainId])
 
-  const { chainId } = useActiveWeb3React()
-
-  const { t } = useTranslation()
 
   const Row = useCallback(
     ({ data, index, style }) => {

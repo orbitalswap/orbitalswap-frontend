@@ -1,4 +1,4 @@
-import { ChainId, Currency, currencyEquals, ETHER, Token } from '@orbitalswap/sdk'
+import { ChainId, Currency, NATIVE_CURRENCIES, Token } from '@orbitalswap/sdk'
 import { Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
@@ -44,13 +44,13 @@ export default function CommonBases({
       <AutoRow gap="auto">
         <BaseWrapper
           onClick={() => {
-            if (!selectedCurrency || !currencyEquals(selectedCurrency, ETHER)) {
-              onSelect(ETHER)
+            if (!selectedCurrency || !selectedCurrency.isNative) {
+              onSelect(NATIVE_CURRENCIES[chainId])
             }
           }}
-          disable={selectedCurrency === ETHER}
+          disable={selectedCurrency.isNative}
         >
-          <CurrencyLogo currency={ETHER} style={{ marginRight: 8 }} />
+          <CurrencyLogo currency={NATIVE_CURRENCIES[chainId]} style={{ marginRight: 8 }} />
           <Text>BNB</Text>
         </BaseWrapper>
         {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {

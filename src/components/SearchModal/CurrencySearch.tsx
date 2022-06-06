@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { KeyboardEvent, RefObject, useCallback, useMemo, useRef, useState, useEffect } from 'react'
-import { Currency, ETHER, Token } from '@orbitalswap/sdk'
+import { Currency, NATIVE_CURRENCIES, Token } from '@orbitalswap/sdk'
 import { Text, Input, Box } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { FixedSizeList } from 'react-window'
@@ -140,8 +140,8 @@ function CurrencySearch({
     (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
         const s = debouncedQuery.toLowerCase().trim()
-        if (s === 'bnb') {
-          handleCurrencySelect(ETHER)
+        if (s === NATIVE_CURRENCIES[chainId].symbol.toLowerCase()) {
+          handleCurrencySelect(NATIVE_CURRENCIES[chainId])
         } else if (filteredSortedTokens.length > 0) {
           if (
             filteredSortedTokens[0].symbol?.toLowerCase() === debouncedQuery.trim().toLowerCase() ||
@@ -152,7 +152,7 @@ function CurrencySearch({
         }
       }
     },
-    [filteredSortedTokens, handleCurrencySelect, debouncedQuery],
+    [filteredSortedTokens, handleCurrencySelect, debouncedQuery, chainId],
   )
 
   // if no results on main list, show option to expand into inactive
