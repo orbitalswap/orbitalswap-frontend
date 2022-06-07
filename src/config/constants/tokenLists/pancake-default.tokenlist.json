@@ -27,6 +27,14 @@
       "logoURI": "https://orbitalswap.netlify.app/images/tokens/0x912F594Fd096E67e0c0A18D496A9f70E3171c330.png"
     },
     {
+      "name": "OrbitalSwap Token",
+      "symbol": "ORB",
+      "address": "0x78D68cF6D97826E200743C1Ed84eE88d0cDf04C4",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://orbitalswap.netlify.app/images/tokens/0x912F594Fd096E67e0c0A18D496A9f70E3171c330.png"
+    },
+    {
       "name": "BUSD Token",
       "symbol": "BUSD",
       "address": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",

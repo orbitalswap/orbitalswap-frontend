@@ -27,8 +27,16 @@ export const mainnetTokens = defineTokens({
     '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
     18,
     'CAKE',
-    'OrbitalSwap Token',
+    'PancakeSwap Token',
     'https://pancakeswap.finance/',
+  ),
+  orb: new Token(
+    MAINNET,
+    '0x78D68cF6D97826E200743C1Ed84eE88d0cDf04C4',
+    18,
+    'ORB',
+    'OrbitalSwap Token',
+    'https://orbitalswap.com/',
   ),
   tytan: new Token(
     MAINNET,

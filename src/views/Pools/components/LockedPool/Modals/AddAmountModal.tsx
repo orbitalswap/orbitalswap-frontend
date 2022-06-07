@@ -98,7 +98,7 @@ const AddAmountModal: React.FC<AddAmountModalProps> = ({
     <RoiCalculatorModalProvider lockedAmount={lockedAmount}>
       <Modal
         style={{ maxWidth: '420px' }}
-        title={t('Add CAKE')}
+        title={t('Add ORB')}
         onDismiss={onDismiss}
         headerBackground={theme.colors.gradients.cardHeader}
       >

@@ -51,7 +51,7 @@ const AddCakeButton: React.FC<AddButtonProps> = ({
 
   return userDataLoaded ? (
     <Button onClick={handleClicked} width="100%">
-      {t('Add CAKE')}
+      {t('Add ORB')}
     </Button>
   ) : (
     <Skeleton height={48} />
