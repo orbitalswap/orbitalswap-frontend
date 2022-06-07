@@ -13,19 +13,19 @@ const farms: SerializedFarmConfig[] = [
     lpSymbol: 'CAKE',
     lpAddresses: {
       97: '',
-      56: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+      56: '0x78D68cF6D97826E200743C1Ed84eE88d0cDf04C4',
     },
     token: serializedTokens.syrup,
     quoteToken: serializedTokens.wbnb,
   },
   {
     pid: 2,
-    lpSymbol: 'CAKE-BNB LP',
+    lpSymbol: 'ORB-BNB LP',
     lpAddresses: {
       97: '0x3ed8936cAFDF85cfDBa29Fbe5940A5b0524824F4',
-      56: '0x0eD7e52944161450477ee417DE9Cd3a859b14fD0',
+      56: '0x6b2835BB6e706B81f2FB109F1a2A35CB79c27f68',
     },
-    token: serializedTokens.cake,
+    token: serializedTokens.orb,
     quoteToken: serializedTokens.wbnb,
   },
   {
@@ -33,7 +33,7 @@ const farms: SerializedFarmConfig[] = [
     lpSymbol: 'BUSD-BNB LP',
     lpAddresses: {
       97: '',
-      56: '0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16',
+      56: '0x57423151Ad2AAFA5378afbA274D30f5fab0d69Df',
     },
     token: serializedTokens.busd,
     quoteToken: serializedTokens.wbnb,
