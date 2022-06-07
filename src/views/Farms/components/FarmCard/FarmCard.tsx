@@ -55,6 +55,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
       : ''
 
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
+  console.log(farm.lpSymbol, '5645645645646', lpLabel)
   const earnLabel = farm.dual ? farm.dual.earnLabel : t('ORB + Fees')
 
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
@@ -63,7 +64,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
-  const isPromotedFarm = farm.token.symbol === 'CAKE'
+  const isPromotedFarm = farm.token.symbol === 'ORB'
 
   return (
     <StyledCard isActive={isPromotedFarm}>

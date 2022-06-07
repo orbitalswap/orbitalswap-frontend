@@ -10,7 +10,7 @@ const farms: SerializedFarmConfig[] = [
    */
   {
     pid: 0,
-    lpSymbol: 'CAKE',
+    lpSymbol: 'ORB',
     lpAddresses: {
       97: '',
       56: '0x78D68cF6D97826E200743C1Ed84eE88d0cDf04C4',
