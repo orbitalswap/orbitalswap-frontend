@@ -1,28 +1,29 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import { ChainId } from '@orbitalswap/sdk'
 import { BscConnector } from '@binance-chain/bsc-connector'
 import { ConnectorNames } from '@pancakeswap/uikit'
 import { hexlify } from '@ethersproject/bytes'
 import { toUtf8Bytes } from '@ethersproject/strings'
 import { Web3Provider } from '@ethersproject/providers'
-import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
+import { DEFAULT_CHAIN_ID, NETWORKS, SUPPORTED_CHAINS } from 'config/constants/networks'
 import getNodeUrl from './getRpcUrl'
 
 const POLLING_INTERVAL = 12000
 const rpcUrl = getNodeUrl()
 const chainId = DEFAULT_CHAIN_ID
+const rpcUrls = {}
+SUPPORTED_CHAINS.forEach(cId => { rpcUrls[cId] = NETWORKS[cId].rpcUrls[0] })
 
-export const injected = new InjectedConnector({ supportedChainIds: [chainId] })
+export const injected = new InjectedConnector({ supportedChainIds: SUPPORTED_CHAINS })
 
 const walletconnect = new WalletConnectConnector({
-  rpc: { [chainId]: rpcUrl },
+  rpc: rpcUrls,
   qrcode: true,
   pollingInterval: POLLING_INTERVAL,
 })
 
-const bscConnector = new BscConnector({ supportedChainIds: [chainId] })
+const bscConnector = new BscConnector({ supportedChainIds: SUPPORTED_CHAINS })
 
 export const connectorsByName = {
   [ConnectorNames.Injected]: injected,
@@ -38,7 +39,7 @@ export const connectorsByName = {
       url: rpcUrl,
       appName: 'OrbitalSwap',
       appLogoUrl: 'https://orbitalswap.com/logo.png',
-      supportedChainIds: [ChainId.BSC_MAINNET, ChainId.BSC_TESTNET],
+      supportedChainIds: SUPPORTED_CHAINS,
     })
   },
 } as const

@@ -3,28 +3,16 @@
 import { ExternalProvider } from '@ethersproject/providers'
 import { ChainId } from '@orbitalswap/sdk'
 import { BAD_SRCS } from 'components/Logo/Logo'
-import { BASE_BSC_SCAN_URLS } from 'config'
+import { DEFAULT_CHAIN_ID, NETWORKS, SUPPORTED_CHAINS } from 'config/constants'
 import { nodes } from './getRpcUrl'
-
-const NETWORK_CONFIG = {
-  [ChainId.BSC_MAINNET]: {
-    name: 'BNB Smart Chain Mainnet',
-    scanURL: BASE_BSC_SCAN_URLS[ChainId.BSC_MAINNET],
-  },
-  [ChainId.BSC_TESTNET]: {
-    name: 'BNB Smart Chain Testnet',
-    scanURL: BASE_BSC_SCAN_URLS[ChainId.BSC_TESTNET],
-  },
-}
 
 /**
  * Prompt the user to add BSC as a network on Metamask, or switch to BSC if the wallet is on a different network
  * @returns {boolean} true if the setup succeeded, false otherwise
  */
-export const setupNetwork = async (externalProvider?: ExternalProvider) => {
+export const setupNetwork = async (externalProvider?: ExternalProvider, chainId?: ChainId) => {
   const provider = externalProvider || window.ethereum
-  const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID, 10) as keyof typeof NETWORK_CONFIG
-  if (!NETWORK_CONFIG[chainId]) {
+  if (!SUPPORTED_CHAINS.includes(chainId)) {
     console.error('Invalid chain id')
     return false
   }
@@ -41,17 +29,7 @@ export const setupNetwork = async (externalProvider?: ExternalProvider) => {
           await provider.request({
             method: 'wallet_addEthereumChain',
             params: [
-              {
-                chainId: `0x${chainId.toString(16)}`,
-                chainName: NETWORK_CONFIG[chainId].name,
-                nativeCurrency: {
-                  name: 'BNB',
-                  symbol: 'bnb',
-                  decimals: 18,
-                },
-                rpcUrls: nodes,
-                blockExplorerUrls: [`${NETWORK_CONFIG[chainId].scanURL}/`],
-              },
+              NETWORKS[chainId ?? DEFAULT_CHAIN_ID],
             ],
           })
           return true
@@ -65,6 +43,40 @@ export const setupNetwork = async (externalProvider?: ExternalProvider) => {
   } else {
     console.error("Can't setup the BSC network on metamask because window.ethereum is undefined")
     return false
+  }
+}
+
+
+export const switchChain = async (chainId: ChainId) => {
+  const provider = window.ethereum
+  if (provider) {
+    try { 
+      await provider.request({
+        "id": 1,
+        "jsonrpc": "2.0",
+        "method": "wallet_switchEthereumChain",
+        "params": [
+          {
+            chainId: `0x${chainId.toString(16)}`,
+          }
+        ]
+      })
+      return undefined
+    } catch (error: any) {
+      if(error.code === 4902) {
+        const result = await setupNetwork(provider, chainId)
+        return result
+      }
+      
+      console.error('Failed to switch the network in Metamask:', error)
+      if(error?.message?.indexOf('wallet_switchEthereumChain') > 0) {
+        return `Failed to switch networks from the Brewlabs Platform. In order to use ${NETWORKS[chainId ?? DEFAULT_CHAIN_ID].chainName}, you must change the blockchain of your wallet directly.`
+      }
+      return error?.message
+    }
+  } else {
+    console.error("Can't setup the BSC network on metamask because window.ethereum is undefined")
+    return `In order to use ${NETWORKS[chainId ?? DEFAULT_CHAIN_ID].chainName}, Please try again after disconnect wallet and switch the blockchain on your connected wallet directly.`;
   }
 }
 

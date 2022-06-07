@@ -60,7 +60,7 @@ const useAuth = () => {
               }
               toastError(t('Authorization Error'), t('Please authorize to access your account'))
             } else {
-              toastError(error.name, error.message)
+              toastError(error?.name, error?.message)
             }
           }
         })

@@ -151,8 +151,7 @@ const Menu: React.FC<NavProps> = ({
                   hideLanguage
                 />
               </Box> */}
-              {/* {globalMenu} {userMenu} */}
-              {userMenu}
+              {globalMenu} {userMenu}
             </Flex>
           </StyledNav>
         </FixedContainer>
