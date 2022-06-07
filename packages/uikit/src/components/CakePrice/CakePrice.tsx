@@ -27,7 +27,7 @@ const PriceLink = styled.a`
 const CakePrice: React.FC<Props> = ({ cakePriceUsd, color = "textSubtle", showSkeleton = true }) => {
   return cakePriceUsd ? (
     <PriceLink
-      href="https://orbitalswap.com/swap?outputCurrency=0x78D68cF6D97826E200743C1Ed84eE88d0cDf04C4"
+      href="https://orbitalswap.com/swap?outputCurrency=0x42b98A2f73a282D731b0B8F4ACfB6cAF3565496B"
       target="_blank"
     >
       <LogoRound width="24px" mr="8px" />

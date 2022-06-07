@@ -32,7 +32,7 @@ export const mainnetTokens = defineTokens({
   ),
   orb: new Token(
     MAINNET,
-    '0x78D68cF6D97826E200743C1Ed84eE88d0cDf04C4',
+    '0x42b98A2f73a282D731b0B8F4ACfB6cAF3565496B',
     18,
     'ORB',
     'OrbitalSwap Token',

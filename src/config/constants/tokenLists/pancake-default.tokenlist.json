@@ -29,10 +29,10 @@
     {
       "name": "OrbitalSwap Token",
       "symbol": "ORB",
-      "address": "0x78D68cF6D97826E200743C1Ed84eE88d0cDf04C4",
+      "address": "0x42b98A2f73a282D731b0B8F4ACfB6cAF3565496B",
       "chainId": 56,
       "decimals": 18,
-      "logoURI": "https://orbitalswap.com/images/tokens/0x912F594Fd096E67e0c0A18D496A9f70E3171c330.png"
+      "logoURI": "https://orbitalswap.com/images/tokens/0x42b98A2f73a282D731b0B8F4ACfB6cAF3565496B.png"
     },
     {
       "name": "BUSD Token",

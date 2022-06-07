@@ -13,7 +13,7 @@ const farms: SerializedFarmConfig[] = [
     lpSymbol: 'ORB',
     lpAddresses: {
       97: '',
-      56: '0x78D68cF6D97826E200743C1Ed84eE88d0cDf04C4',
+      56: '0x42b98A2f73a282D731b0B8F4ACfB6cAF3565496B',
     },
     token: serializedTokens.syrup,
     quoteToken: serializedTokens.wbnb,
@@ -23,7 +23,7 @@ const farms: SerializedFarmConfig[] = [
     lpSymbol: 'ORB-BNB LP',
     lpAddresses: {
       97: '0x3ed8936cAFDF85cfDBa29Fbe5940A5b0524824F4',
-      56: '0x6b2835BB6e706B81f2FB109F1a2A35CB79c27f68',
+      56: '0x451a503b59A4DEA428b8eb88D6df27DE8A7fcfe1',
     },
     token: serializedTokens.orb,
     quoteToken: serializedTokens.wbnb,

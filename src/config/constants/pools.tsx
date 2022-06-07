@@ -48,7 +48,7 @@ const pools: SerializedPoolConfig[] = [
     earningToken: serializedTokens.orb,
     contractAddress: {
       97: '',
-      56: '0xb1c92b1B1d8427C290eA6d85bf8F2a3B12f014d6',
+      56: '0xd67a0CE4B1484DBa8dB53349F9b26a3272dB04F5',
     },
     poolCategory: PoolCategory.CORE,
     harvest: true,
