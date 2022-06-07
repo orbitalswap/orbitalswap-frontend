@@ -5,7 +5,7 @@ export const DEFAULT_META: PageMeta = {
   title: 'OrbitalSwap',
   description:
     'The Future of Defi, The Next Generation In Defi Tools and Trading',
-  image: 'https://orbitalswap.netlify.app/images/hero.png',
+  image: 'https://orbitalswap.com/images/hero.png',
 }
 
 export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {

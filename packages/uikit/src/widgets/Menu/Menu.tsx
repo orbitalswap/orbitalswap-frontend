@@ -136,11 +136,11 @@ const Menu: React.FC<NavProps> = ({
               {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem} ml="24px" />}
             </Flex>
             <Flex alignItems="center" height="100%">
-              {/* {!isMobile && !isMd && (
+              {!isMobile && !isMd && (
                 <Box mr="12px">
                   <CakePrice showSkeleton={false} cakePriceUsd={cakePriceUsd} />
                 </Box>
-              )} */}
+              )}
               {/* <Box mt="4px">
                 <LangSelector
                   currentLang={currentLang}

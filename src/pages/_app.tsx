@@ -57,7 +57,7 @@ function MyApp(props: AppProps) {
           content="Orbital - The Future of DeFi"
         />
         <meta name="theme-color" content="#38D7CD" />
-        <meta name="twitter:image" content="https://orbitalswap.netlify.app/images/hero.png" />
+        <meta name="twitter:image" content="https://orbitalswap.com/images/hero.png" />
         <meta
           name="twitter:description"
           content="Orbital - The Future of DeFi, The Next Generation In Defi Tools and Trading."
