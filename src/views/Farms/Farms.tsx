@@ -423,7 +423,7 @@ const Farms: React.FC = ({ children }) => {
             </LabelWrapper>
           </FilterContainer>
         </ControlContainer>
-        {isInactive && (
+        {/* {isInactive && (
           <FinishedTextContainer>
             <Text fontSize={['16px', null, '20px']} color="failure" pr="4px">
               {t("Don't see the farm you are staking?")}
@@ -445,7 +445,7 @@ const Farms: React.FC = ({ children }) => {
               </FinishedTextLink>
             </Flex>
           </FinishedTextContainer>
-        )}
+        )} */}
         {renderContent()}
         {account && !userDataLoaded && stakedOnly && (
           <Flex justifyContent="center">
