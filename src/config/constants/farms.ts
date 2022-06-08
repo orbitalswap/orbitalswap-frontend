@@ -68,6 +68,16 @@ const farms: SerializedFarmConfig[] = [
     token: serializedTokens.btcb,
     quoteToken: serializedTokens.wbnb,
   },
+  {
+    pid: 7,
+    lpSymbol: 'BTCB-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x3ec9B8e424486FCf4923d5e1424B838feee628E8',
+    },
+    token: serializedTokens.btcb,
+    quoteToken: serializedTokens.busd,
+  },
 ].filter((f) => !!f.lpAddresses[CHAIN_ID])
 
 export default farms
