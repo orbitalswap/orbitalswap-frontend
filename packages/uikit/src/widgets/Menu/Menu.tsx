@@ -9,6 +9,7 @@ import MenuItems from "../../components/MenuItems/MenuItems";
 import { SubMenuItems } from "../../components/SubMenuItems";
 import { useMatchBreakpoints } from "../../hooks";
 import CakePrice from "../../components/CakePrice/CakePrice";
+import Audit from "../../components/Audit/Audit";
 import Logo from "./components/Logo";
 import { MENU_HEIGHT, MOBILE_MENU_HEIGHT, TOP_BANNER_HEIGHT, TOP_BANNER_HEIGHT_MOBILE } from "./config";
 import { NavProps } from "./types";
@@ -141,6 +142,9 @@ const Menu: React.FC<NavProps> = ({
                   <CakePrice showSkeleton={false} cakePriceUsd={cakePriceUsd} />
                 </Box>
               )}
+              <Box mr="12px">
+                <Audit showSkeleton={false} cakePriceUsd={cakePriceUsd} />
+              </Box>
               <Box mt="4px">
                 <LangSelector
                   currentLang={currentLang}

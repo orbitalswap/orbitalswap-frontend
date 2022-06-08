@@ -115,6 +115,7 @@ export { default as ShareIcon } from "./Icons/Share";
 export { default as ShrinkIcon } from "./Icons/Shrink";
 export { default as SmallDotIcon } from "./Icons/SmallDot";
 export { default as SmartContractIcon } from "./Icons/SmartContract";
+export { default as SpadeTechIcon } from "./Icons/SpadeTech";
 export { default as SplitIcon } from "./Icons/Split";
 export { default as StarFillIcon } from "./Icons/StarFill";
 export { default as StarLineIcon } from "./Icons/StarLine";
