@@ -65,8 +65,8 @@ const farms: SerializedFarmConfig[] = [
       97: '',
       56: '0xfeC8Ee2fd97CF04FA7a2013299496E3EdF497EbC',
     },
-    token: serializedTokens.btcb,
-    quoteToken: serializedTokens.wbnb,
+    token: serializedTokens.wbnb,
+    quoteToken: serializedTokens.btcb,
   },
   {
     pid: 7,
@@ -95,8 +95,8 @@ const farms: SerializedFarmConfig[] = [
       97: '',
       56: '0xaB5d13feE7B4eCC6B2D019BB16793D18ab8c9982',
     },
-    token: serializedTokens.orb,
-    quoteToken: serializedTokens.usdc,
+    token: serializedTokens.usdc,
+    quoteToken: serializedTokens.orb,
   },
   {
     pid: 10,
@@ -105,12 +105,22 @@ const farms: SerializedFarmConfig[] = [
       97: '',
       56: '0x80fBD8Daa1516ac96c26b02798df6CC4919ef354',
     },
+    token: serializedTokens.usdc,
+    quoteToken: serializedTokens.eth,
+  },
+  {
+    pid: 14,
+    lpSymbol: 'ETH-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0xc9b39b94a09a1F772CD98fB9DBfC66696C921ab9',
+    },
     token: serializedTokens.eth,
-    quoteToken: serializedTokens.usdc,
+    quoteToken: serializedTokens.wbnb,
   },
   {
     pid: 11,
-    lpSymbol: 'ETH-BTCB LP',
+    lpSymbol: 'BTCB-ETH LP',
     lpAddresses: {
       97: '',
       56: '0x9fb8c330d0804C6Af7cC3E044cE8717021AaEBCE',
@@ -135,8 +145,8 @@ const farms: SerializedFarmConfig[] = [
       97: '',
       56: '0xE5FcBAad5c0a22375A3Ee2EC7A85707807eDFd29',
     },
-    token: serializedTokens.avax,
-    quoteToken: serializedTokens.piggy,
+    token: serializedTokens.piggy,
+    quoteToken: serializedTokens.avax,
   },
 ].filter((f) => !!f.lpAddresses[CHAIN_ID])
 
