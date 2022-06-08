@@ -2135,7 +2135,7 @@ export const testnetTokens = defineTokens({
     '0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe',
     18,
     'CAKE',
-    'OrbitalSwap Token',
+    'PancakeSwap Token',
     'https://pancakeswap.finance/',
   ),
   busd: new Token(
