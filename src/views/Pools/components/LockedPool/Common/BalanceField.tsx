@@ -1,10 +1,11 @@
-import { BalanceInput, Button, Flex, Image, Slider, Text } from '@pancakeswap/uikit'
+import { BalanceInput, Button, Flex, Image, Text } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from 'contexts/Localization'
 import { Dispatch, memo, SetStateAction, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { BIG_TEN } from 'utils/bigNumber'
 import { getFullDisplayBalance } from 'utils/formatBalance'
+import { Slider } from 'components/Slider'
 import { useUserEnoughCakeValidator } from '../hooks/useUserEnoughCakeValidator'
 
 const StyledButton = styled(Button)`
