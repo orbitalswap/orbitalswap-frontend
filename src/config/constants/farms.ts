@@ -128,6 +128,16 @@ const farms: SerializedFarmConfig[] = [
     token: serializedTokens.avax,
     quoteToken: serializedTokens.wbnb,
   },
+  {
+    pid: 13,
+    lpSymbol: 'AVAX-PIGGY LP',
+    lpAddresses: {
+      97: '',
+      56: '0xE5FcBAad5c0a22375A3Ee2EC7A85707807eDFd29',
+    },
+    token: serializedTokens.avax,
+    quoteToken: serializedTokens.piggy,
+  },
 ].filter((f) => !!f.lpAddresses[CHAIN_ID])
 
 export default farms
