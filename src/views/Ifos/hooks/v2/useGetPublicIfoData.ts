@@ -30,7 +30,7 @@ const formatPool = (pool) => ({
  * Gets all public data of an IFO
  */
 const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
-  const { address, releaseBlockNumber, version } = ifo
+  const { address, chainId, releaseBlockNumber, version } = ifo
   const cakePriceUsd = usePriceCakeBusd()
   const lpTokenPriceInUsd = useLpTokenPrice(ifo.currency.symbol)
   const currencyPriceInUSD = ifo.currency === tokens.cake ? cakePriceUsd : lpTokenPriceInUsd
@@ -82,6 +82,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
         pointThreshold,
       ] = await multicallv2(
         abi,
+        chainId,
         [
           {
             address,

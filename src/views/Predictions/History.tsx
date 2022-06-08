@@ -46,7 +46,7 @@ const SpinnerWrapper = styled.div`
 `
 
 const History = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const dispatch = useAppDispatch()
   const isHistoryPaneOpen = useIsHistoryPaneOpen()
   const isFetchingHistory = useGetIsFetchingHistory()
@@ -59,7 +59,7 @@ const History = () => {
 
   useEffect(() => {
     if (account && isHistoryPaneOpen) {
-      dispatch(fetchNodeHistory({ account }))
+      dispatch(fetchNodeHistory({ account, chainId }))
     }
   }, [account, currentEpoch, isHistoryPaneOpen, dispatch])
 

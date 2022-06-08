@@ -55,24 +55,24 @@ import { IPancakePair } from '../config/abi/types/IPancakePair'
  */
 
 export const useIfoV1Contract = (address: string) => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getIfoV1Contract(address, library.getSigner()), [address, library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getIfoV1Contract(address, chainId, library.getSigner()), [address, library])
 }
 
 export const useIfoV2Contract = (address: string) => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getIfoV2Contract(address, library.getSigner()), [address, library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getIfoV2Contract(address, chainId, library.getSigner()), [address, library])
 }
 
 export const useLaunchpadContract = (address: string) => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getLaunchpadContract(address, library.getSigner()), [address, library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getLaunchpadContract(address, chainId, library.getSigner()), [address, library])
 }
 
 export const useERC20 = (address: string, withSignerIfPossible = true) => {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
   return useMemo(
-    () => getBep20Contract(address, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    () => getBep20Contract(address, chainId, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
     [account, address, library, withSignerIfPossible],
   )
 }
@@ -81,55 +81,55 @@ export const useERC20 = (address: string, withSignerIfPossible = true) => {
  * @see https://docs.openzeppelin.com/contracts/3.x/api/token/erc721
  */
 export const useERC721 = (address: string) => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getErc721Contract(address, library.getSigner()), [address, library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getErc721Contract(address, chainId, library.getSigner()), [address, chainId, library])
 }
 
 export const useCake = (): { reader: Cake; signer: Cake } => {
-  const { account, library } = useActiveWeb3React()
+  const { chainId, account, library } = useActiveWeb3React()
   return useMemo(
     () => ({
       reader: getCakeContract(null),
-      signer: getCakeContract(getProviderOrSigner(library, account)),
+      signer: getCakeContract(chainId, getProviderOrSigner(library, account)),
     }),
-    [account, library],
+    [account, chainId, library],
   )
 }
 
 export const useBunnyFactory = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnyFactoryContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getBunnyFactoryContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const usePancakeBunnies = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getPancakeBunniesContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getPancakeBunniesContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useProfileContract = (withSignerIfPossible = true) => {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
   return useMemo(
-    () => getProfileContract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [withSignerIfPossible, account, library],
+    () => getProfileContract(chainId, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, account, chainId, library],
   )
 }
 
 export const useLotteryV2Contract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getLotteryV2Contract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getLotteryV2Contract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useMasterchef = (withSignerIfPossible = true) => {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
   return useMemo(
-    () => getMasterchefContract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [library, withSignerIfPossible, account],
+    () => getMasterchefContract(chainId, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [chainId, library, withSignerIfPossible, account],
   )
 }
 
 export const useMasterchefV1 = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getMasterchefV1Contract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getMasterchefV1Contract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useSousChef = (id) => {
@@ -138,130 +138,130 @@ export const useSousChef = (id) => {
 }
 
 export const usePointCenterIfoContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getPointCenterIfoContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getPointCenterIfoContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useBunnySpecialContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getBunnySpecialContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useClaimRefundContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getClaimRefundContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getClaimRefundContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useTradingCompetitionContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getTradingCompetitionContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getTradingCompetitionContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useTradingCompetitionContractV2 = (withSignerIfPossible = true) => {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
   return useMemo(
-    () => getTradingCompetitionContractV2(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [library, withSignerIfPossible, account],
+    () => getTradingCompetitionContractV2(chainId, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [chainId, library, withSignerIfPossible, account],
   )
 }
 
 export const useTradingCompetitionContractMobox = (withSignerIfPossible = true) => {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
   return useMemo(
-    () => getTradingCompetitionContractMobox(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [library, withSignerIfPossible, account],
+    () => getTradingCompetitionContractMobox(chainId, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [chainId, library, withSignerIfPossible, account],
   )
 }
 
 export const useEasterNftContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getEasterNftContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getEasterNftContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useVaultPoolContract = (): CakeVaultV2 => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getCakeVaultV2Contract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getCakeVaultV2Contract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useCakeVaultContract = (withSignerIfPossible = true) => {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
   return useMemo(
-    () => getCakeVaultV2Contract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [withSignerIfPossible, library, account],
+    () => getCakeVaultV2Contract(chainId, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, chainId, library, account],
   )
 }
 
 export const usePredictionsContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getPredictionsContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getPredictionsContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useChainlinkOracleContract = (withSignerIfPossible = true) => {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
   return useMemo(
-    () => getChainlinkOracleContract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [account, library, withSignerIfPossible],
+    () => getChainlinkOracleContract(chainId, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [account, chainId, library, withSignerIfPossible],
   )
 }
 
 export const useSpecialBunnyCakeVaultContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialCakeVaultContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getBunnySpecialCakeVaultContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useSpecialBunnyPredictionContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialPredictionContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getBunnySpecialPredictionContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useBunnySpecialLotteryContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialLotteryContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getBunnySpecialLotteryContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useBunnySpecialXmasContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialXmasContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getBunnySpecialXmasContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useAnniversaryAchievementContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getAnniversaryAchievementContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getAnniversaryAchievementContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useNftSaleContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getNftSaleContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getNftSaleContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const usePancakeSquadContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getPancakeSquadContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getPancakeSquadContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useFarmAuctionContract = (withSignerIfPossible = true) => {
-  const { account, library } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
   return useMemo(
-    () => getFarmAuctionContract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [library, account, withSignerIfPossible],
+    () => getFarmAuctionContract(chainId, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [chainId, library, account, withSignerIfPossible],
   )
 }
 
 export const useNftMarketContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getNftMarketContract(library.getSigner()), [library])
+  const { chainId, library } = useActiveWeb3React()
+  return useMemo(() => getNftMarketContract(chainId, library.getSigner()), [chainId, library])
 }
 
 export const useErc721CollectionContract = (
   collectionAddress: string,
 ): { reader: Erc721collection; signer: Erc721collection } => {
-  const { library, account } = useActiveWeb3React()
+  const {chainId, library, account } = useActiveWeb3React()
   return useMemo(
     () => ({
-      reader: getErc721CollectionContract(null, collectionAddress),
-      signer: getErc721CollectionContract(getProviderOrSigner(library, account), collectionAddress),
+      reader: getErc721CollectionContract(chainId, null, collectionAddress),
+      signer: getErc721CollectionContract(chainId, getProviderOrSigner(library, account), collectionAddress),
     }),
-    [account, library, collectionAddress],
+    [account, chainId, library, collectionAddress],
   )
 }
 
@@ -273,17 +273,17 @@ function useContract<T extends Contract = Contract>(
   ABI: any,
   withSignerIfPossible = true,
 ): T | null {
-  const { library, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
 
   return useMemo(() => {
     if (!address || !ABI || !library) return null
     try {
-      return getContract(address, ABI, withSignerIfPossible ? getProviderOrSigner(library, account) : null)
+      return getContract(address, chainId, ABI, withSignerIfPossible ? getProviderOrSigner(library, account) : null)
     } catch (error) {
       console.error('Failed to get contract', error)
       return null
     }
-  }, [address, ABI, library, withSignerIfPossible, account]) as T
+  }, [address, ABI, chainId, library, withSignerIfPossible, account]) as T
 }
 
 export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean) {
@@ -304,5 +304,6 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 }
 
 export function useMulticallContract() {
-  return useContract<Multicall>(getMulticallAddress(), multiCallAbi, false)
+  const { chainId } = useActiveWeb3React()
+  return useContract<Multicall>(getMulticallAddress(chainId), multiCallAbi, false)
 }

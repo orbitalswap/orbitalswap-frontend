@@ -5,6 +5,7 @@ import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { PriceChartEntry } from 'state/info/types'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import orderBy from 'lodash/orderBy'
+import { ChainId } from '@orbitalswap/sdk'
 
 const getPriceSubqueries = (tokenAddress: string, blocks: any) =>
   blocks.map(
@@ -31,12 +32,19 @@ const priceQueryConstructor = (subqueries: string[]) => {
 
 const fetchTokenPriceData = async (
   address: string,
+  chainId: ChainId,
   interval: number,
   startTimestamp: number,
 ): Promise<{
   data?: PriceChartEntry[]
   error: boolean
 }> => {
+  if (!INFO_CLIENT) {
+    return {
+      error: true,
+    }
+  }
+
   // Construct timestamps to query against
   const endTimestamp = getUnixTime(new Date())
   const timestamps = []
@@ -46,7 +54,7 @@ const fetchTokenPriceData = async (
     time += interval
   }
   try {
-    const blocks = await getBlocksFromTimestamps(timestamps, 'asc', 500)
+    const blocks = await getBlocksFromTimestamps(chainId, timestamps, 'asc', 500)
     if (!blocks || blocks.length === 0) {
       console.error('Error fetching blocks for timestamps', timestamps)
       return {
@@ -57,7 +65,7 @@ const fetchTokenPriceData = async (
     const prices: any | undefined = await multiQuery(
       priceQueryConstructor,
       getPriceSubqueries(address, blocks),
-      INFO_CLIENT,
+      INFO_CLIENT[chainId],
       200,
     )
 

@@ -23,6 +23,7 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
   const currentBlock = useCurrentBlock()
 
   const {
+    chainId,
     stakingToken,
     earningToken,
     totalStaked,
@@ -46,8 +47,8 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
   } = useVaultPoolByKey(vaultKey)
 
   const tokenAddress = earningToken.address || ''
-  const poolContractAddress = getAddress(contractAddress)
-  const cakeVaultContractAddress = getVaultPoolAddress(vaultKey)
+  const poolContractAddress = getAddress(contractAddress, chainId)
+  const cakeVaultContractAddress = getVaultPoolAddress(vaultKey, chainId)
   const isMetaMaskInScope = !!window.ethereum?.isMetaMask
 
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =

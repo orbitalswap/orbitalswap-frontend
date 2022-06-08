@@ -9,8 +9,10 @@ import { FetchStatus } from 'config/constants/types'
 import { laggyMiddleware } from 'hooks/useSWRContract'
 import usePrevious from 'hooks/usePreviousValue'
 import { isAddress } from 'utils'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useNftsForAddress = (account: string, profile: Profile, isProfileFetching: boolean) => {
+  const { chainId } = useActiveWeb3React()
   const { data: collections } = useGetCollections()
   const resetLaggyRef = useRef(null)
   const previousAccount = usePrevious(account)
@@ -27,6 +29,7 @@ const useNftsForAddress = (account: string, profile: Profile, isProfileFetching:
     if (hasProfileNft) {
       return {
         tokenId: profileNftTokenId,
+        chainId,
         collectionAddress: profileNftCollectionAddress,
         nftLocation: NftLocation.PROFILE,
       }
@@ -37,7 +40,7 @@ const useNftsForAddress = (account: string, profile: Profile, isProfileFetching:
   // @ts-ignore
   const { status, data, mutate, resetLaggy } = useSWR(
     !isProfileFetching && !isEmpty(collections) && isAddress(account) ? [account, 'userNfts'] : null,
-    async () => getCompleteAccountNftData(account, collections, profileNftWithCollectionAddress),
+    async () => getCompleteAccountNftData(account, chainId, collections, profileNftWithCollectionAddress),
     { use: [laggyMiddleware] },
   )
 

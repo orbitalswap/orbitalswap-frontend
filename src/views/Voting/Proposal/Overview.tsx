@@ -24,19 +24,19 @@ const Overview = () => {
   const { query, isFallback } = useRouter()
   const id = query.id as string
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   const {
     status: proposalLoadingStatus,
     data: proposal,
     error,
-  } = useSWRImmutable(id ? ['proposal', id] : null, () => getProposal(id))
+  } = useSWRImmutable(id ? ['proposal', id] : null, () => getProposal(id, chainId))
 
   const {
     status: votesLoadingStatus,
     data: votes,
     mutate: refetch,
-  } = useSWRImmutable(proposal ? ['proposal', proposal, 'votes'] : null, async () => getAllVotes(proposal))
+  } = useSWRImmutable(proposal ? ['proposal', proposal, 'votes'] : null, async () => getAllVotes(proposal, chainId))
   const hasAccountVoted = account && votes && votes.some((vote) => vote.voter.toLowerCase() === account.toLowerCase())
 
   const isPageLoading = votesLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching

@@ -1,3 +1,4 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { PCS_V2_START } from 'config/constants/info'
 import { gql } from 'graphql-request'
 import { ChartEntry } from 'state/info/types'
@@ -5,8 +6,10 @@ import { infoClient } from 'utils/graphql'
 import { fetchChartData, mapDayData } from '../helpers'
 import { TokenDayDatasResponse } from '../types'
 
-const getTokenChartData = async (skip: number, address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
+const getTokenChartData = async (chainId: ChainId, skip: number, address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
   try {
+    if(!infoClient(chainId)) return { error: true }
+
     const query = gql`
       query tokenDayDatas($startTime: Int!, $skip: Int!, $address: Bytes!) {
         tokenDayDatas(
@@ -22,7 +25,7 @@ const getTokenChartData = async (skip: number, address: string): Promise<{ data?
         }
       }
     `
-    const { tokenDayDatas } = await infoClient.request<TokenDayDatasResponse>(query, {
+    const { tokenDayDatas } = await infoClient(chainId).request<TokenDayDatasResponse>(query, {
       startTime: PCS_V2_START,
       skip,
       address,
@@ -35,8 +38,8 @@ const getTokenChartData = async (skip: number, address: string): Promise<{ data?
   }
 }
 
-const fetchTokenChartData = async (address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
-  return fetchChartData(getTokenChartData, address)
+const fetchTokenChartData = async (address: string, chainId: ChainId): Promise<{ data?: ChartEntry[]; error: boolean }> => {
+  return fetchChartData(getTokenChartData, chainId, address)
 }
 
 export default fetchTokenChartData

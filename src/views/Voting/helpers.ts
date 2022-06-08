@@ -5,6 +5,7 @@ import _chunk from 'lodash/chunk'
 import { ADMINS, PANCAKE_SPACE, SNAPSHOT_VERSION } from './config'
 import { getScores } from './getScores'
 import * as strategies from './strategies'
+import { ChainId } from '@orbitalswap/sdk'
 
 export const isCoreProposal = (proposal: Proposal) => {
   return ADMINS.includes(proposal.author.toLowerCase())
@@ -64,8 +65,10 @@ export const generatePayloadData = () => {
 /**
  * General function to send commands to the snapshot api
  */
-export const sendSnapshotData = async (message: Message) => {
-  const response = await fetch(SNAPSHOT_HUB_API, {
+export const sendSnapshotData = async (message: Message, chainId: ChainId) => {
+  if(SNAPSHOT_HUB_API[chainId]) return null
+
+  const response = await fetch(SNAPSHOT_HUB_API[chainId], {
     method: 'post',
     headers: {
       Accept: 'application/json',

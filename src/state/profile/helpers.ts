@@ -6,6 +6,7 @@ import { NftToken } from 'state/nftMarket/types'
 import { getNftApi } from 'state/nftMarket/helpers'
 import { multicallv2 } from 'utils/multicall'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
+import { ChainId } from '@orbitalswap/sdk'
 
 export interface GetProfileResponse {
   hasRegistered: boolean
@@ -45,12 +46,12 @@ export const getUsername = async (address: string): Promise<string> => {
   }
 }
 
-export const getProfile = async (address: string): Promise<GetProfileResponse> => {
+export const getProfile = async (address: string, chainId: ChainId): Promise<GetProfileResponse> => {
   try {
     const profileCalls = ['hasRegistered', 'getUserProfile'].map((method) => {
-      return { address: getPancakeProfileAddress(), name: method, params: [address] }
+      return { address: getPancakeProfileAddress(chainId), name: method, params: [address] }
     })
-    const profileCallsResult = await multicallv2(profileABI, profileCalls, { requireSuccess: false })
+    const profileCallsResult = await multicallv2(profileABI, chainId, profileCalls, { requireSuccess: false })
     const [[hasRegistered], profileResponse] = profileCallsResult
     if (!hasRegistered) {
       return { hasRegistered, profile: null }
@@ -58,9 +59,9 @@ export const getProfile = async (address: string): Promise<GetProfileResponse> =
 
     const { userId, points, teamId, tokenId, collectionAddress, isActive } = transformProfileResponse(profileResponse)
     const [team, username, nftRes] = await Promise.all([
-      getTeam(teamId),
+      getTeam(teamId, chainId),
       getUsername(address),
-      isActive ? getNftApi(collectionAddress, tokenId.toString()) : Promise.resolve(null),
+      isActive ? getNftApi(collectionAddress, tokenId.toString(), chainId) : Promise.resolve(null),
     ])
     let nftToken: NftToken
 
@@ -69,6 +70,7 @@ export const getProfile = async (address: string): Promise<GetProfileResponse> =
     if (nftRes) {
       nftToken = {
         tokenId: nftRes.tokenId,
+        chainId: nftRes.chainId,
         name: nftRes.name,
         collectionName: nftRes.collection.name,
         collectionAddress,

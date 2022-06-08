@@ -33,7 +33,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ nft }) => {
   useEffect(() => {
     const fetchTokenActivity = async () => {
       try {
-        const tokenActivity = await getTokenActivity(nft.tokenId, nft.collectionAddress.toLowerCase())
+        const tokenActivity = await getTokenActivity(nft.tokenId, nft.collectionAddress.toLowerCase(), nft.chainId)
         setSortedTokenActivities(sortActivity(tokenActivity))
         setIsLoading(false)
       } catch (error) {

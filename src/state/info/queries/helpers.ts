@@ -1,3 +1,4 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { ONE_DAY_UNIX, PCS_V2_START } from 'config/constants/info'
 import { getUnixTime } from 'date-fns'
 import { TransactionType } from 'state/info/types'
@@ -64,13 +65,14 @@ export const mapPairDayData = (pairDayData: PairDayData): ChartEntry => ({
   liquidityUSD: parseFloat(pairDayData.reserveUSD),
 })
 
-type PoolOrTokenFetchFn = (skip: number, address: string) => Promise<{ data?: ChartEntry[]; error: boolean }>
-type OverviewFetchFn = (skip: number) => Promise<{ data?: ChartEntry[]; error: boolean }>
+type PoolOrTokenFetchFn = (chainId: ChainId, skip: number, address: string) => Promise<{ data?: ChartEntry[]; error: boolean }>
+type OverviewFetchFn = (chainId: ChainId, skip: number) => Promise<{ data?: ChartEntry[]; error: boolean }>
 
 // Common helper function to retrieve chart data
 // Used for both Pool and Token charts
 export const fetchChartData = async (
   getEntityDayDatas: PoolOrTokenFetchFn | OverviewFetchFn,
+  chainId: ChainId,
   address?: string,
 ): Promise<{ data?: ChartEntry[]; error: boolean }> => {
   let chartEntries: ChartEntry[] = []
@@ -80,7 +82,7 @@ export const fetchChartData = async (
 
   while (!allFound) {
     // eslint-disable-next-line no-await-in-loop
-    const { data, error: fetchError } = await getEntityDayDatas(skip, address)
+    const { data, error: fetchError } = await getEntityDayDatas(chainId, skip, address)
     skip += 1000
     allFound = data?.length < 1000
     error = fetchError

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { arrayify } from '@ethersproject/bytes'
 import { parseBytes32String } from '@ethersproject/strings'
-import { Currency, currencyEquals, NATIVE_CURRENCIES, Token } from '@orbitalswap/sdk'
+import { ChainId, Currency, currencyEquals, NATIVE_CURRENCIES, Token } from '@orbitalswap/sdk'
 import { createSelector } from '@reduxjs/toolkit'
 import { GELATO_NATIVE } from 'config/constants'
 import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
@@ -19,17 +19,17 @@ import useUserAddedTokens, { userAddedTokenSelector } from '../state/user/hooks/
 import { isAddress } from '../utils'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 
-const mapWithoutUrls = (tokenMap: TokenAddressMap) =>
-  Object.keys(tokenMap[DEFAULT_CHAIN_ID]).reduce<{ [address: string]: Token }>((newMap, address) => {
-    newMap[address] = tokenMap[DEFAULT_CHAIN_ID][address].token
+const mapWithoutUrls = (tokenMap: TokenAddressMap, chainId: ChainId) =>
+  Object.keys(tokenMap[chainId]).reduce<{ [address: string]: Token }>((newMap, address) => {
+    newMap[address] = tokenMap[chainId][address].token
     return newMap
   }, {})
 
-const allTokenSelector = createSelector(
+const allTokenSelector = (chainId) => createSelector(
   [combinedTokenMapFromActiveUrlsSelector, userAddedTokenSelector],
   (tokenMap, userAddedTokens) => {
     return (
-      userAddedTokens
+      userAddedTokens.filter(t => t.chainId === chainId)
         // reduce into all ALL_TOKENS filtered by the current chain
         .reduce<{ [address: string]: Token }>(
           (tokenMap_, token) => {
@@ -38,17 +38,17 @@ const allTokenSelector = createSelector(
           },
           // must make a copy because reduce modifies the map, and we do not
           // want to make a copy in every iteration
-          mapWithoutUrls(tokenMap),
+          mapWithoutUrls(tokenMap, chainId),
         )
     )
   },
 )
 
-const allOfficialsAndUserAddedTokensSelector = createSelector(
+const allOfficialsAndUserAddedTokensSelector = (chainId) =>  createSelector(
   [combinedTokenMapFromOfficialsUrlsSelector, userAddedTokenSelector],
   (tokenMap, userAddedTokens) => {
     return (
-      userAddedTokens
+      userAddedTokens.filter(t => t.chainId === chainId)
         // reduce into all ALL_TOKENS filtered by the current chain
         .reduce<{ [address: string]: Token }>(
           (tokenMap_, token) => {
@@ -57,7 +57,7 @@ const allOfficialsAndUserAddedTokensSelector = createSelector(
           },
           // must make a copy because reduce modifies the map, and we do not
           // want to make a copy in every iteration
-          mapWithoutUrls(tokenMap),
+          mapWithoutUrls(tokenMap, chainId),
         )
     )
   },
@@ -67,19 +67,22 @@ const allOfficialsAndUserAddedTokensSelector = createSelector(
  * Returns all tokens that are from active urls and user added tokens
  */
 export function useAllTokens(): { [address: string]: Token } {
-  return useSelector(allTokenSelector)
+  const { chainId } = useActiveWeb3React()
+  return useSelector(allTokenSelector(chainId))
 }
 
 /**
  * Returns all tokens that are from officials token list and user added tokens
  */
-export function useOfficialsAndUserAddedTokens(): { [address: string]: Token } {
-  return useSelector(allOfficialsAndUserAddedTokensSelector)
+export function useOfficialsAndUserAddedTokens(): { [address: string]: Token } {  
+  const { chainId } = useActiveWeb3React()
+  return useSelector(allOfficialsAndUserAddedTokensSelector(chainId))
 }
 
 export function useUnsupportedTokens(): { [address: string]: Token } {
+  const { chainId } = useActiveWeb3React()
   const unsupportedTokensMap = useUnsupportedTokenList()
-  return useMemo(() => mapWithoutUrls(unsupportedTokensMap), [unsupportedTokensMap])
+  return useMemo(() => mapWithoutUrls(unsupportedTokensMap, chainId), [unsupportedTokensMap])
 }
 
 export function useIsTokenActive(token: Token | undefined | null): boolean {

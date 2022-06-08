@@ -6,10 +6,11 @@ import { multicallv2 } from 'utils/multicall'
 import { TeamsById } from 'state/types'
 import profileABI from 'config/abi/pancakeProfile.json'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
+import { ChainId } from '@orbitalswap/sdk'
 
-const profileContract = getProfileContract()
+export const getTeam = async (teamId: number, chainId: ChainId): Promise<Team> => {
+  const profileContract = getProfileContract(chainId)
 
-export const getTeam = async (teamId: number): Promise<Team> => {
   try {
     const { 0: teamName, 2: numberUsers, 3: numberPoints, 4: isJoinable } = await profileContract.getTeamProfile(teamId)
     const staticTeamInfo = teamsList.find((staticTeam) => staticTeam.id === teamId)
@@ -28,7 +29,9 @@ export const getTeam = async (teamId: number): Promise<Team> => {
 /**
  * Gets on-chain data and merges it with the existing static list of teams
  */
-export const getTeams = async (): Promise<TeamsById> => {
+export const getTeams = async (chainId: ChainId): Promise<TeamsById> => {
+  const profileContract = getProfileContract(chainId)
+
   try {
     const teamsById = teamsList.reduce((accum, team) => {
       return {
@@ -41,12 +44,12 @@ export const getTeams = async (): Promise<TeamsById> => {
     const calls = []
     for (let i = 1; i <= nbTeams.toNumber(); i++) {
       calls.push({
-        address: getPancakeProfileAddress(),
+        address: getPancakeProfileAddress(chainId),
         name: 'getTeamProfile',
         params: [i],
       })
     }
-    const teamData = await multicallv2(profileABI, calls)
+    const teamData = await multicallv2(profileABI, chainId, calls)
 
     const onChainTeamData = teamData.reduce((accum, team, index) => {
       const { 0: teamName, 2: numberUsers, 3: numberPoints, 4: isJoinable } = team

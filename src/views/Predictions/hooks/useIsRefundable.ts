@@ -4,11 +4,11 @@ import { getPredictionsContract } from 'utils/contractHelpers'
 
 const useIsRefundable = (epoch: number) => {
   const [isRefundable, setIsRefundable] = useState(false)
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   useEffect(() => {
     const fetchRefundableStatus = async () => {
-      const predictionsContract = getPredictionsContract()
+      const predictionsContract = getPredictionsContract(chainId)
       const refundable = await predictionsContract.refundable(epoch, account)
 
       if (refundable) {
@@ -23,7 +23,7 @@ const useIsRefundable = (epoch: number) => {
     if (account) {
       fetchRefundableStatus()
     }
-  }, [account, epoch, setIsRefundable])
+  }, [account, chainId, epoch, setIsRefundable])
 
   return { isRefundable, setIsRefundable }
 }

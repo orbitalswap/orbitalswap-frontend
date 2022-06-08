@@ -4,13 +4,15 @@ import { getPancakeSquadContract } from 'utils/contractHelpers'
 import { multicallv2 } from 'utils/multicall'
 import { BigNumber } from '@ethersproject/bignumber'
 import nftSaleAbi from 'config/abi/nftSale.json'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useEventInfos = ({ refreshCounter, setCallback }) => {
+  const { chainId } = useActiveWeb3React()
   useEffect(() => {
     const fetchEventInfos = async () => {
       try {
-        const nftSaleAddress = getNftSaleAddress()
-        const pancakeSquadContract = getPancakeSquadContract()
+        const nftSaleAddress = getNftSaleAddress(chainId)
+        const pancakeSquadContract = getPancakeSquadContract(chainId)
 
         const calls = [
           'maxSupply',
@@ -33,7 +35,7 @@ const useEventInfos = ({ refreshCounter, setCallback }) => {
           [currentTotalTicketsDistributed],
           [currentSaleStatus],
           [currentStartTimestamp],
-        ] = await multicallv2(nftSaleAbi, calls)
+        ] = await multicallv2(nftSaleAbi, chainId, calls)
 
         const currentTotalSupplyMinted = await pancakeSquadContract.totalSupply()
 
@@ -55,7 +57,7 @@ const useEventInfos = ({ refreshCounter, setCallback }) => {
     if (nftSaleAbi.length > 0) {
       fetchEventInfos()
     }
-  }, [refreshCounter, setCallback])
+  }, [refreshCounter, chainId, setCallback])
 }
 
 export default useEventInfos

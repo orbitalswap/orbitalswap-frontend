@@ -36,7 +36,7 @@ const Divider = styled.hr`
 const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { isRefundable } = useIsRefundable(bet.round.epoch)
   const canClaim = useGetIsClaimable(bet.round.epoch)
   const bnbBusdPrice = useBNBBusdPrice()
@@ -110,7 +110,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   const handleSuccess = async () => {
     // We have to mark the bet as claimed immediately because it does not update fast enough
     dispatch(markAsCollected({ [bet.round.epoch]: true }))
-    dispatch(fetchLedgerData({ account, epochs: [bet.round.epoch] }))
+    dispatch(fetchLedgerData({ account, chainId, epochs: [bet.round.epoch] }))
   }
 
   return (

@@ -74,7 +74,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
 }) => {
   const dispatch = useAppDispatch()
   const { stakingToken, earningTokenPrice, vaultKey } = pool
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const vaultPoolContract = useVaultPoolContract()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -158,7 +158,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         </ToastDescriptionWithTx>,
       )
       onDismiss?.()
-      dispatch(fetchCakeVaultUserData({ account }))
+      dispatch(fetchCakeVaultUserData({ account, chainId }))
     }
   }
 
@@ -178,7 +178,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         </ToastDescriptionWithTx>,
       )
       onDismiss?.()
-      dispatch(fetchCakeVaultUserData({ account }))
+      dispatch(fetchCakeVaultUserData({ account, chainId }))
     }
   }
 

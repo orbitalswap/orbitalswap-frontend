@@ -4,6 +4,7 @@ import { LotteryTicket } from 'config/constants/types'
 import { LotteryUserGraphEntity, LotteryResponse, UserRound } from 'state/types'
 import { getRoundIdsArray, fetchMultipleLotteries, hasRoundBeenClaimed } from './helpers'
 import { fetchUserTicketsForMultipleRounds } from './getUserTicketsData'
+import { ChainId } from '@orbitalswap/sdk'
 
 export const MAX_USER_LOTTERIES_REQUEST_SIZE = 100
 
@@ -58,6 +59,7 @@ const applyNodeDataToUserGraphResponse = (
 
 export const getGraphLotteryUser = async (
   account: string,
+  chainId: ChainId,
   first = MAX_USER_LOTTERIES_REQUEST_SIZE,
   skip = 0,
   where: UserLotteriesWhere = {},
@@ -70,9 +72,11 @@ export const getGraphLotteryUser = async (
     rounds: [],
   }
 
+  if (!GRAPH_API_LOTTERY[chainId]) return blankUser
+
   try {
     const response = await request(
-      GRAPH_API_LOTTERY,
+      GRAPH_API_LOTTERY[chainId],
       gql`
         query getUserLotteries($account: ID!, $first: Int!, $skip: Int!, $where: Round_filter) {
           user(id: $account) {
@@ -123,13 +127,17 @@ export const getGraphLotteryUser = async (
   return user
 }
 
-const getUserLotteryData = async (account: string, currentLotteryId: string): Promise<LotteryUserGraphEntity> => {
+const getUserLotteryData = async (
+  account: string,
+  chainId: ChainId,
+  currentLotteryId: string,
+): Promise<LotteryUserGraphEntity> => {
   const idsForTicketsNodeCall = getRoundIdsArray(currentLotteryId)
-  const roundDataAndUserTickets = await fetchUserTicketsForMultipleRounds(idsForTicketsNodeCall, account)
+  const roundDataAndUserTickets = await fetchUserTicketsForMultipleRounds(idsForTicketsNodeCall, account, chainId)
   const userRoundsNodeData = roundDataAndUserTickets.filter((round) => round.userTickets.length > 0)
   const idsForLotteriesNodeCall = userRoundsNodeData.map((round) => round.roundId)
-  const lotteriesNodeData = await fetchMultipleLotteries(idsForLotteriesNodeCall)
-  const graphResponse = await getGraphLotteryUser(account)
+  const lotteriesNodeData = await fetchMultipleLotteries(idsForLotteriesNodeCall, chainId)
+  const graphResponse = await getGraphLotteryUser(account, chainId)
   const mergedRoundData = applyNodeDataToUserGraphResponse(userRoundsNodeData, graphResponse.rounds, lotteriesNodeData)
   const graphResponseWithNodeRounds = { ...graphResponse, rounds: mergedRoundData }
   return graphResponseWithNodeRounds

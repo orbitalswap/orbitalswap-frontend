@@ -11,13 +11,13 @@ import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
 import useToast from 'hooks/useToast'
 import { getNftsFromCollectionApi } from 'state/nftMarket/helpers'
 import { ApiSingleTokenData } from 'state/nftMarket/types'
-import { pancakeBunniesAddress } from 'views/Nft/market/constants'
 import { requiresApproval } from 'utils/requiresApproval'
 import { FetchStatus } from 'config/constants/types'
 import SelectionCard from './SelectionCard'
 import NextStepButton from './NextStepButton'
 import useProfileCreation from './contexts/hook'
 import { MINT_COST, STARTER_NFT_BUNNY_IDS } from './config'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 
 interface MintNftData extends ApiSingleTokenData {
   bunnyId?: string
@@ -29,7 +29,7 @@ const Mint: React.FC = () => {
   const { actions, minimumCakeRequired, allowance } = useProfileCreation()
   const { toastSuccess } = useToast()
 
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { reader: cakeContractReader, signer: cakeContractApprover } = useCake()
   const bunnyFactoryContract = useBunnyFactory()
   const { t } = useTranslation()
@@ -39,7 +39,7 @@ const Mint: React.FC = () => {
 
   useEffect(() => {
     const getStarterNfts = async () => {
-      const response = await getNftsFromCollectionApi(pancakeBunniesAddress)
+      const response = await getNftsFromCollectionApi(getPancakeBunniesAddress(chainId), chainId)
       if (!response) return
       const { data: allPbTokens } = response
       const nfts = STARTER_NFT_BUNNY_IDS.map((bunnyId) => {

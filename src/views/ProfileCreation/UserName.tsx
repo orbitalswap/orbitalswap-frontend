@@ -30,6 +30,7 @@ import ConfirmProfileCreationModal from './ConfirmProfileCreationModal'
 import useProfileCreation from './contexts/hook'
 import { USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH, REGISTER_COST } from './config'
 import useDebounce from '../../hooks/useDebounce'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 enum ExistingUserState {
   IDLE = 'idle', // initial state
@@ -61,7 +62,7 @@ const UserName: React.FC = () => {
   const [isAcknowledged, setIsAcknowledged] = useState(false)
   const { teamId, selectedNft, userName, actions, minimumCakeRequired, allowance } = useProfileCreation()
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { toastError } = useToast()
   const { library, connector } = useWeb3Provider()
   const [existingUserState, setExistingUserState] = useState<ExistingUserState>(ExistingUserState.IDLE)
@@ -89,6 +90,11 @@ const UserName: React.FC = () => {
 
   useEffect(() => {
     const fetchUsernameToCheck = async (abortSignal) => {
+      if (!API_PROFILE[chainId]) {
+        setIsValid(false)
+        return
+      }
+
       try {
         setIsLoading(true)
         if (!debouncedUsernameToCheck) {
@@ -96,7 +102,7 @@ const UserName: React.FC = () => {
           setMessage('')
           fetchAbortSignal.current = null
         } else {
-          const res = await fetchWithTimeout(`${API_PROFILE}/api/users/valid/${debouncedUsernameToCheck}`, {
+          const res = await fetchWithTimeout(`${API_PROFILE[chainId]}/api/users/valid/${debouncedUsernameToCheck}`, {
             method: 'get',
             signal: abortSignal,
             timeout: 30000,
@@ -131,7 +137,7 @@ const UserName: React.FC = () => {
     fetchAbortSignal.current = new AbortController()
 
     fetchUsernameToCheck(fetchAbortSignal.current.signal)
-  }, [debouncedUsernameToCheck, t])
+  }, [debouncedUsernameToCheck, chainId, t])
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
@@ -140,11 +146,13 @@ const UserName: React.FC = () => {
   }
 
   const handleConfirm = async () => {
+    if (!API_PROFILE[chainId]) return
+
     try {
       setIsLoading(true)
 
       const signature = await signMessage(connector, library, account, userName)
-      const response = await fetch(`${API_PROFILE}/api/users/register`, {
+      const response = await fetch(`${API_PROFILE[chainId]}/api/users/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,8 +182,13 @@ const UserName: React.FC = () => {
   // Perform an initial check to see if the wallet has already created a username
   useEffect(() => {
     const fetchUser = async () => {
+      if (!API_PROFILE[chainId]) {
+        setExistingUserState(ExistingUserState.NEW)
+        return
+      }
+
       try {
-        const response = await fetch(`${API_PROFILE}/api/users/${account}`)
+        const response = await fetch(`${API_PROFILE[chainId]}/api/users/${account}`)
         const data = await response.json()
 
         if (response.ok) {
@@ -196,7 +209,7 @@ const UserName: React.FC = () => {
     if (account) {
       fetchUser()
     }
-  }, [account, setExistingUserState, setIsValid, setMessage, actions, toastError, t])
+  }, [account, chainId, setExistingUserState, setIsValid, setMessage, actions, toastError, t])
 
   return (
     <>

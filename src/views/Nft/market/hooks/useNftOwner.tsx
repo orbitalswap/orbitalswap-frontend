@@ -6,12 +6,12 @@ import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
 
 const useNftOwner = (nft: NftToken, isOwnNft = false) => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const [owner, setOwner] = useState(null)
   const [isLoadingOwner, setIsLoadingOwner] = useState(true)
   const { reader: collectionContract } = useErc721CollectionContract(nft.collectionAddress)
   const currentSeller = nft.marketData?.currentSeller
-  const pancakeProfileAddress = getPancakeProfileAddress()
+  const pancakeProfileAddress = getPancakeProfileAddress(chainId)
   const { tokenId } = nft
 
   useEffect(() => {

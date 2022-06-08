@@ -18,7 +18,7 @@ export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol)
   const { callWithGasPrice } = useCallWithGasPrice()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const sousChefContract = useSousChef(sousId)
 
   const handleApprove = useCallback(async () => {
@@ -32,7 +32,7 @@ export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol)
           {t('You can now stake in the %symbol% pool!', { symbol: earningTokenSymbol })}
         </ToastDescriptionWithTx>,
       )
-      dispatch(updateUserAllowance(sousId, account))
+      dispatch(updateUserAllowance(sousId, account, chainId))
     }
   }, [
     account,
@@ -40,6 +40,7 @@ export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol)
     lpContract,
     sousChefContract,
     sousId,
+    chainId,
     earningTokenSymbol,
     t,
     toastSuccess,

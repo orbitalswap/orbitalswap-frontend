@@ -19,6 +19,7 @@ import useSWRInfinite from 'swr/infinite'
 import isEmpty from 'lodash/isEmpty'
 import uniqBy from 'lodash/uniqBy'
 import { REQUEST_SIZE } from '../Collection/config'
+import { ChainId } from '@orbitalswap/sdk'
 
 interface ItemListingSettings {
   field: string
@@ -27,7 +28,7 @@ interface ItemListingSettings {
   nftFilters: Record<string, NftAttribute>
 }
 
-const fetchTokenIdsFromFilter = async (address: string, settings: ItemListingSettings) => {
+const fetchTokenIdsFromFilter = async (address: string, chainId: ChainId, settings: ItemListingSettings) => {
   const filterObject: Record<string, NftAttribute> = settings.nftFilters
   const attrParams = Object.values(filterObject).reduce(
     (accum, attr) => ({
@@ -36,7 +37,7 @@ const fetchTokenIdsFromFilter = async (address: string, settings: ItemListingSet
     }),
     {},
   )
-  const attrFilters = !isEmpty(attrParams) ? await fetchNftsFiltered(address, attrParams) : null
+  const attrFilters = !isEmpty(attrParams) ? await fetchNftsFiltered(address, chainId, attrParams) : null
   return attrFilters ? Object.values(attrFilters.data).map((apiToken) => apiToken.tokenId) : null
 }
 
@@ -54,6 +55,7 @@ const fetchMarketDataNfts = async (
       }
     : { collection: collection.address.toLowerCase(), isTradable: true }
   const subgraphRes = await getNftsMarketData(
+    collection.chainId,
     whereClause,
     REQUEST_SIZE,
     settings.field,
@@ -61,7 +63,7 @@ const fetchMarketDataNfts = async (
     page * REQUEST_SIZE,
   )
 
-  const apiRequestPromises = subgraphRes.map((marketNft) => getNftApi(collection.address, marketNft.tokenId))
+  const apiRequestPromises = subgraphRes.map((marketNft) => getNftApi(collection.address, marketNft.tokenId, collection.chainId))
   const apiResponses = await Promise.all(apiRequestPromises)
   const newNfts: NftToken[] = apiResponses.reduce((acc, apiNft) => {
     if (apiNft) {
@@ -151,17 +153,18 @@ const fetchAllNfts = async (
   }
 
   if (tokenIds.length) {
-    const nftsMarket = await getMarketDataForTokenIds(collection.address, tokenIds)
+    const nftsMarket = await getMarketDataForTokenIds(collection.address, tokenIds, collection.chainId)
 
     const responsesPromises = tokenIds.map(async (id) => {
       const apiMetadata: ApiSingleTokenData = collectionNftsResponse
         ? collectionNftsResponse.data[id]
-        : await getNftApi(collection.address, id)
+        : await getNftApi(collection.address, id, collection.chainId)
       if (apiMetadata) {
         const marketData = nftsMarket.find((nft) => nft.tokenId === id)
 
         return {
           tokenId: id,
+          chainId: collection.chainId,
           name: apiMetadata.name,
           description: apiMetadata.description,
           collectionName: apiMetadata.collection.name,
@@ -233,7 +236,7 @@ export const useCollectionNfts = (collectionAddress: string) => {
     },
     async (address, settingsJson, page) => {
       const settings: ItemListingSettings = JSON.parse(settingsJson)
-      const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, settings)
+      const tokenIdsFromFilter = await fetchTokenIdsFromFilter(collection?.address, collection?.chainId, settings)
       let newNfts: NftToken[] = []
       if (settings.showOnlyNftsOnSale) {
         newNfts = await fetchMarketDataNfts(collection, settings, page, tokenIdsFromFilter)

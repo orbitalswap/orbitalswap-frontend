@@ -4,13 +4,13 @@ import { multicallv2 } from 'utils/multicall'
 import cakeVaultAbi from 'config/abi/cakeVaultV2.json'
 import { BIG_ZERO } from 'utils/bigNumber'
 
-export const fetchPublicVaultData = async (cakeVaultAddress: string) => {
+export const fetchPublicVaultData = async (cakeVaultAddress: string, chainId) => {
   try {
     const calls = ['getPricePerFullShare', 'totalShares', 'totalLockedAmount'].map((method) => ({
       address: cakeVaultAddress,
       name: method,
     }))
-    const [[sharePrice], [shares], totalLockedAmount] = await multicallv2(cakeVaultAbi, calls, {
+    const [[sharePrice], [shares], totalLockedAmount] = await multicallv2(cakeVaultAbi, chainId, calls, {
       requireSuccess: false,
     })
     const totalSharesAsBigNumber = shares ? new BigNumber(shares.toString()) : BIG_ZERO

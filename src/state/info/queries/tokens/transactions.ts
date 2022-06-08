@@ -1,3 +1,4 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { gql } from 'graphql-request'
 import { mapBurns, mapMints, mapSwaps } from 'state/info/queries/helpers'
 import { BurnResponse, MintResponse, SwapResponse } from 'state/info/queries/types'
@@ -133,9 +134,11 @@ interface TransactionResults {
   burnsAs1: BurnResponse[]
 }
 
-const fetchTokenTransactions = async (address: string): Promise<{ data?: Transaction[]; error: boolean }> => {
+const fetchTokenTransactions = async (address: string, chainId: ChainId): Promise<{ data?: Transaction[]; error: boolean }> => {
   try {
-    const data = await infoClient.request<TransactionResults>(TOKEN_TRANSACTIONS, {
+    if(!infoClient(chainId)) return { error: true }
+
+    const data = await infoClient(chainId).request<TransactionResults>(TOKEN_TRANSACTIONS, {
       address,
     })
     const mints0 = data.mintsAs0.map(mapMints)

@@ -7,9 +7,11 @@ import { fetchCakeVaultFees, fetchPoolsPublicDataAsync, fetchCakeVaultPublicData
 import { usePoolsWithVault } from 'state/pools/hooks'
 import { useInitialBlock } from 'state/block/hooks'
 import { FetchStatus } from 'config/constants/types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useGetTopPoolsByApr = (isIntersecting: boolean) => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
 
   const [fetchStatus, setFetchStatus] = useState(FetchStatus.Idle)
   const [topPools, setTopPools] = useState<DeserializedPool[]>([null, null, null, null, null])
@@ -23,9 +25,9 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
 
       try {
         // It should all be blocking calls since data only fetched once
-        await dispatch(fetchCakeVaultFees())
-        await dispatch(fetchCakeVaultPublicData())
-        await dispatch(fetchPoolsPublicDataAsync(initialBlock))
+        await dispatch(fetchCakeVaultFees({chainId}))
+        await dispatch(fetchCakeVaultPublicData({chainId}))
+        await dispatch(fetchPoolsPublicDataAsync(initialBlock, chainId))
         setFetchStatus(FetchStatus.Fetched)
       } catch (e) {
         console.error(e)
@@ -36,7 +38,7 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
     if (isIntersecting && fetchStatus === FetchStatus.Idle && initialBlock > 0) {
       fetchPoolsPublicData()
     }
-  }, [dispatch, setFetchStatus, fetchStatus, topPools, isIntersecting, initialBlock])
+  }, [dispatch, setFetchStatus, fetchStatus, topPools, isIntersecting, initialBlock, chainId])
 
   useEffect(() => {
     const [cakePool, otherPools] = partition(pools, (pool) => pool.sousId === 0)

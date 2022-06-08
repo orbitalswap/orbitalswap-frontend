@@ -7,10 +7,12 @@ import { useTranslation } from 'contexts/Localization'
 import TeamListCard from './components/TeamListCard'
 import TeamHeader from './components/TeamHeader'
 import { getTeams } from '../../state/teams/helpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const Teams = () => {
   const { t } = useTranslation()
-  const { data, status } = useSWR('teams', async () => getTeams())
+  const { chainId } = useActiveWeb3React()
+  const { data, status } = useSWR('teams', async () => getTeams(chainId))
   const teamList = data ? Object.values(data) : []
   const topTeams = orderBy(teamList, ['points', 'id', 'name'], ['desc', 'asc', 'asc'])
 

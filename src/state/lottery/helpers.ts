@@ -7,8 +7,8 @@ import { LotteryResponse } from 'state/types'
 import { getLotteryV2Contract } from 'utils/contractHelpers'
 import { ethersToSerializedBigNumber } from 'utils/bigNumber'
 import { NUM_ROUNDS_TO_FETCH_FROM_NODES } from 'config/constants/lottery'
+import { ChainId } from '@orbitalswap/sdk'
 
-const lotteryContract = getLotteryV2Contract()
 
 const processViewLotterySuccessResponse = (response, lotteryId: string): LotteryResponse => {
   const {
@@ -73,7 +73,8 @@ const processViewLotteryErrorResponse = (lotteryId: string): LotteryResponse => 
   }
 }
 
-export const fetchLottery = async (lotteryId: string): Promise<LotteryResponse> => {
+export const fetchLottery = async (lotteryId: string, chainId: ChainId): Promise<LotteryResponse> => {
+  const lotteryContract = getLotteryV2Contract(chainId)
   try {
     const lotteryData = await lotteryContract.viewLottery(lotteryId)
     return processViewLotterySuccessResponse(lotteryData, lotteryId)
@@ -82,14 +83,14 @@ export const fetchLottery = async (lotteryId: string): Promise<LotteryResponse> 
   }
 }
 
-export const fetchMultipleLotteries = async (lotteryIds: string[]): Promise<LotteryResponse[]> => {
+export const fetchMultipleLotteries = async (lotteryIds: string[], chainId: ChainId): Promise<LotteryResponse[]> => {
   const calls = lotteryIds.map((id) => ({
     name: 'viewLottery',
-    address: getLotteryV2Address(),
+    address: getLotteryV2Address(chainId),
     params: [id],
   }))
   try {
-    const multicallRes = await multicallv2(lotteryV2Abi, calls, { requireSuccess: false })
+    const multicallRes = await multicallv2(lotteryV2Abi, chainId, calls, { requireSuccess: false })
     const processedResponses = multicallRes.map((res, index) =>
       processViewLotterySuccessResponse(res[0], lotteryIds[index]),
     )
@@ -100,18 +101,20 @@ export const fetchMultipleLotteries = async (lotteryIds: string[]): Promise<Lott
   }
 }
 
-export const fetchCurrentLotteryId = async (): Promise<EthersBigNumber> => {
+export const fetchCurrentLotteryId = async (chainId: ChainId): Promise<EthersBigNumber> => {
+  const lotteryContract = getLotteryV2Contract(chainId)
   return lotteryContract.currentLotteryId()
 }
 
-export const fetchCurrentLotteryIdAndMaxBuy = async () => {
+export const fetchCurrentLotteryIdAndMaxBuy = async (chainId: ChainId) => {
   try {
     const calls = ['currentLotteryId', 'maxNumberTicketsPerBuyOrClaim'].map((method) => ({
-      address: getLotteryV2Address(),
+      address: getLotteryV2Address(chainId),
       name: method,
     }))
     const [[currentLotteryId], [maxNumberTicketsPerBuyOrClaim]] = (await multicallv2(
       lotteryV2Abi,
+      chainId,
       calls,
     )) as EthersBigNumber[][]
 

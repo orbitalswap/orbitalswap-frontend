@@ -11,6 +11,7 @@ import { formatBigNumber, formatLocalisedCompactNumber } from 'utils/formatBalan
 import { multicallv2 } from 'utils/multicall'
 import useSWR from 'swr'
 import { SLOW_INTERVAL } from 'config/constants'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const StyledColumn = styled(Flex)<{ noMobileBorder?: boolean }>`
   flex-direction: column;
@@ -49,6 +50,7 @@ const emissionsPerBlock = 14.25
 
 const CakeDataRow = () => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const [loadData, setLoadData] = useState(false)
   const {
@@ -65,7 +67,7 @@ const CakeDataRow = () => {
         name: 'balanceOf',
         params: ['0x000000000000000000000000000000000000dEaD'],
       }
-      const tokenDataResultRaw = await multicallv2(cakeAbi, [totalSupplyCall, burnedTokenCall], {
+      const tokenDataResultRaw = await multicallv2(cakeAbi, chainId, [totalSupplyCall, burnedTokenCall], {
         requireSuccess: false,
       })
       const [totalSupply, burned] = tokenDataResultRaw.flat()

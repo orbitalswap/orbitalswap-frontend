@@ -1,4 +1,6 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { gql } from 'graphql-request'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useEffect, useState } from 'react'
 import { ProtocolData } from 'state/info/types'
 import { infoClient } from 'utils/graphql'
@@ -19,8 +21,10 @@ interface OverviewResponse {
 /**
  * Latest Liquidity, Volume and Transaction count
  */
-const getOverviewData = async (block?: number): Promise<{ data?: OverviewResponse; error: boolean }> => {
+const getOverviewData = async (chainId: ChainId, block?: number): Promise<{ data?: OverviewResponse; error: boolean }> => {
   try {
+    if(!infoClient(chainId)) return { error: true }
+    
     const query = gql`query overview {
       pancakeFactories(
         ${block ? `block: { number: ${block}}` : ``}
@@ -30,7 +34,7 @@ const getOverviewData = async (block?: number): Promise<{ data?: OverviewRespons
         totalLiquidityUSD
       }
     }`
-    const data = await infoClient.request<OverviewResponse>(query)
+    const data = await infoClient(chainId).request<OverviewResponse>(query)
     return { data, error: false }
   } catch (error) {
     console.error('Failed to fetch info overview', error)
@@ -55,6 +59,7 @@ interface ProtocolFetchState {
 }
 
 const useFetchProtocolData = (): ProtocolFetchState => {
+  const { chainId } = useActiveWeb3React()
   const [fetchState, setFetchState] = useState<ProtocolFetchState>({
     error: false,
   })
@@ -64,7 +69,7 @@ const useFetchProtocolData = (): ProtocolFetchState => {
 
   useEffect(() => {
     const fetch = async () => {
-      const { error, data } = await getOverviewData()
+      const { error, data } = await getOverviewData(chainId)
       const { error: error24, data: data24 } = await getOverviewData(block24?.number ?? undefined)
       const { error: error48, data: data48 } = await getOverviewData(block48?.number ?? undefined)
       const anyError = error || error24 || error48
@@ -107,7 +112,7 @@ const useFetchProtocolData = (): ProtocolFetchState => {
     if (allBlocksAvailable && !blockError && !fetchState.data) {
       fetch()
     }
-  }, [block24, block48, blockError, fetchState])
+  }, [block24, block48, blockError, fetchState, chainId])
 
   return fetchState
 }

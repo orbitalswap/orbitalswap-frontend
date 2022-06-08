@@ -4,17 +4,16 @@ import { getCakeVaultAddress } from 'utils/addressHelpers'
 import cakeVaultAbi from 'config/abi/cakeVaultV2.json'
 import { multicallv2 } from 'utils/multicall'
 
-const cakeVaultAddress = getCakeVaultAddress()
 
-const fetchVaultUser = async (account: string): Promise<SerializedLockedVaultUser> => {
+const fetchVaultUser = async (account: string, chainId): Promise<SerializedLockedVaultUser> => {
   try {
     const calls = ['userInfo', 'calculatePerformanceFee', 'calculateOverdueFee'].map((method) => ({
-      address: cakeVaultAddress,
+      address: getCakeVaultAddress(chainId),
       name: method,
       params: [account],
     }))
 
-    const [userContractResponse, [currentPerformanceFee], [currentOverdueFee]] = await multicallv2(cakeVaultAbi, calls)
+    const [userContractResponse, [currentPerformanceFee], [currentOverdueFee]] = await multicallv2(cakeVaultAbi, chainId, calls)
     return {
       isLoading: false,
       userShares: new BigNumber(userContractResponse.shares.toString()).toJSON(),

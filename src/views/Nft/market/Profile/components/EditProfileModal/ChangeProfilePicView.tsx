@@ -26,7 +26,7 @@ const ChangeProfilePicPage: React.FC<ChangeProfilePicPageProps> = ({ onDismiss, 
     collectionAddress: null,
   })
   const { t } = useTranslation()
-  const { account, library } = useWeb3React()
+  const { account, chainId, library } = useWeb3React()
   const { isLoading: isProfileLoading, profile, refresh: refreshProfile } = useProfile()
   const { nfts, isLoading } = useNftsForAddress(account, profile, isProfileLoading)
   const profileContract = useProfileContract()
@@ -45,7 +45,7 @@ const ChangeProfilePicPage: React.FC<ChangeProfilePicPageProps> = ({ onDismiss, 
       onApprove: () => {
         const contract = getErc721Contract(selectedNft.collectionAddress, library.getSigner())
 
-        return callWithGasPrice(contract, 'approve', [getPancakeProfileAddress(), selectedNft.tokenId])
+        return callWithGasPrice(contract, 'approve', [getPancakeProfileAddress(chainId), selectedNft.tokenId])
       },
       onConfirm: () => {
         if (!profile.isActive) {

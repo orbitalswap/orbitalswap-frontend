@@ -8,6 +8,7 @@ import ifoV1Abi from 'config/abi/ifoV1.json'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useIfoAllowance from '../useIfoAllowance'
 import { WalletIfoState, WalletIfoData } from '../../types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface UserInfo {
   amount: BigNumber
@@ -32,7 +33,7 @@ const initialState = {
 const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
   const [state, setState] = useState<WalletIfoState>(initialState)
 
-  const { address, currency } = ifo
+  const { address, chainId, currency } = ifo
   const { poolUnlimited } = state
 
   const { account } = useWeb3React()
@@ -66,7 +67,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
       params: [account],
     }))
 
-    const [offeringAmount, userInfoResponse, refundingAmount] = await multicallv2(ifoV1Abi, ifoCalls)
+    const [offeringAmount, userInfoResponse, refundingAmount] = await multicallv2(ifoV1Abi, chainId, ifoCalls)
     const parsedUserInfo: UserInfo = userInfoResponse
       ? {
           amount: new BigNumber(userInfoResponse.amount.toString()),
@@ -84,7 +85,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
         refundingAmountInLP: refundingAmount ? new BigNumber(refundingAmount[0].toString()) : BIG_ZERO,
       },
     }))
-  }, [account, address])
+  }, [account, chainId, address])
 
   const resetIfoData = useCallback(() => {
     setState(initialState)

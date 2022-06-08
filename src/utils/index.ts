@@ -8,7 +8,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import IPancakeRouter02ABI from 'config/abi/IPancakeRouter02.json'
 import { IPancakeRouter02 } from 'config/abi/types/IPancakeRouter02'
 import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
-import { JSBI, Percent, Token, CurrencyAmount, Currency } from '@orbitalswap/sdk'
+import { JSBI, Percent, Token, CurrencyAmount, Currency, ChainId } from '@orbitalswap/sdk'
 import { TokenAddressMap } from 'state/types'
 import { ROUTER_ADDRESS } from '../config/constants'
 import { BASE_BSC_SCAN_URLS } from '../config'
@@ -84,18 +84,19 @@ export function getProviderOrSigner(library: Web3Provider, account?: string): We
 }
 
 // account is optional
-export function getContract(address: string, ABI: any, signer?: Signer | Provider): Contract {
+export function getContract(address: string, chainId: ChainId, ABI: any, signer?: Signer | Provider): Contract {
   if (!isAddress(address) || address === AddressZero) {
     throw Error(`Invalid 'address' parameter '${address}'.`)
   }
 
-  return new Contract(address, ABI, signer ?? simpleRpcProvider())
+  return new Contract(address, ABI, signer ?? simpleRpcProvider(chainId))
 }
 
 // account is optional
-export function getRouterContract(_: number, library: Web3Provider, account?: string) {
+export function getRouterContract(chainId: ChainId, library: Web3Provider, account?: string) {
   return getContract(
-    ROUTER_ADDRESS[DEFAULT_CHAIN_ID],
+    ROUTER_ADDRESS[chainId],
+    chainId,
     IPancakeRouter02ABI,
     getProviderOrSigner(library, account),
   ) as IPancakeRouter02

@@ -1,10 +1,13 @@
 import request, { gql } from 'graphql-request'
 import flatten from 'lodash/flatten'
 import { GRAPH_API_PREDICTION_V1 } from 'config/constants/endpoints'
+import { ChainId } from '@orbitalswap/sdk'
 
-export const getV1History = async (skip = 0, where = {}): Promise<Record<string, any>[]> => {
+export const getV1History = async (chainId: ChainId, skip = 0, where = {}): Promise<Record<string, any>[]> => {
+  if (!GRAPH_API_PREDICTION_V1[chainId]) return []
+
   const response = await request(
-    GRAPH_API_PREDICTION_V1,
+    GRAPH_API_PREDICTION_V1[chainId],
     gql`
       query getV1BetHistory($skip: Int!, $where: Bet_filter) {
         bets(first: 1000, skip: $skip, where: $where, orderBy: createdAt, orderDirection: desc) {
@@ -32,13 +35,13 @@ export const getV1History = async (skip = 0, where = {}): Promise<Record<string,
   return response.bets
 }
 
-export const getAllV1History = (where = {}): Promise<Record<string, any>[]> => {
+export const getAllV1History = (chainId: ChainId, where = {}): Promise<Record<string, any>[]> => {
   return new Promise((resolve, reject) => {
     const bets = {}
 
     const getHistoryChunk = async (skip: number) => {
       try {
-        const betHistory = await getV1History(skip, where)
+        const betHistory = await getV1History(chainId, skip, where)
         bets[skip] = betHistory
 
         if (betHistory.length === 0) {

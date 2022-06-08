@@ -1,3 +1,4 @@
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getLaunchpad } from 'state/launchpads/helpers'
 // eslint-disable-next-line camelcase
@@ -26,7 +27,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { launchpadAddress } = params
+  const { launchpadAddress, chainId } = params
 
   if (typeof launchpadAddress !== 'string') {
     return {
@@ -35,7 +36,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   try {
-    const launchpadData = await getLaunchpad(launchpadAddress)
+    const launchpadData = await getLaunchpad(launchpadAddress, +chainId)
     if (launchpadData) {
       return {
         props: {

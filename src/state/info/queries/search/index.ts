@@ -1,5 +1,6 @@
 import { MINIMUM_SEARCH_CHARACTERS } from 'config/constants/info'
 import { gql } from 'graphql-request'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useEffect, useState } from 'react'
 import { usePoolDatas, useTokenDatas } from 'state/info/hooks'
 import { PoolData, TokenData } from 'state/info/types'
@@ -64,6 +65,7 @@ const useFetchSearchResults = (
   poolsLoading: boolean
   error: boolean
 } => {
+  const { chainId } = useActiveWeb3React()
   const [searchResults, setSearchResults] = useState({
     tokens: [], // Token ids found by search query
     pools: [], // Pool ids found by search query
@@ -85,15 +87,25 @@ const useFetchSearchResults = (
 
   useEffect(() => {
     const search = async () => {
+      if (!infoClient(chainId)) {
+        setSearchResults({
+          tokens: [],
+          pools: [],
+          loading: false,
+          error: true,
+        })
+        return
+      }
+
       try {
-        const tokens = await infoClient.request<TokenSearchResponse>(TOKEN_SEARCH, {
+        const tokens = await infoClient(chainId).request<TokenSearchResponse>(TOKEN_SEARCH, {
           symbol: searchString.toUpperCase(),
           // Most well known tokens have first letter capitalized
           name: searchString.charAt(0).toUpperCase() + searchString.slice(1),
           id: searchString.toLowerCase(),
         })
         const tokenIds = getIds([tokens.asAddress, tokens.asSymbol, tokens.asName])
-        const pools = await infoClient.request<PoolSearchResponse>(POOL_SEARCH, {
+        const pools = await infoClient(chainId).request<PoolSearchResponse>(POOL_SEARCH, {
           tokens: tokenIds,
           id: searchString.toLowerCase(),
         })
@@ -116,7 +128,7 @@ const useFetchSearchResults = (
     if (!searchStringTooShort) {
       search()
     }
-  }, [searchString, searchStringTooShort])
+  }, [searchString, searchStringTooShort, chainId])
 
   // Save ids to Redux
   // Token and Pool updater will then go fetch full data for these addresses

@@ -2,6 +2,7 @@ import useSWR from 'swr'
 import { useTranslation } from 'contexts/Localization'
 import { getLeastMostPriceInCollection } from 'state/nftMarket/helpers'
 import { StatBoxItem, StatBoxItemProps } from '../components/StatBox'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface LowestPriceStatBoxItemProps extends Omit<StatBoxItemProps, 'title' | 'stat'> {
   collectionAddress: string
@@ -9,9 +10,10 @@ interface LowestPriceStatBoxItemProps extends Omit<StatBoxItemProps, 'title' | '
 
 const LowestPriceStatBoxItem: React.FC<LowestPriceStatBoxItemProps> = ({ collectionAddress, ...props }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const { data: lowestCollectionPrice = null } = useSWR(
     collectionAddress ? [collectionAddress, 'lowestPrice'] : null,
-    () => getLeastMostPriceInCollection(collectionAddress),
+    () => getLeastMostPriceInCollection(collectionAddress, chainId),
   )
 
   const formattedLowestPrice =

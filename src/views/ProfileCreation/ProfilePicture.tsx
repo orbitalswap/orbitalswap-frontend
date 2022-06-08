@@ -29,7 +29,7 @@ const NftWrapper = styled.div`
 `
 
 const ProfilePicture: React.FC = () => {
-  const { account, library } = useWeb3React()
+  const { account, chainId, library } = useWeb3React()
   const [isApproved, setIsApproved] = useState(false)
   const [userProfileCreationNfts, setUserProfileCreationNfts] = useState(null)
   const { selectedNft, actions } = useContext(ProfileCreationContext)
@@ -56,7 +56,7 @@ const ProfilePicture: React.FC = () => {
               params: [nftRole, collectionAddress],
             }
           })
-          const collectionRolesRaw = await multicall(profileABI, collectionsNftRoleCalls)
+          const collectionRolesRaw = await multicall(profileABI, chainId, collectionsNftRoleCalls)
           const collectionRoles = collectionRolesRaw.flat()
           setUserProfileCreationNfts(
             nfts.filter((nft) => collectionRoles[nftsByCollection.indexOf(nft.collectionAddress)]),
@@ -69,7 +69,7 @@ const ProfilePicture: React.FC = () => {
     if (!isUserNftLoading) {
       fetchUserPancakeCollectibles()
     }
-  }, [nfts, profileContract, isUserNftLoading])
+  }, [nfts, chainId, profileContract, isUserNftLoading])
 
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
@@ -79,7 +79,7 @@ const ProfilePicture: React.FC = () => {
   const handleApprove = async () => {
     const contract = getErc721Contract(selectedNft.collectionAddress, library.getSigner())
     const receipt = await fetchWithCatchTxError(() => {
-      return callWithGasPrice(contract, 'approve', [getPancakeProfileAddress(), selectedNft.tokenId])
+      return callWithGasPrice(contract, 'approve', [getPancakeProfileAddress(chainId), selectedNft.tokenId])
     })
     if (receipt?.status) {
       toastSuccess(t('Enabled'), t('Please progress to the next step.'))

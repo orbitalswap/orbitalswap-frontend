@@ -13,6 +13,7 @@ import {
   getSortedRoundsCurrentEpochSelector,
   getCurrentRoundCloseTimestampSelector,
 } from './selectors'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 export const useGetRoundsByCloseOracleId = () => {
   return useSelector(getRoundsByCloseOracleIdSelector)
@@ -123,13 +124,14 @@ export const useGetAddressResult = (account: string) => {
 export const useGetOrFetchLeaderboardAddressResult = (account: string) => {
   const addressResult = useGetAddressResult(account)
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
 
   useEffect(() => {
     const address = isAddress(account)
 
     // If address result is null it means we already tried fetching the results and none came back
     if (!addressResult && addressResult !== null && address) {
-      dispatch(fetchAddressResult(account))
+      dispatch(fetchAddressResult({account, chainId}))
     }
   }, [dispatch, account, addressResult])
 

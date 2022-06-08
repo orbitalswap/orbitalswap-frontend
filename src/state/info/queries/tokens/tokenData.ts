@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
+import { ChainId } from '@orbitalswap/sdk'
 import { gql } from 'graphql-request'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useEffect, useState } from 'react'
 import { TokenData } from 'state/info/types'
 import { infoClient } from 'utils/graphql'
@@ -60,6 +62,7 @@ const TOKEN_AT_BLOCK = (block: number | undefined, tokens: string[]) => {
 }
 
 const fetchTokenData = async (
+  chainId: ChainId,
   block24h: number,
   block48h: number,
   block7d: number,
@@ -67,6 +70,8 @@ const fetchTokenData = async (
   tokenAddresses: string[],
 ) => {
   try {
+    if(!infoClient(chainId)) return { error: true }
+
     const query = gql`
       query tokens {
         now: ${TOKEN_AT_BLOCK(null, tokenAddresses)}
@@ -76,7 +81,7 @@ const fetchTokenData = async (
         twoWeeksAgo: ${TOKEN_AT_BLOCK(block14d, tokenAddresses)}
       }
     `
-    const data = await infoClient.request<TokenQueryResponse>(query)
+    const data = await infoClient(chainId).request<TokenQueryResponse>(query)
     return { data, error: false }
   } catch (error) {
     console.error('Failed to fetch token data', error)
@@ -114,6 +119,7 @@ interface TokenDatas {
  * Fetch top addresses by volume
  */
 const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
+  const { chainId } = useActiveWeb3React()
   const [fetchState, setFetchState] = useState<TokenDatas>({ error: false })
   const [t24h, t48h, t7d, t14d] = getDeltaTimestamps()
   const { blocks, error: blockError } = useBlocksFromTimestamps([t24h, t48h, t7d, t14d])
@@ -122,6 +128,7 @@ const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
   useEffect(() => {
     const fetch = async () => {
       const { error, data } = await fetchTokenData(
+        chainId,
         block24h.number,
         block48h.number,
         block7d.number,

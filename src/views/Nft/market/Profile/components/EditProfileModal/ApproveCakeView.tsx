@@ -7,6 +7,7 @@ import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import { formatBigNumber } from 'utils/formatBalance'
 import useGetProfileCosts from 'views/Nft/market/Profile/hooks/useGetProfileCosts'
 import { UseEditProfileResponse } from './reducer'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface ApproveCakePageProps extends InjectedModalProps {
   goToChange: UseEditProfileResponse['goToChange']
@@ -15,6 +16,7 @@ interface ApproveCakePageProps extends InjectedModalProps {
 const ApproveCakePage: React.FC<ApproveCakePageProps> = ({ goToChange, onDismiss }) => {
   const { profile } = useProfile()
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const { fetchWithCatchTxError, loading: isApproving } = useCatchTxError()
   const {
     costs: { numberCakeToUpdate, numberCakeToReactivate },
@@ -29,7 +31,7 @@ const ApproveCakePage: React.FC<ApproveCakePageProps> = ({ goToChange, onDismiss
 
   const handleApprove = async () => {
     const receipt = await fetchWithCatchTxError(() => {
-      return cakeContract.approve(getPancakeProfileAddress(), cost.mul(2).toString())
+      return cakeContract.approve(getPancakeProfileAddress(chainId), cost.mul(2).toString())
     })
     if (receipt?.status) {
       goToChange()

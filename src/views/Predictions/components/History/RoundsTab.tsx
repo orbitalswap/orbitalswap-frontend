@@ -17,13 +17,13 @@ interface RoundsTabProps {
 const RoundsTab: React.FC<RoundsTabProps> = ({ hasBetHistory, bets }) => {
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const hasHistoryLoaded = useGetHasHistoryLoaded()
   const currentHistoryPage = useGetCurrentHistoryPage()
   const isFetchingHistory = useGetIsFetchingHistory()
 
   const handleClick = () => {
-    dispatch(fetchNodeHistory({ account, page: currentHistoryPage + 1 }))
+    dispatch(fetchNodeHistory({ account, chainId, page: currentHistoryPage + 1 }))
   }
 
   return hasBetHistory ? (

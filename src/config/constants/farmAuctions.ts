@@ -739,7 +739,7 @@ export const whitelistedBidders: FarmAuctionBidderConfig[] =
         },
       ].map((bidderConfig) => ({
         ...bidderConfig,
-        lpAddress: getLpAddress(bidderConfig.tokenAddress, bidderConfig.quoteToken),
+        lpAddress: getLpAddress(ChainId.BSC_MAINNET, bidderConfig.tokenAddress, bidderConfig.quoteToken),
       }))
     : []
 

@@ -3,6 +3,7 @@ import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { farmsConfig } from 'config/constants'
 import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
@@ -21,17 +22,17 @@ import {
 
 export const usePollFarmsWithUserData = () => {
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   useSlowRefreshEffect(() => {
     const pids = farmsConfig.map((farmToFetch) => farmToFetch.pid)
 
-    dispatch(fetchFarmsPublicDataAsync(pids))
+    dispatch(fetchFarmsPublicDataAsync({chainId, pids}))
 
     if (account) {
-      dispatch(fetchFarmUserDataAsync({ account, pids }))
+      dispatch(fetchFarmUserDataAsync({ account, chainId, pids }))
     }
-  }, [dispatch, account])
+  }, [dispatch, account, chainId])
 }
 
 /**
@@ -42,9 +43,10 @@ export const usePollFarmsWithUserData = () => {
 const coreFarmPIDs = DEFAULT_CHAIN_ID === ChainId.BSC_MAINNET ? [2, 3] : [1, 2]
 export const usePollCoreFarmData = () => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
 
   useFastRefreshEffect(() => {
-    dispatch(fetchFarmsPublicDataAsync(coreFarmPIDs))
+    dispatch(fetchFarmsPublicDataAsync({chainId, pids: coreFarmPIDs}))
   }, [dispatch])
 }
 

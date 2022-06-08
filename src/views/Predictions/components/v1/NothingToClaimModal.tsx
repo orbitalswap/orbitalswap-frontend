@@ -32,7 +32,7 @@ const CollectRoundWinningsModal: React.FC<InjectedModalProps> = ({ onDismiss }) 
   const [isFetching, setIsFetching] = useState(false)
   const [history, setHistory] = useState([])
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   const handleClick = () => {
     const header = [
@@ -87,7 +87,7 @@ const CollectRoundWinningsModal: React.FC<InjectedModalProps> = ({ onDismiss }) 
       setIsFetching(true)
 
       try {
-        const response = await getAllV1History({ user: account.toLowerCase() })
+        const response = await getAllV1History(chainId, { user: account.toLowerCase() })
         setHistory(response)
       } catch (error) {
         console.error('Unable to fetch history', error)

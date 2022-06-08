@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router'
 import PageLoader from 'components/Loader/PageLoader'
-import { pancakeBunniesAddress } from '../../constants'
 import IndividualPancakeBunnyPage from './PancakeBunnyPage'
 import IndividualNFTPage from './OneOfAKindNftPage'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const IndividualNFTPageRouter = () => {
   const router = useRouter()
+  const { chainId } = useActiveWeb3React()
   // For PancakeBunnies tokenId in url is really bunnyId
   const { collectionAddress, tokenId } = router.query
 
@@ -13,7 +15,7 @@ const IndividualNFTPageRouter = () => {
     return <PageLoader />
   }
 
-  const isPBCollection = String(collectionAddress).toLowerCase() === pancakeBunniesAddress.toLowerCase()
+  const isPBCollection = String(collectionAddress).toLowerCase() === getPancakeBunniesAddress(chainId).toLowerCase()
   if (isPBCollection) {
     return <IndividualPancakeBunnyPage bunnyId={String(tokenId)} />
   }

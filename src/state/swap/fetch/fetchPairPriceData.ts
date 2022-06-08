@@ -17,8 +17,8 @@ import pairDayDatas from '../queries/pairDayDatas'
 import pairHourDatasByIds from '../queries/pairHourDatasByIds'
 import lastPairHourId from '../queries/lastPairHourId'
 
-const fetchPairPriceData = async ({ pairId, timeWindow }: fetchPairDataParams) => {
-  const client = infoClient
+const fetchPairPriceData = async ({ pairId, chainId, timeWindow }: fetchPairDataParams) => {
+  const client = infoClient(chainId)
 
   try {
     switch (timeWindow) {

@@ -1,6 +1,8 @@
 /* eslint-disable no-await-in-loop */
+import { ChainId } from '@orbitalswap/sdk'
 import { PCS_V2_START } from 'config/constants/info'
 import { gql } from 'graphql-request'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useEffect, useState } from 'react'
 import { ChartEntry } from 'state/info/types'
 import { infoClient } from 'utils/graphql'
@@ -20,9 +22,11 @@ const PANCAKE_DAY_DATAS = gql`
   }
 `
 
-const getOverviewChartData = async (skip: number): Promise<{ data?: ChartEntry[]; error: boolean }> => {
+const getOverviewChartData = async (chainId: ChainId, skip: number): Promise<{ data?: ChartEntry[]; error: boolean }> => {
   try {
-    const { pancakeDayDatas } = await infoClient.request<PancakeDayDatasResponse>(PANCAKE_DAY_DATAS, {
+    if(!infoClient(chainId)) return { error: true }
+    
+    const { pancakeDayDatas } = await infoClient(chainId).request<PancakeDayDatasResponse>(PANCAKE_DAY_DATAS, {
       startTime: PCS_V2_START,
       skip,
     })
@@ -41,12 +45,13 @@ const useFetchGlobalChartData = (): {
   error: boolean
   data: ChartEntry[] | undefined
 } => {
+  const { chainId } = useActiveWeb3React()
   const [overviewChartData, setOverviewChartData] = useState<ChartEntry[] | undefined>()
   const [error, setError] = useState(false)
 
   useEffect(() => {
     const fetch = async () => {
-      const { data } = await fetchChartData(getOverviewChartData)
+      const { data } = await fetchChartData(getOverviewChartData, chainId)
       if (data) {
         setOverviewChartData(data)
       } else {

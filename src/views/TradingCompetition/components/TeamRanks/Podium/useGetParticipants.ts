@@ -1,14 +1,21 @@
 import { useState, useEffect } from 'react'
 import { TC_MOBOX_SUBGRAPH } from 'config/constants/endpoints'
 import request, { gql } from 'graphql-request'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useGetParticipants = (): string[] => {
+  const { chainId } = useActiveWeb3React()
   const [participants, setParticipants] = useState<string[]>([])
   useEffect(() => {
     const getParticipants = async () => {
+      if(!TC_MOBOX_SUBGRAPH[chainId]) {
+        setParticipants([])
+        return
+      }
+      
       try {
         const response = await request(
-          TC_MOBOX_SUBGRAPH,
+          TC_MOBOX_SUBGRAPH[chainId],
           gql`
             query getTradingCompetitionParticipants {
               storm: team(id: "1") {

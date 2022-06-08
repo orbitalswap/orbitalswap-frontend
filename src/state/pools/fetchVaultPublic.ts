@@ -5,16 +5,20 @@ import { getCakeVaultAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getCakeContract } from 'utils/contractHelpers'
 
-const cakeVaultV2 = getCakeVaultAddress()
-const cakeContract = getCakeContract()
-export const fetchPublicVaultData = async (cakeVaultAddress = cakeVaultV2) => {
+export const fetchPublicVaultData = async (chainId, cakeVaultAddress = undefined) => {
+  const cakeVaultV2 = getCakeVaultAddress(chainId)
+  if (!cakeVaultAddress) {
+    cakeVaultAddress = cakeVaultV2
+  }
+
+  const cakeContract = getCakeContract(chainId)
   try {
     const calls = ['getPricePerFullShare', 'totalShares', 'totalLockedAmount'].map((method) => ({
       address: cakeVaultAddress,
       name: method,
     }))
 
-    const [[sharePrice], [shares], totalLockedAmount] = await multicallv2(cakeVaultAbi, calls, {
+    const [[sharePrice], [shares], totalLockedAmount] = await multicallv2(cakeVaultAbi, chainId, calls, {
       requireSuccess: false,
     })
 
@@ -38,14 +42,18 @@ export const fetchPublicVaultData = async (cakeVaultAddress = cakeVaultV2) => {
   }
 }
 
-export const fetchVaultFees = async (cakeVaultAddress = cakeVaultV2) => {
+export const fetchVaultFees = async (chainId, cakeVaultAddress = undefined) => {
+  if (!cakeVaultAddress) {
+    cakeVaultAddress = getCakeVaultAddress(chainId)
+  }
+
   try {
     const calls = ['performanceFee', 'withdrawFee', 'withdrawFeePeriod'].map((method) => ({
       address: cakeVaultAddress,
       name: method,
     }))
 
-    const [[performanceFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(cakeVaultAbi, calls)
+    const [[performanceFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(cakeVaultAbi, chainId, calls)
 
     return {
       performanceFee: performanceFee.toNumber(),

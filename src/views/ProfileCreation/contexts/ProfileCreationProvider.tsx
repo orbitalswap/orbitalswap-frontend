@@ -60,14 +60,14 @@ export const ProfileCreationContext = createContext<ContextType>(null)
 
 const ProfileCreationProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   // Initial checks
   useEffect(() => {
     let isSubscribed = true
 
     const fetchData = async () => {
-      const bunnyFactoryContract = getBunnyFactoryContract()
+      const bunnyFactoryContract = getBunnyFactoryContract(chainId)
       const canMint = await bunnyFactoryContract.canMint(account)
       dispatch({ type: 'initialize', step: canMint ? 0 : 1 })
 
@@ -84,7 +84,7 @@ const ProfileCreationProvider: React.FC = ({ children }) => {
     return () => {
       isSubscribed = false
     }
-  }, [account, dispatch])
+  }, [account, chainId, dispatch])
 
   const actions: ContextType['actions'] = useMemo(
     () => ({

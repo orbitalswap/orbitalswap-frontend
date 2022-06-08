@@ -4,10 +4,11 @@ import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { multicallv2 } from 'utils/multicall'
 import { SerializedFarm } from '../types'
 import { SerializedFarmConfig } from '../../config/constants/types'
+import { ChainId } from '@orbitalswap/sdk'
 
 const fetchFarmCalls = (farm: SerializedFarm) => {
-  const { lpAddresses, token, quoteToken } = farm
-  const lpAddress = getAddress(lpAddresses)
+  const { lpAddresses, chainId, token, quoteToken } = farm
+  const lpAddress = getAddress(lpAddresses, chainId)
   return [
     // Balance of token in the LP contract
     {
@@ -25,7 +26,7 @@ const fetchFarmCalls = (farm: SerializedFarm) => {
     {
       address: lpAddress,
       name: 'balanceOf',
-      params: [getMasterChefAddress()],
+      params: [getMasterChefAddress(chainId)],
     },
     // Total supply of LP tokens
     {
@@ -45,9 +46,9 @@ const fetchFarmCalls = (farm: SerializedFarm) => {
   ]
 }
 
-export const fetchPublicFarmsData = async (farms: SerializedFarmConfig[]): Promise<any[]> => {
-  const farmCalls = farms.flatMap((farm) => fetchFarmCalls(farm))
+export const fetchPublicFarmsData = async (farms: SerializedFarmConfig[], chainId: ChainId): Promise<any[]> => {
+  const farmCalls = farms.filter(farm => farm.chainId === chainId).flatMap((farm) => fetchFarmCalls(farm))
   const chunkSize = farmCalls.length / farms.length
-  const farmMultiCallResult = await multicallv2(erc20, farmCalls)
+  const farmMultiCallResult = await multicallv2(erc20, chainId, farmCalls)
   return chunk(farmMultiCallResult, chunkSize)
 }

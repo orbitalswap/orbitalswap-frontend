@@ -1,6 +1,6 @@
 import { Flex, Text, Button, Heading, useModal, Skeleton } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
-import { Token } from '@orbitalswap/sdk'
+import { ChainId, Token } from '@orbitalswap/sdk'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance, getBalanceNumber, formatNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
@@ -10,6 +10,7 @@ interface HarvestActionsProps {
   earnings: BigNumber
   earningToken: Token
   sousId: number
+  chainId: ChainId
   earningTokenPrice: number
   isBnbPool: boolean
   isLoading?: boolean
@@ -19,6 +20,7 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
   earnings,
   earningToken,
   sousId,
+  chainId,
   isBnbPool,
   earningTokenPrice,
   isLoading = false,
@@ -40,6 +42,7 @@ const HarvestActions: React.FC<HarvestActionsProps> = ({
       earningToken={earningToken}
       earningsDollarValue={earningTokenDollarBalance}
       sousId={sousId}
+      chainId={chainId}
       isBnbPool={isBnbPool}
       isCompoundPool={isCompoundPool}
     />,

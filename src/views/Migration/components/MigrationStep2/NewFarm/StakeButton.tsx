@@ -31,6 +31,7 @@ interface StackedActionProps extends FarmWithStakedValue {
 
 const StakeButton: React.FC<StackedActionProps> = ({
   pid,
+  chainId,
   apr,
   multiplier,
   lpSymbol,
@@ -53,7 +54,7 @@ const StakeButton: React.FC<StackedActionProps> = ({
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
-  const lpAddress = getAddress(lpAddresses)
+  const lpAddress = getAddress(lpAddresses, chainId)
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,
@@ -71,7 +72,7 @@ const StakeButton: React.FC<StackedActionProps> = ({
           {t('Your funds have been staked in the farm')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      dispatch(fetchFarmUserDataAsync({ account, chainId, pids: [pid] }))
     }
   }
 
@@ -86,7 +87,7 @@ const StakeButton: React.FC<StackedActionProps> = ({
           {t('Your earnings have also been harvested to your wallet')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      dispatch(fetchFarmUserDataAsync({ account, chainId, pids: [pid] }))
     }
   }
 
@@ -123,7 +124,7 @@ const StakeButton: React.FC<StackedActionProps> = ({
     })
     if (receipt?.status) {
       toastSuccess(t('Contract Enabled'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      dispatch(fetchFarmUserDataAsync({ account, chainId, pids: [pid] }))
     }
   }, [onApprove, dispatch, account, pid, t, toastSuccess, fetchWithCatchTxError])
 

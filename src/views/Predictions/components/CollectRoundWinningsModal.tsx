@@ -77,7 +77,7 @@ const calculateClaimableRounds = (history): ClaimableRounds => {
 }
 
 const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({ onDismiss, onSuccess }) => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: isPendingTx } = useCatchTxError()
@@ -94,9 +94,9 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({ o
   useEffect(() => {
     // Fetch history if they have not opened the history pane yet
     if (history.length === 0) {
-      dispatch(fetchNodeHistory({ account }))
+      dispatch(fetchNodeHistory({ account, chainId }))
     }
-  }, [account, history, dispatch])
+  }, [account, chainId, history, dispatch])
 
   const handleClick = async () => {
     const receipt = await fetchWithCatchTxError(() => {

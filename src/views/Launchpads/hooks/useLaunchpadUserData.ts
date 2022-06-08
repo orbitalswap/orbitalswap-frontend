@@ -12,7 +12,7 @@ import { UserLaunchpadData } from '../types'
 
 // Retrieve IFO allowance
 const useLaunchpadUserData = (ifo: Launchpad, dependency?: any): UserLaunchpadData => {
-  const ifoAddress = getAddress(ifo.address)
+  const ifoAddress = getAddress(ifo.address, ifo.chainId)
   const { account } = useWeb3React()
 
   const [contributedAmount, setContributedAmount] = useState<BigNumber>(BIG_ZERO)
@@ -27,7 +27,7 @@ const useLaunchpadUserData = (ifo: Launchpad, dependency?: any): UserLaunchpadDa
         name: 'funders',
         params: [account]
       }]
-      const [contributeData] = await multicall(launchpadAbi, ifoCalls)
+      const [contributeData] = await multicall(launchpadAbi, ifo.chainId, ifoCalls)
 
       setContributedAmount(getBalanceAmount(new BigNumber(contributeData.amount?._hex)))
       setClaimed(contributeData.claimed)

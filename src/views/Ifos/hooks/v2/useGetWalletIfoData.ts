@@ -35,7 +35,7 @@ const initialState = {
 const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
   const [state, setState] = useState<WalletIfoState>(initialState)
 
-  const { address, currency } = ifo
+  const { address, chainId, currency } = ifo
 
   const { account } = useWeb3React()
   const contract = useIfoV2Contract(address)
@@ -68,7 +68,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
       params: [account, [0, 1]],
     }))
 
-    const [userInfo, amounts] = await multicallv2(ifoV2Abi, ifoCalls)
+    const [userInfo, amounts] = await multicallv2(ifoV2Abi, chainId, ifoCalls)
 
     setState((prevState) => ({
       ...prevState,

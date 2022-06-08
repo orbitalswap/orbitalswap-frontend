@@ -60,7 +60,7 @@ enum BuyingStage {
 }
 
 const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { t } = useTranslation()
   const { theme } = useTheme()
   const {
@@ -260,7 +260,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
       },
       onSuccess: async ({ receipt }) => {
         onDismiss?.()
-        dispatch(fetchUserTicketsAndLotteries({ account, currentLotteryId }))
+        dispatch(fetchUserTicketsAndLotteries({ account, chainId, currentLotteryId }))
         toastSuccess(t('Lottery tickets purchased!'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       },
     })

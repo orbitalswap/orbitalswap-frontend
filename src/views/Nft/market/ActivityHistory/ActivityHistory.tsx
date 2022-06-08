@@ -38,7 +38,8 @@ interface ActivityHistoryProps {
 
 const ActivityHistory: React.FC<ActivityHistoryProps> = ({ collection }) => {
   const dispatch = useAppDispatch()
-  const { address: collectionAddress } = collection || { address: '' }
+
+  const { address: collectionAddress, chainId } = collection || { address: '' }
   const nftActivityFilters = useGetNftActivityFilters(collectionAddress)
   const { theme } = useTheme()
   const { t } = useTranslation()
@@ -69,6 +70,7 @@ const ActivityHistory: React.FC<ActivityHistoryProps> = ({ collection }) => {
         const nftActivityFiltersParsed = JSON.parse(nftActivityFiltersString)
         const collectionActivity = await getCollectionActivity(
           collectionAddress.toLowerCase(),
+          chainId,
           nftActivityFiltersParsed,
           MAX_PER_QUERY,
         )
@@ -92,14 +94,14 @@ const ActivityHistory: React.FC<ActivityHistoryProps> = ({ collection }) => {
 
   useEffect(() => {
     const fetchNftMetadata = async () => {
-      const nfts = await fetchActivityNftMetadata(activitiesSlice)
+      const nfts = await fetchActivityNftMetadata(chainId, activitiesSlice)
       setNftMetadata(nfts)
     }
 
     if (activitiesSlice.length > 0) {
       fetchNftMetadata()
     }
-  }, [activitiesSlice])
+  }, [activitiesSlice, chainId])
 
   useEffect(() => {
     const slice = paginationData.activity.slice(
@@ -220,6 +222,7 @@ const ActivityHistory: React.FC<ActivityHistoryProps> = ({ collection }) => {
                           const nftActivityFiltersParsed = JSON.parse(nftActivityFiltersString)
                           const collectionActivity = await getCollectionActivity(
                             collectionAddress.toLowerCase(),
+                            chainId,
                             nftActivityFiltersParsed,
                             MAX_PER_QUERY * (queryPage + 1),
                           )

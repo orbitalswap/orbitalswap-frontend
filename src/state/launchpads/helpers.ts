@@ -11,7 +11,7 @@ import multicall from 'utils/multicall'
 /**
  * Fetch collection data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
  */
-export const getLaunchpad = async (launchpadAddress: string): Promise<PublicLaunchpadData> => {
+export const getLaunchpad = async (launchpadAddress: string, chainId: ChainId): Promise<PublicLaunchpadData> => {
   try {
     const ifoCalls = [
       'startTime',
@@ -28,6 +28,7 @@ export const getLaunchpad = async (launchpadAddress: string): Promise<PublicLaun
     }))
     const [startDate, endDate, hardcap, softcap, presalePrice, minPerTx, maxPerUser, totalSold] = await multicall(
       launchpadAbi,
+      chainId,
       ifoCalls,
     )
 

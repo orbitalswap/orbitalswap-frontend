@@ -18,6 +18,8 @@ export interface SerializedToken {
   chainId: number
   address: string
   decimals: number
+  isNative: boolean
+  isToken: boolean
   symbol?: string
   name?: string
   projectLink?: string
@@ -41,6 +43,7 @@ interface IfoPoolInfo {
 
 export interface Ifo {
   id: string
+  chainId: ChainId
   isActive: boolean
   address: string
   name: string
@@ -80,6 +83,7 @@ export enum PoolCategory {
 
 interface FarmConfigBaseProps {
   pid: number
+  chainId: ChainId
   v1pid?: number
   lpSymbol: string
   lpAddresses: Address
@@ -104,6 +108,7 @@ export interface DeserializedFarmConfig extends FarmConfigBaseProps {
 
 interface PoolConfigBaseProps {
   sousId: number
+  chainId: ChainId
   contractAddress: Address
   poolCategory: PoolCategory
   tokenPerBlock: string

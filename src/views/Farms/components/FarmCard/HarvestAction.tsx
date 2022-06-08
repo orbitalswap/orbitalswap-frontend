@@ -13,13 +13,15 @@ import { usePriceCakeBusd } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import useHarvestFarm from '../../hooks/useHarvestFarm'
+import { ChainId } from '@orbitalswap/sdk'
 
 interface FarmCardActionsProps {
   earnings?: BigNumber
   pid?: number
+  chainId: ChainId
 }
 
-const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
+const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, chainId }) => {
   const { account } = useWeb3React()
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
@@ -52,7 +54,7 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
                 {t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'CAKE' })}
               </ToastDescriptionWithTx>,
             )
-            dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+            dispatch(fetchFarmUserDataAsync({ account, chainId, pids: [pid] }))
           }
         }}
       >

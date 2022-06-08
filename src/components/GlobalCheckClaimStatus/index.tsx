@@ -30,14 +30,14 @@ const GlobalCheckClaimStatus: React.FC<GlobalCheckClaimStatusProps> = (props) =>
 const GlobalCheckClaim: React.FC<GlobalCheckClaimStatusProps> = ({ excludeLocations }) => {
   const hasDisplayedModal = useRef(false)
   const [canClaimAnniversaryPoints, setCanClaimAnniversaryPoints] = useState(false)
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { pathname } = useRouter()
   const [onPresentAnniversaryModal] = useModal(<AnniversaryAchievementModal />)
 
   // Check claim status
   useEffect(() => {
     const fetchClaimAnniversaryStatus = async () => {
-      const { canClaim } = getAnniversaryAchievementContract()
+      const { canClaim } = getAnniversaryAchievementContract(chainId)
       const canClaimAnniversary = await canClaim(account)
       setCanClaimAnniversaryPoints(canClaimAnniversary)
     }
@@ -45,7 +45,7 @@ const GlobalCheckClaim: React.FC<GlobalCheckClaimStatusProps> = ({ excludeLocati
     if (account) {
       fetchClaimAnniversaryStatus()
     }
-  }, [account])
+  }, [account, chainId])
 
   // Check if we need to display the modal
   useEffect(() => {

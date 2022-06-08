@@ -3,15 +3,16 @@ import { convertSharesToCake } from 'views/Pools/helpers'
 import { multicallv2 } from 'utils/multicall'
 import ifoPoolAbi from 'config/abi/ifoPool.json'
 import { BIG_ZERO } from 'utils/bigNumber'
+import { ChainId } from '@orbitalswap/sdk'
 
-export const fetchPublicIfoPoolData = async (ifoPoolAddress: string) => {
+export const fetchPublicIfoPoolData = async (ifoPoolAddress: string, chainId: ChainId) => {
   try {
     const calls = ['getPricePerFullShare', 'totalShares', 'startBlock', 'endBlock'].map((method) => ({
       address: ifoPoolAddress,
       name: method,
     }))
 
-    const [[sharePrice], [shares], [startBlock], [endBlock]] = await multicallv2(ifoPoolAbi, calls)
+    const [[sharePrice], [shares], [startBlock], [endBlock]] = await multicallv2(ifoPoolAbi, chainId, calls)
 
     const totalSharesAsBigNumber = shares ? new BigNumber(shares.toString()) : BIG_ZERO
     const sharePriceAsBigNumber = sharePrice ? new BigNumber(sharePrice.toString()) : BIG_ZERO
@@ -32,14 +33,14 @@ export const fetchPublicIfoPoolData = async (ifoPoolAddress: string) => {
   }
 }
 
-export const fetchIfoPoolFeesData = async (ifoPoolAddress: string) => {
+export const fetchIfoPoolFeesData = async (ifoPoolAddress: string, chainId: ChainId) => {
   try {
     const calls = ['performanceFee', 'withdrawFee', 'withdrawFeePeriod'].map((method) => ({
       address: ifoPoolAddress,
       name: method,
     }))
 
-    const [[performanceFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(ifoPoolAbi, calls)
+    const [[performanceFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(ifoPoolAbi, chainId, calls)
 
     return {
       performanceFee: performanceFee.toNumber(),

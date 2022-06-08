@@ -1,4 +1,5 @@
 import { toDate, add, differenceInHours } from 'date-fns'
+import { ChainId } from '@orbitalswap/sdk'
 import { BSC_BLOCK_TIME, DEFAULT_TOKEN_DECIMAL } from 'config'
 import { getBidderInfo } from 'config/constants/farmAuctions'
 import { simpleRpcProvider } from 'utils/providers'
@@ -79,13 +80,13 @@ const getAuctionStatus = (
   return AuctionStatus.ToBeAnnounced
 }
 
-const getDateForBlock = async (currentBlock: number, block: number) => {
+const getDateForBlock = async (chainId: ChainId, currentBlock: number, block: number) => {
   const blocksUntilBlock = block - currentBlock
   const secondsUntilStart = blocksUntilBlock * BSC_BLOCK_TIME
   // if block already happened we can get timestamp via .getBlock(block)
   if (currentBlock > block) {
     try {
-      const { timestamp } = await simpleRpcProvider().getBlock(block)
+      const { timestamp } = await simpleRpcProvider(chainId).getBlock(block)
       return toDate(timestamp * 1000)
     } catch {
       add(new Date(), { seconds: secondsUntilStart })
@@ -95,7 +96,7 @@ const getDateForBlock = async (currentBlock: number, block: number) => {
 }
 
 // Get additional auction information based on the date received from smart contract
-export const processAuctionData = async (auctionId: number, auctionResponse: AuctionsResponse): Promise<Auction> => {
+export const processAuctionData = async (auctionId: number, chainId: ChainId, auctionResponse: AuctionsResponse): Promise<Auction> => {
   const processedAuctionData = {
     ...auctionResponse,
     topLeaderboard: auctionResponse.leaderboard.toNumber(),
@@ -106,9 +107,9 @@ export const processAuctionData = async (auctionId: number, auctionResponse: Auc
   }
 
   // Get all required data and blocks
-  const currentBlock = await simpleRpcProvider().getBlockNumber()
-  const startDate = await getDateForBlock(currentBlock, processedAuctionData.startBlock)
-  const endDate = await getDateForBlock(currentBlock, processedAuctionData.endBlock)
+  const currentBlock = await simpleRpcProvider(chainId).getBlockNumber()
+  const startDate = await getDateForBlock(chainId, currentBlock, processedAuctionData.startBlock)
+  const endDate = await getDateForBlock(chainId, currentBlock, processedAuctionData.endBlock)
 
   const auctionStatus = getAuctionStatus(
     currentBlock,

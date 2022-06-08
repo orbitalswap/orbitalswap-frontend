@@ -37,7 +37,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
   const [state, setState] = useState<WalletIfoState>(initialState)
   const credit = new BigNumber(0)
 
-  const { address, currency, version } = ifo
+  const { address, chainId, currency, version } = ifo
 
   const { account } = useWeb3React()
   const contract = useIfoV2Contract(address)
@@ -81,7 +81,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
 
     const abi = version === 3.1 ? ifoV3Abi : ifoV2Abi
 
-    const [userInfo, amounts, isQualifiedNFT, isQualifiedPoints] = await multicallv2(abi, [...ifoCalls, ...ifov3Calls])
+    const [userInfo, amounts, isQualifiedNFT, isQualifiedPoints] = await multicallv2(abi, chainId, [...ifoCalls, ...ifov3Calls])
 
     setState((prevState) => ({
       ...prevState,
@@ -105,7 +105,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
         hasClaimed: userInfo[1][1],
       },
     }))
-  }, [account, address, version])
+  }, [account, chainId, address, version])
 
   const resetIfoData = useCallback(() => {
     setState({ ...initialState })

@@ -66,7 +66,7 @@ function Warnings() {
 
 const Predictions = () => {
   const { isDesktop } = useMatchBreakpoints()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const status = useGetPredictionsStatus()
   const dispatch = useAppDispatch()
   const initialBlock = useInitialBlock()
@@ -74,9 +74,9 @@ const Predictions = () => {
   useEffect(() => {
     if (initialBlock > 0) {
       // Do not start initialization until the first block has been retrieved
-      dispatch(initializePredictions(account))
+      dispatch(initializePredictions({account, chainId}))
     }
-  }, [initialBlock, dispatch, account])
+  }, [initialBlock, dispatch, account, chainId])
 
   usePollPredictions()
 

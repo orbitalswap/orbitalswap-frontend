@@ -14,12 +14,12 @@ import Filters from './components/Filters'
 const Leaderboard = () => {
   const leaderboardLoadingState = useGetLeaderboardLoadingState()
   const filters = useGetLeaderboardFilters()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(filterLeaderboard({ filters }))
-  }, [account, filters, dispatch])
+    dispatch(filterLeaderboard({ filters, chainId }))
+  }, [account, chainId, filters, dispatch])
 
   if (leaderboardLoadingState === FetchStatus.Idle) {
     return <PageLoader />

@@ -4,9 +4,12 @@ import { ChartEntry } from 'state/info/types'
 import { PCS_V2_START } from 'config/constants/info'
 import { PairDayDatasResponse } from '../types'
 import { mapPairDayData, fetchChartData } from '../helpers'
+import { ChainId } from '@orbitalswap/sdk'
 
-const getPoolChartData = async (skip: number, address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
+const getPoolChartData = async (chainId: ChainId, skip: number, address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
   try {
+    if(!infoClient(chainId)) return { error: true }
+
     const query = gql`
       query pairDayDatas($startTime: Int!, $skip: Int!, $address: Bytes!) {
         pairDayDatas(
@@ -22,7 +25,7 @@ const getPoolChartData = async (skip: number, address: string): Promise<{ data?:
         }
       }
     `
-    const { pairDayDatas } = await infoClient.request<PairDayDatasResponse>(query, {
+    const { pairDayDatas } = await infoClient(chainId).request<PairDayDatasResponse>(query, {
       startTime: PCS_V2_START,
       skip,
       address,
@@ -35,8 +38,8 @@ const getPoolChartData = async (skip: number, address: string): Promise<{ data?:
   }
 }
 
-const fetchPoolChartData = async (address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
-  return fetchChartData(getPoolChartData, address)
+const fetchPoolChartData = async (address: string, chainId: ChainId): Promise<{ data?: ChartEntry[]; error: boolean }> => {
+  return fetchChartData(getPoolChartData, chainId, address)
 }
 
 export default fetchPoolChartData

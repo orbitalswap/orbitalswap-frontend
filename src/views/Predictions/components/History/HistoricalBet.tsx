@@ -24,6 +24,7 @@ import { formatBnb, getNetPayout } from './helpers'
 import CollectWinningsButton from '../CollectWinningsButton'
 import ReclaimPositionButton from '../ReclaimPositionButton'
 import BetDetails from './BetDetails'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface BetProps {
   bet: Bet
@@ -43,6 +44,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
   const [isOpen, setIsOpen] = useState(false)
   const { amount, round } = bet
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <>
       <Text bold mb="4px">
@@ -151,7 +153,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
   const handleSuccess = async () => {
     // We have to mark the bet as claimed immediately because it does not update fast enough
     dispatch(markAsCollected({ [bet.round.epoch]: true }))
-    dispatch(fetchLedgerData({ account, epochs: [bet.round.epoch] }))
+    dispatch(fetchLedgerData({ account, chainId, epochs: [bet.round.epoch] }))
   }
 
   return (

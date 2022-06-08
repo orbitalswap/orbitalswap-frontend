@@ -7,11 +7,13 @@ import { useTranslation } from 'contexts/Localization'
 import SelectionCard from './SelectionCard'
 import NextStepButton from './NextStepButton'
 import useProfileCreation from './contexts/hook'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const Team: React.FC = () => {
+  const { chainId } = useActiveWeb3React()
   const { teamId: currentTeamId, actions } = useProfileCreation()
   const { t } = useTranslation()
-  const { data: teams } = useSWR('teams', async () => getTeams())
+  const { data: teams } = useSWR('teams', async () => getTeams(chainId))
   const teamValues = useMemo(() => (teams ? shuffle(Object.values(teams)) : []), [teams])
   const handleTeamSelection = (value: string) => actions.setTeamId(parseInt(value, 10))
 

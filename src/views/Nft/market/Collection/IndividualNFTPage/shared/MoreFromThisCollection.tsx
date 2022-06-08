@@ -12,9 +12,10 @@ import { useNftsFromCollection } from 'state/nftMarket/hooks'
 import { fetchNftsFromCollections } from 'state/nftMarket/reducer'
 import { useAppDispatch } from 'state'
 import Trans from 'components/Trans'
-import { pancakeBunniesAddress } from '../../../constants'
 import { CollectibleLinkCard } from '../../../components/CollectibleCard'
 import useAllPancakeBunnyNfts from '../../../hooks/useAllPancakeBunnyNfts'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 
 const INITIAL_SLIDE = 4
 
@@ -47,19 +48,21 @@ const MoreFromThisCollection: React.FC<MoreFromThisCollectionProps> = ({
   title = <Trans>More from this collection</Trans>,
 }) => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
   const [swiperRef, setSwiperRef] = useState<SwiperCore>(null)
   const [activeIndex, setActiveIndex] = useState(1)
   const { isMobile, isMd, isLg } = useMatchBreakpoints()
   const allPancakeBunnyNfts = useAllPancakeBunnyNfts(collectionAddress)
   const collectionNfts = useNftsFromCollection(collectionAddress)
 
-  const isPBCollection = isAddress(collectionAddress) === pancakeBunniesAddress
+  const isPBCollection = isAddress(collectionAddress) === getPancakeBunniesAddress(chainId)
 
   useEffect(() => {
     if (!isPBCollection && !collectionNfts) {
       dispatch(
         fetchNftsFromCollections({
           collectionAddress: isAddress(collectionAddress) || collectionAddress,
+          chainId,
           page: 1,
           size: 100,
         }),

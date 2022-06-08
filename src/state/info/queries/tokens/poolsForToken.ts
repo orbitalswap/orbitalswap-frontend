@@ -1,3 +1,4 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { TOKEN_BLACKLIST } from 'config/constants/info'
 import { gql } from 'graphql-request'
 import { infoClient } from 'utils/graphql'
@@ -37,12 +38,15 @@ interface PoolsForTokenResponse {
 
 const fetchPoolsForToken = async (
   address: string,
+  chainId: ChainId,
 ): Promise<{
   error: boolean
   addresses?: string[]
 }> => {
   try {
-    const data = await infoClient.request<PoolsForTokenResponse>(POOLS_FOR_TOKEN, {
+    if(!infoClient(chainId)) return { error: true }
+
+    const data = await infoClient(chainId).request<PoolsForTokenResponse>(POOLS_FOR_TOKEN, {
       address,
       blacklist: TOKEN_BLACKLIST,
     })

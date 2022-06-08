@@ -6,6 +6,7 @@ import { localStorageMiddleware } from 'hooks/useSWRContract'
 import useSWRImmutable from 'swr/immutable'
 import { getProfile, GetProfileResponse } from './helpers'
 import { Profile } from '../types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 export const useProfileForAddress = (
   address: string,
@@ -20,9 +21,10 @@ export const useProfileForAddress = (
   isValidating: boolean
   refresh: KeyedMutator<GetProfileResponse>
 } => {
+  const { chainId } = useActiveWeb3React()
   const { data, status, mutate, isValidating } = useSWR(
     address ? [address, 'profile'] : null,
-    () => getProfile(address),
+    () => getProfile(address, chainId),
     fetchConfiguration,
   )
 
@@ -37,8 +39,9 @@ export const useProfileForAddress = (
 }
 
 export const useAchievementsForAddress = (address: string) => {
+  const { chainId } = useActiveWeb3React()
   const { data, status, mutate } = useSWRImmutable(address ? [address, 'achievements'] : null, () =>
-    getAchievements(address),
+    getAchievements(address, chainId),
   )
 
   return {
@@ -56,8 +59,8 @@ export const useProfile = (): {
   isLoading: boolean
   refresh: KeyedMutator<GetProfileResponse>
 } => {
-  const { account } = useWeb3React()
-  const { data, status, mutate } = useSWRImmutable(account ? [account, 'profile'] : null, () => getProfile(account), {
+  const { account, chainId } = useWeb3React()
+  const { data, status, mutate } = useSWRImmutable(account ? [account, 'profile'] : null, () => getProfile(account, chainId), {
     use: [localStorageMiddleware],
   })
 

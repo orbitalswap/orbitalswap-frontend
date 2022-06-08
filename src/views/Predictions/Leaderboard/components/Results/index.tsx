@@ -14,10 +14,12 @@ import { FetchStatus } from 'config/constants/types'
 import DesktopResults from './DesktopResults'
 import MobileResults from './MobileResults'
 import RankingCard from './RankingCard'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const Results = () => {
   const { isDesktop } = useMatchBreakpoints()
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const [first, second, third, ...rest] = useGetLeaderboardResults()
   const leaderboardLoadingState = useGetLeaderboardLoadingState()
   const isLoading = leaderboardLoadingState === FetchStatus.Fetching
@@ -26,7 +28,7 @@ const Results = () => {
   const dispatch = useAppDispatch()
 
   const handleClick = () => {
-    dispatch(filterNextPageLeaderboard(currentSkip + LEADERBOARD_RESULTS_PER_PAGE))
+    dispatch(filterNextPageLeaderboard({skip: currentSkip + LEADERBOARD_RESULTS_PER_PAGE, chainId}))
   }
 
   return (

@@ -52,7 +52,7 @@ const YourHistoryCard: React.FC<YourHistoryCardProps> = ({ handleShowMoreClick, 
     t,
     currentLanguage: { locale },
   } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const [shouldShowRoundDetail, setShouldShowRoundDetail] = useState(false)
   const [selectedLotteryNodeData, setSelectedLotteryNodeData] = useState<LotteryRound>(null)
   const [selectedLotteryId, setSelectedLotteryId] = useState<string>(null)
@@ -67,7 +67,7 @@ const YourHistoryCard: React.FC<YourHistoryCardProps> = ({ handleShowMoreClick, 
   const handleHistoryRowClick = async (lotteryId: string) => {
     setShouldShowRoundDetail(true)
     setSelectedLotteryId(lotteryId)
-    const lotteryData = await fetchLottery(lotteryId)
+    const lotteryData = await fetchLottery(lotteryId, chainId)
     const processedLotteryData = processLotteryResponse(lotteryData)
     setSelectedLotteryNodeData(processedLotteryData)
   }

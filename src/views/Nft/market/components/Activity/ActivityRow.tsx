@@ -19,8 +19,9 @@ import ProfileCell from 'views/Nft/market/components/ProfileCell'
 import MobileModal from './MobileModal'
 import ActivityPrice from './ActivityPrice'
 import ActivityEventText from './ActivityEventText'
-import { nftsBaseUrl, pancakeBunniesAddress } from '../../constants'
+import { nftsBaseUrl } from '../../constants'
 import NFTMedia from '../NFTMedia'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 
 interface ActivityRowProps {
   activity: Activity
@@ -57,7 +58,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({
       isUserActivity={isUserActivity}
     />,
   )
-  const isPBCollection = nft ? nft.collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase() : false
+  const isPBCollection = nft ? nft.collectionAddress.toLowerCase() === getPancakeBunniesAddress(chainId).toLowerCase() : false
   const tokenId =
     nft && isPBCollection
       ? nft.attributes.find((attribute) => attribute.traitType === 'bunnyId')?.value

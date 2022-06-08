@@ -17,13 +17,13 @@ interface State {
 }
 
 const useGetVotingPower = (block?: number, isActive = true): State & { isLoading: boolean; isError: boolean } => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { data, status, error } = useSWRImmutable(
     account && isActive ? [account, block, 'votingPower'] : null,
     async () => {
-      const blockNumber = block || (await simpleRpcProvider().getBlockNumber())
+      const blockNumber = block || (await simpleRpcProvider(chainId).getBlockNumber())
       const eligiblePools = await getActivePools(blockNumber)
-      const poolAddresses = eligiblePools.map(({ contractAddress }) => getAddress(contractAddress))
+      const poolAddresses = eligiblePools.map(({ contractAddress }) => getAddress(contractAddress, chainId))
       const { cakeBalance, cakeBnbLpBalance, cakePoolBalance, total, poolsBalance, cakeVaultBalance, ifoPoolBalance } =
         await getVotingPower(account, poolAddresses, blockNumber)
       return {

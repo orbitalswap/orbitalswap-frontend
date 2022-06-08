@@ -2,6 +2,7 @@ import { request, gql } from 'graphql-request'
 import { GRAPH_API_LOTTERY } from 'config/constants/endpoints'
 import { LotteryRoundGraphEntity, LotteryResponse } from 'state/types'
 import { getRoundIdsArray, fetchMultipleLotteries } from './helpers'
+import { ChainId } from '@orbitalswap/sdk'
 
 export const MAX_LOTTERIES_REQUEST_SIZE = 100
 
@@ -57,13 +58,16 @@ const applyNodeDataToLotteriesGraphResponse = (
 }
 
 export const getGraphLotteries = async (
+  chainId: ChainId,
   first = MAX_LOTTERIES_REQUEST_SIZE,
   skip = 0,
   where: LotteriesWhere = {},
 ): Promise<LotteryRoundGraphEntity[]> => {
+  if (!GRAPH_API_LOTTERY[chainId]) return []
+
   try {
     const response = await request(
-      GRAPH_API_LOTTERY,
+      GRAPH_API_LOTTERY[chainId],
       gql`
         query getLotteries($first: Int!, $skip: Int!, $where: Lottery_filter) {
           lotteries(first: $first, skip: $skip, where: $where, orderDirection: desc, orderBy: block) {
@@ -88,10 +92,10 @@ export const getGraphLotteries = async (
   }
 }
 
-const getLotteriesData = async (currentLotteryId: string): Promise<LotteryRoundGraphEntity[]> => {
+const getLotteriesData = async (currentLotteryId: string, chainId: ChainId): Promise<LotteryRoundGraphEntity[]> => {
   const idsForNodesCall = getRoundIdsArray(currentLotteryId)
-  const nodeData = await fetchMultipleLotteries(idsForNodesCall)
-  const graphResponse = await getGraphLotteries()
+  const nodeData = await fetchMultipleLotteries(idsForNodesCall, chainId)
+  const graphResponse = await getGraphLotteries(chainId)
   const mergedData = applyNodeDataToLotteriesGraphResponse(nodeData, graphResponse)
   return mergedData
 }

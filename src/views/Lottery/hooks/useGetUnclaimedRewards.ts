@@ -5,7 +5,7 @@ import fetchUnclaimedUserRewards from 'state/lottery/fetchUnclaimedUserRewards'
 import { FetchStatus } from 'config/constants/types'
 
 const useGetUnclaimedRewards = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { isTransitioning, currentLotteryId } = useLottery()
   const userLotteryData = useGetUserLotteriesGraphData()
   const lotteriesData = useGetLotteriesGraphData()
@@ -21,6 +21,7 @@ const useGetUnclaimedRewards = () => {
     setFetchStatus(FetchStatus.Fetching)
     const unclaimedRewardsResponse = await fetchUnclaimedUserRewards(
       account,
+      chainId,
       userLotteryData,
       lotteriesData,
       currentLotteryId,

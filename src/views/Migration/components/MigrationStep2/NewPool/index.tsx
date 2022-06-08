@@ -12,12 +12,12 @@ import {
 import PoolsTable from './PoolTable'
 
 const NewPool: React.FC = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { pools } = usePoolsWithVault()
   const cakeVault = useCakeVault()
 
   const stakedOnlyOpenPools = useMemo(
-    () => pools.filter((pool) => pool.userData && pool.sousId === 0 && !pool.isFinished),
+    () => pools.filter((pool) => pool.userData && pool.sousId === 0 && !pool.isFinished && pool.chainId === chainId),
     [pools],
   )
 
@@ -26,16 +26,16 @@ const NewPool: React.FC = () => {
   const dispatch = useAppDispatch()
 
   useFastRefreshEffect(() => {
-    dispatch(fetchCakeVaultPublicData())
+    dispatch(fetchCakeVaultPublicData({chainId}))
     if (account) {
-      dispatch(fetchCakeVaultUserData({ account }))
-      dispatch(fetchCakePoolUserDataAsync(account))
+      dispatch(fetchCakeVaultUserData({ account, chainId }))
+      dispatch(fetchCakePoolUserDataAsync(account, chainId))
     }
-  }, [account, dispatch])
+  }, [account, chainId, dispatch])
 
   useEffect(() => {
-    dispatch(fetchCakeVaultFees())
-  }, [dispatch])
+    dispatch(fetchCakeVaultFees({chainId}))
+  }, [chainId, dispatch])
 
   return <PoolsTable pools={stakedOnlyOpenPools} account={account} userDataReady={userDataReady} />
 }

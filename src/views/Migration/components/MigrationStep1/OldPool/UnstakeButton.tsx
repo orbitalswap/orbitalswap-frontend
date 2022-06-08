@@ -25,7 +25,7 @@ export interface UnstakeButtonProps {
 const UnstakeButton: React.FC<UnstakeButtonProps> = ({ pool }) => {
   const { sousId, stakingToken, earningToken, userData, vaultKey } = pool
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { library } = useActiveWeb3React()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -37,8 +37,8 @@ const UnstakeButton: React.FC<UnstakeButtonProps> = ({ pool }) => {
 
   const vaultPoolContract = useMemo(() => {
     return vaultKey === VaultKey.CakeVaultV1
-      ? getContract(cakeVaultAbi, cakeVaultAddress, library.getSigner())
-      : getContract(ifoPoolAbi, ifoPoolV1Contract, library.getSigner())
+      ? getContract(cakeVaultAbi, cakeVaultAddress, chainId, library.getSigner())
+      : getContract(ifoPoolAbi, ifoPoolV1Contract, chainId, library.getSigner())
   }, [library, vaultKey])
 
   const { onUnstake } = useUnstakePool(sousId, pool.enableEmergencyWithdraw)

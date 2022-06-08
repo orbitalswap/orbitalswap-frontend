@@ -7,12 +7,15 @@ import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamp
 import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { getDerivedPrices, getDerivedPricesQueryConstructor } from '../queries/getDerivedPrices'
 import { PairDataTimeWindowEnum } from '../types'
+import { ChainId } from '@orbitalswap/sdk'
 
-const getTokenDerivedBnbPrices = async (tokenAddress: string, blocks: Block[]) => {
+const getTokenDerivedBnbPrices = async (tokenAddress: string, chainId, blocks: Block[]) => {
+  if(!INFO_CLIENT[chainId]) return null
+
   const prices: any | undefined = await multiQuery(
     getDerivedPricesQueryConstructor,
     getDerivedPrices(tokenAddress, blocks),
-    INFO_CLIENT,
+    INFO_CLIENT[chainId],
     200,
   )
 
@@ -76,6 +79,7 @@ const getSkipDaysToStart = (timeWindow: PairDataTimeWindowEnum) => {
 // Fetches derivedBnb values for tokens to calculate derived price
 // Used when no direct pool is available
 const fetchDerivedPriceData = async (
+  chainId: ChainId,
   token0Address: string,
   token1Address: string,
   timeWindow: PairDataTimeWindowEnum,
@@ -91,14 +95,14 @@ const fetchDerivedPriceData = async (
   }
 
   try {
-    const blocks = await getBlocksFromTimestamps(timestamps, 'asc', 500)
+    const blocks = await getBlocksFromTimestamps(chainId, timestamps, 'asc', 500)
     if (!blocks || blocks.length === 0) {
       console.error('Error fetching blocks for timestamps', timestamps)
       return null
     }
 
-    const token0DerivedBnb = await getTokenDerivedBnbPrices(token0Address, blocks)
-    const token1DerivedBnb = await getTokenDerivedBnbPrices(token1Address, blocks)
+    const token0DerivedBnb = await getTokenDerivedBnbPrices(token0Address, chainId, blocks)
+    const token1DerivedBnb = await getTokenDerivedBnbPrices(token1Address, chainId, blocks)
     return { token0DerivedBnb, token1DerivedBnb }
   } catch (error) {
     console.error('Failed to fetched derived price data for chart', error)

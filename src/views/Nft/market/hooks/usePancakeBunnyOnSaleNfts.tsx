@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { ChainId } from '@orbitalswap/sdk'
 import { NftToken, ApiResponseCollectionTokens } from 'state/nftMarket/types'
 import {
   getNftsMarketData,
@@ -11,21 +12,24 @@ import useSWRInfinite from 'swr/infinite'
 import { FetchStatus } from 'config/constants/types'
 import { formatBigNumber } from 'utils/formatBalance'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
-import { pancakeBunniesAddress } from '../constants'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const fetchMarketDataNfts = async (
   bunnyId: string,
+  chainId: ChainId,
   nftMetadata: ApiResponseCollectionTokens,
   direction: 'asc' | 'desc',
   page: number,
   itemsPerPage: number,
 ): Promise<{ newNfts: NftToken[]; isPageLast: boolean }> => {
   const whereClause = {
-    collection: pancakeBunniesAddress.toLowerCase(),
+    collection: getPancakeBunniesAddress(chainId).toLowerCase(),
     otherId: bunnyId,
     isTradable: true,
   }
   const nftsMarket = await getNftsMarketData(
+    chainId,
     whereClause,
     itemsPerPage,
     'currentAskPrice',
@@ -46,6 +50,7 @@ export const usePancakeBunnyOnSaleNfts = (
   nftMetadata: ApiResponseCollectionTokens,
   itemsPerPage: number,
 ) => {
+  const { chainId } = useActiveWeb3React()
   const isLastPage = useRef(false)
   const [direction, setDirection] = useState<'asc' | 'desc'>('asc' as const)
 
@@ -67,10 +72,10 @@ export const usePancakeBunnyOnSaleNfts = (
       return [bunnyId, direction, pageIndex, 'pancakeBunnyOnSaleNfts']
     },
     async (id, sortDirection, page) => {
-      const { newNfts, isPageLast } = await fetchMarketDataNfts(id, nftMetadata, sortDirection, page, itemsPerPage)
+      const { newNfts, isPageLast } = await fetchMarketDataNfts(id, chainId, nftMetadata, sortDirection, page, itemsPerPage)
       isLastPage.current = isPageLast
       const nftsMarketTokenIds = newNfts.map((marketData) => marketData.tokenId)
-      const updatedMarketData = await getNftsUpdatedMarketData(pancakeBunniesAddress.toLowerCase(), nftsMarketTokenIds)
+      const updatedMarketData = await getNftsUpdatedMarketData(chainId, getPancakeBunniesAddress(chainId).toLowerCase(), nftsMarketTokenIds)
       if (!updatedMarketData) return newNfts
 
       return updatedMarketData

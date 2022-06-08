@@ -3,96 +3,95 @@ import addresses from 'config/constants/contracts'
 import { Address } from 'config/constants/types'
 import { VaultKey } from 'state/types'
 
-export const getAddress = (address: Address): string => {
-  const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
+export const getAddress = (address: Address, chainId: ChainId): string => {
   return address[chainId] ? address[chainId] : address[ChainId.BSC_MAINNET]
 }
 
-export const getMasterChefAddress = () => {
-  return getAddress(addresses.masterChef)
+export const getMasterChefAddress = (chainId: ChainId) => {
+  return getAddress(addresses.masterChef, chainId)
 }
-export const getMasterChefV1Address = () => {
-  return getAddress(addresses.masterChefV1)
+export const getMasterChefV1Address = (chainId: ChainId) => {
+  return getAddress(addresses.masterChefV1, chainId)
 }
-export const getMulticallAddress = () => {
-  return getAddress(addresses.multiCall)
+export const getMulticallAddress = (chainId: ChainId) => {
+  return getAddress(addresses.multiCall, chainId)
 }
-export const getLotteryV2Address = () => {
-  return getAddress(addresses.lotteryV2)
+export const getLotteryV2Address = (chainId: ChainId) => {
+  return getAddress(addresses.lotteryV2, chainId)
 }
-export const getPancakeProfileAddress = () => {
-  return getAddress(addresses.pancakeProfile)
+export const getPancakeProfileAddress = (chainId: ChainId) => {
+  return getAddress(addresses.pancakeProfile, chainId)
 }
-export const getPancakeBunniesAddress = () => {
-  return getAddress(addresses.pancakeBunnies)
+export const getPancakeBunniesAddress = (chainId: ChainId) => {
+  return getAddress(addresses.pancakeBunnies, chainId)
 }
-export const getBunnyFactoryAddress = () => {
-  return getAddress(addresses.bunnyFactory)
+export const getBunnyFactoryAddress = (chainId: ChainId) => {
+  return getAddress(addresses.bunnyFactory, chainId)
 }
-export const getClaimRefundAddress = () => {
-  return getAddress(addresses.claimRefund)
+export const getClaimRefundAddress = (chainId: ChainId) => {
+  return getAddress(addresses.claimRefund, chainId)
 }
-export const getPointCenterIfoAddress = () => {
-  return getAddress(addresses.pointCenterIfo)
+export const getPointCenterIfoAddress = (chainId: ChainId) => {
+  return getAddress(addresses.pointCenterIfo, chainId)
 }
-export const getBunnySpecialAddress = () => {
-  return getAddress(addresses.bunnySpecial)
+export const getBunnySpecialAddress = (chainId: ChainId) => {
+  return getAddress(addresses.bunnySpecial, chainId)
 }
-export const getTradingCompetitionAddress = () => {
-  return getAddress(addresses.tradingCompetition)
+export const getTradingCompetitionAddress = (chainId: ChainId) => {
+  return getAddress(addresses.tradingCompetition, chainId)
 }
-export const getTradingCompetitionAddressV2 = () => {
-  return getAddress(addresses.tradingCompetitionV2)
-}
-
-export const getTradingCompetitionAddressMobox = () => {
-  return getAddress(addresses.tradingCompetitionMobox)
+export const getTradingCompetitionAddressV2 = (chainId: ChainId) => {
+  return getAddress(addresses.tradingCompetitionV2, chainId)
 }
 
-export const getEasterNftAddress = () => {
-  return getAddress(addresses.easterNft)
+export const getTradingCompetitionAddressMobox = (chainId: ChainId) => {
+  return getAddress(addresses.tradingCompetitionMobox, chainId)
 }
 
-export const getVaultPoolAddress = (vaultKey: VaultKey) => {
+export const getEasterNftAddress = (chainId: ChainId) => {
+  return getAddress(addresses.easterNft, chainId)
+}
+
+export const getVaultPoolAddress = (vaultKey: VaultKey, chainId: ChainId) => {
   if (!vaultKey) {
     return null
   }
-  return getAddress(addresses[vaultKey])
+  return getAddress(addresses[vaultKey], chainId)
 }
 
-export const getCakeVaultAddress = () => {
-  return getAddress(addresses.cakeVault)
+export const getCakeVaultAddress = (chainId: ChainId) => {
+  return getAddress(addresses.cakeVault, chainId)
 }
-export const getPredictionsAddress = () => {
-  return getAddress(addresses.predictions)
+export const getPredictionsAddress = (chainId: ChainId) => {
+  return getAddress(addresses.predictions, chainId)
 }
-export const getChainlinkOracleAddress = () => {
-  return getAddress(addresses.chainlinkOracle)
+export const getChainlinkOracleAddress = (chainId: ChainId) => {
+  return getAddress(addresses.chainlinkOracle, chainId)
 }
-export const getBunnySpecialCakeVaultAddress = () => {
-  return getAddress(addresses.bunnySpecialCakeVault)
+export const getBunnySpecialCakeVaultAddress = (chainId: ChainId) => {
+  return getAddress(addresses.bunnySpecialCakeVault, chainId)
 }
-export const getBunnySpecialPredictionAddress = () => {
-  return getAddress(addresses.bunnySpecialPrediction)
+export const getBunnySpecialPredictionAddress = (chainId: ChainId) => {
+  return getAddress(addresses.bunnySpecialPrediction, chainId)
 }
-export const getBunnySpecialLotteryAddress = () => {
-  return getAddress(addresses.bunnySpecialLottery)
+export const getBunnySpecialLotteryAddress = (chainId: ChainId) => {
+  return getAddress(addresses.bunnySpecialLottery, chainId)
 }
-export const getBunnySpecialXmasAddress = () => {
-  return getAddress(addresses.bunnySpecialXmas)
+export const getBunnySpecialXmasAddress = (chainId: ChainId) => {
+  return getAddress(addresses.bunnySpecialXmas, chainId)
 }
-export const getFarmAuctionAddress = () => {
-  return getAddress(addresses.farmAuction)
+export const getFarmAuctionAddress = (chainId: ChainId) => {
+  return getAddress(addresses.farmAuction, chainId)
 }
-export const getAnniversaryAchievement = () => {
-  return getAddress(addresses.AnniversaryAchievement)
+export const getAnniversaryAchievement = (chainId: ChainId) => {
+  return getAddress(addresses.AnniversaryAchievement, chainId)
 }
-export const getNftMarketAddress = () => {
-  return getAddress(addresses.nftMarket)
+export const getNftMarketAddress = (chainId: ChainId) => {
+  return getAddress(addresses.nftMarket, chainId)
 }
-export const getNftSaleAddress = () => {
-  return getAddress(addresses.nftSale)
+export const getNftSaleAddress = (chainId: ChainId) => {
+  return getAddress(addresses.nftSale, chainId)
 }
-export const getPancakeSquadAddress = () => {
-  return getAddress(addresses.pancakeSquad)
+export const getPancakeSquadAddress = (chainId: ChainId) => {
+  return getAddress(addresses.pancakeSquad, chainId)
 }

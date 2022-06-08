@@ -3,6 +3,7 @@ import { campaignMap } from 'config/constants/campaigns'
 import { GRAPH_API_PROFILE } from 'config/constants/endpoints'
 import { Achievement } from 'state/types'
 import { getAchievementTitle, getAchievementDescription } from 'utils/achievements'
+import { ChainId } from '@orbitalswap/sdk'
 
 interface UserPointIncreaseEvent {
   campaignId: string
@@ -13,10 +14,15 @@ interface UserPointIncreaseEvent {
 /**
  * Gets all user point increase events on the profile filtered by wallet address
  */
-export const getUserPointIncreaseEvents = async (account: string): Promise<UserPointIncreaseEvent[]> => {
+export const getUserPointIncreaseEvents = async (
+  account: string,
+  chainId: ChainId,
+): Promise<UserPointIncreaseEvent[]> => {
+  if (!GRAPH_API_PROFILE[chainId]) return null
+
   try {
     const { user } = await request(
-      GRAPH_API_PROFILE,
+      GRAPH_API_PROFILE[chainId],
       gql`
         query getUserPointIncreaseEvents($account: ID!) {
           user(id: $account) {
@@ -42,8 +48,8 @@ export const getUserPointIncreaseEvents = async (account: string): Promise<UserP
 /**
  * Gets all user point increase events and adds achievement meta
  */
-export const getAchievements = async (account: string): Promise<Achievement[]> => {
-  const pointIncreaseEvents = await getUserPointIncreaseEvents(account)
+export const getAchievements = async (account: string, chainId: ChainId): Promise<Achievement[]> => {
+  const pointIncreaseEvents = await getUserPointIncreaseEvents(account, chainId)
 
   if (!pointIncreaseEvents) {
     return []

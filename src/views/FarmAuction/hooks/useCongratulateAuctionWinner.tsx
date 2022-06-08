@@ -3,6 +3,7 @@ import { useWeb3React } from '@web3-react/core'
 import { Auction, AuctionStatus, Bidder } from 'config/constants/types'
 import { useFarmAuctionContract } from 'hooks/useContract'
 import { processAuctionData, sortAuctionBidders } from '../helpers'
+import { ChainId } from '@orbitalswap/sdk'
 
 interface WonAuction {
   auction: Auction
@@ -12,14 +13,14 @@ interface WonAuction {
 const useCongratulateAuctionWinner = (currentAuction: Auction, bidders: Bidder[]): WonAuction => {
   const [wonAuction, setWonAuction] = useState<WonAuction | null>(null)
 
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   const farmAuctionContract = useFarmAuctionContract(false)
 
   useEffect(() => {
-    const checkIfWonPreviousAuction = async (previousAuctionId: number) => {
+    const checkIfWonPreviousAuction = async (previousAuctionId: number, chainId: ChainId) => {
       const auctionData = await farmAuctionContract.auctions(previousAuctionId)
-      const processedAuctionData = await processAuctionData(previousAuctionId, auctionData)
+      const processedAuctionData = await processAuctionData(previousAuctionId, chainId, auctionData)
       const [auctionBidders] = await farmAuctionContract.viewBidsPerAuction(previousAuctionId, 0, 500)
       const sortedBidders = sortAuctionBidders(auctionBidders)
       const { leaderboardThreshold } = processedAuctionData
@@ -46,9 +47,9 @@ const useCongratulateAuctionWinner = (currentAuction: Auction, bidders: Bidder[]
         bidderData: accountBidderData,
       })
     } else if (previousAuctionId > 0) {
-      checkIfWonPreviousAuction(previousAuctionId)
+      checkIfWonPreviousAuction(previousAuctionId, chainId)
     }
-  }, [currentAuction, bidders, account, farmAuctionContract])
+  }, [currentAuction, bidders, account, chainId, farmAuctionContract])
 
   return wonAuction
 }

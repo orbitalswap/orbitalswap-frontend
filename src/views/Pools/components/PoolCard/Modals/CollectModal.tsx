@@ -16,7 +16,7 @@ import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { Token } from '@orbitalswap/sdk'
+import { ChainId, Token } from '@orbitalswap/sdk'
 import { formatNumber } from 'utils/formatBalance'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance } from 'state/pools'
@@ -30,6 +30,7 @@ interface CollectModalProps {
   earningToken: Token
   earningsDollarValue: number
   sousId: number
+  chainId: ChainId
   isBnbPool: boolean
   isCompoundPool?: boolean
   onDismiss?: () => void
@@ -41,6 +42,7 @@ const CollectModal: React.FC<CollectModalProps> = ({
   earningToken,
   earningsDollarValue,
   sousId,
+  chainId,
   isBnbPool,
   isCompoundPool = false,
   onDismiss,
@@ -85,9 +87,9 @@ const CollectModal: React.FC<CollectModalProps> = ({
           </ToastDescriptionWithTx>,
         )
       }
-      dispatch(updateUserStakedBalance(sousId, account))
-      dispatch(updateUserPendingReward(sousId, account))
-      dispatch(updateUserBalance(sousId, account))
+      dispatch(updateUserStakedBalance(sousId, account, chainId))
+      dispatch(updateUserPendingReward(sousId, account, chainId))
+      dispatch(updateUserBalance(sousId, account, chainId))
       onDismiss?.()
     }
   }

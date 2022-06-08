@@ -1,7 +1,8 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { FetchStatus } from 'config/constants/types'
 import isEmpty from 'lodash/isEmpty'
-import { pancakeBunniesAddress } from 'views/Nft/market/constants'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 import { fetchNftsFiltered, getMarketDataForTokenIds, getNftsFromCollectionApi, getNftsMarketData } from './helpers'
 import { MarketEvent, NftActivityFilter, NftAttribute, NftFilter, NftToken, State } from './types'
 
@@ -36,23 +37,23 @@ const initialState: State = {
  */
 export const fetchNftsFromCollections = createAsyncThunk<
   NftToken[],
-  { collectionAddress: string; page: number; size: number }
->('nft/fetchNftsFromCollections', async ({ collectionAddress, page, size }) => {
+  { collectionAddress: string; chainId: ChainId; page: number; size: number }
+>('nft/fetchNftsFromCollections', async ({ collectionAddress, chainId, page, size }) => {
   try {
-    if (collectionAddress === pancakeBunniesAddress) {
+    if (collectionAddress === getPancakeBunniesAddress(chainId)) {
       // PancakeBunnies don't need to pre-fetch "all nfts" from the collection
       // When user visits IndividualNFTPage required nfts will be fetched via bunny id
       return []
     }
 
-    const nfts = await getNftsFromCollectionApi(collectionAddress, size, page)
+    const nfts = await getNftsFromCollectionApi(collectionAddress, chainId, size, page)
 
     if (!nfts?.data) {
       return []
     }
 
     const tokenIds = Object.values(nfts.data).map((nft) => nft.tokenId)
-    const nftsMarket = await getMarketDataForTokenIds(collectionAddress, tokenIds)
+    const nftsMarket = await getMarketDataForTokenIds(collectionAddress, tokenIds, chainId)
 
     return tokenIds.map((id) => {
       const apiMetadata = nfts.data[id]
@@ -60,6 +61,7 @@ export const fetchNftsFromCollections = createAsyncThunk<
 
       return {
         tokenId: id,
+        chainId,
         name: apiMetadata.name,
         description: apiMetadata.description,
         collectionName: apiMetadata.collection.name,
@@ -77,8 +79,8 @@ export const fetchNftsFromCollections = createAsyncThunk<
 
 export const filterNftsFromCollection = createAsyncThunk<
   NftToken[],
-  { collectionAddress: string; nftFilters: Record<string, NftAttribute> }
->('nft/filterNftsFromCollection', async ({ collectionAddress, nftFilters }) => {
+  { collectionAddress: string; chainId: ChainId; nftFilters: Record<string, NftAttribute> }
+>('nft/filterNftsFromCollection', async ({ collectionAddress, chainId, nftFilters }) => {
   try {
     const attrParams = Object.values(nftFilters).reduce(
       (accum, attr) => ({
@@ -90,17 +92,18 @@ export const filterNftsFromCollection = createAsyncThunk<
     if (isEmpty(attrParams)) {
       return []
     }
-    const attrFilters = await fetchNftsFiltered(collectionAddress, attrParams)
+    const attrFilters = await fetchNftsFiltered(collectionAddress, chainId, attrParams)
 
     // Fetch market data for each token returned
     const tokenIds = Object.values(attrFilters.data).map((apiToken) => apiToken.tokenId)
-    const marketData = await getNftsMarketData({ tokenId_in: tokenIds, collection: collectionAddress.toLowerCase() })
+    const marketData = await getNftsMarketData(chainId, { tokenId_in: tokenIds, collection: collectionAddress.toLowerCase() })
 
     const nftTokens: NftToken[] = Object.values(attrFilters.data).map((apiToken) => {
       const apiTokenMarketData = marketData.find((tokenMarketData) => tokenMarketData.tokenId === apiToken.tokenId)
 
       return {
         tokenId: apiToken.tokenId,
+        chainId,
         name: apiToken.name,
         description: apiToken.description,
         collectionName: apiToken.collection.name,

@@ -9,6 +9,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import { simpleRpcProvider } from 'utils/providers'
 import { useCake, useLaunchpadContract, useTokenContract } from './useContract'
 import { useSWRContract } from './useSWRContract'
+import useActiveWeb3React from './useActiveWeb3React'
 
 const useTokenBalance = (tokenAddress: string) => {
   const { account } = useWeb3React()
@@ -53,17 +54,18 @@ export const useBurnedBalance = (tokenAddress: string) => {
 }
 
 export const useGetBnbBalance = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { status, data, mutate } = useSWR([account, 'bnbBalance'], async () => {
-    return simpleRpcProvider().getBalance(account)
+    return simpleRpcProvider(chainId).getBalance(account)
   })
 
   return { balance: data || Zero, fetchStatus: status, refresh: mutate }
 }
 
 export const useGetBnbBalanceForPresale = (address: string) => {
+  const { chainId } = useActiveWeb3React()
   const { status, data, mutate } = useSWR([address, 'bnbBalance'], async () => {
-    return simpleRpcProvider().getBalance(address)
+    return simpleRpcProvider(chainId).getBalance(address)
   })
 
   return { balance: data || Zero, fetchStatus: status, refresh: mutate }

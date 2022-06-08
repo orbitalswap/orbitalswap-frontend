@@ -1,7 +1,9 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { PairDataTimeWindowEnum } from '../types'
 
 export type fetchPairDataParams = {
   pairId: string
+  chainId: ChainId
   timeWindow: PairDataTimeWindowEnum
 }
 

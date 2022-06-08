@@ -17,6 +17,7 @@ interface HarvestActionProps extends DeserializedPool {
 
 const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
   sousId,
+  chainId,
   poolCategory,
   earningToken,
   userData,
@@ -42,6 +43,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
       earningToken={earningToken}
       earningsDollarValue={earningTokenDollarBalance}
       sousId={sousId}
+      chainId={chainId}
       isBnbPool={isBnbPool}
       isCompoundPool={isCompoundPool}
     />,

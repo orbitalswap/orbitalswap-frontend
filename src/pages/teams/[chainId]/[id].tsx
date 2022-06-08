@@ -26,7 +26,8 @@ export const getStaticPaths: GetStaticPaths = () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params
+  const { id, chainId } = params
+
   if (typeof id !== 'string') {
     return {
       notFound: true,
@@ -42,7 +43,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 
-  const fetchedTeam = await getTeam(idNumber)
+  const fetchedTeam = await getTeam(idNumber, +chainId)
   if (!fetchedTeam) {
     return {
       props: {

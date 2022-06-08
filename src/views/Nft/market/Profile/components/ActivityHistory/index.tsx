@@ -19,7 +19,7 @@ import { fetchActivityNftMetadata } from '../../../ActivityHistory/utils/fetchAc
 const MAX_PER_PAGE = 8
 
 const ActivityHistory = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const dispatch = useAppDispatch()
   const accountAddress = useRouter().query.accountAddress as string
   const { theme } = useTheme()
@@ -36,7 +36,7 @@ const ActivityHistory = () => {
   useEffect(() => {
     const fetchAddressActivity = async () => {
       try {
-        const addressActivity = await getUserActivity(accountAddress.toLocaleLowerCase())
+        const addressActivity = await getUserActivity(accountAddress.toLocaleLowerCase(), chainId)
         setSortedUserActivities(sortUserActivity(accountAddress, addressActivity))
         setIsLoading(false)
       } catch (error) {
@@ -47,11 +47,11 @@ const ActivityHistory = () => {
     if (isAddress(accountAddress)) {
       fetchAddressActivity()
     }
-  }, [account, accountAddress, dispatch])
+  }, [account, chainId, accountAddress, dispatch])
 
   useEffect(() => {
     const fetchNftMetadata = async () => {
-      const nfts = await fetchActivityNftMetadata(sortedUserActivities)
+      const nfts = await fetchActivityNftMetadata(chainId, sortedUserActivities)
       setNftMetadata(nfts)
     }
 
@@ -71,7 +71,7 @@ const ActivityHistory = () => {
       setMaxPages(1)
       setCurrentPage(1)
     }
-  }, [sortedUserActivities])
+  }, [sortedUserActivities, chainId])
 
   useEffect(() => {
     const getActivitySlice = () => {

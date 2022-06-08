@@ -8,6 +8,8 @@ import { DEFAULT_CHAIN_ID } from 'config/constants/networks'
 import { PoolCategory } from 'config/constants/types'
 import { serializeTokens } from 'config/constants/tokens'
 import { fetchUserStakeBalances, fetchUserPendingRewards } from './fetchPoolsUser'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { ChainId } from '@orbitalswap/sdk'
 
 export interface PoolsState {
   data: SerializedPool
@@ -15,11 +17,11 @@ export interface PoolsState {
 }
 
 const serializedTokens = serializeTokens()
-const cakeContract = getCakeContract()
 
 const initialData = {
   data: {
     sousId: 0,
+    chainId: ChainId.BSC_MAINNET,
     stakingToken: serializedTokens.cake,
     earningToken: serializedTokens.cake,
     contractAddress: {
@@ -37,15 +39,18 @@ const initialData = {
 }
 
 export const useFetchUserPools = (account) => {
+  const { chainId } = useActiveWeb3React()
   const [userPoolsData, setPoolsUserData] = useState<PoolsState>(initialData)
+  
 
   const fetchUserPoolsData = useCallback(() => {
     if (account) {
       const fetchPoolsUserDataAsync = async () => {
+        const cakeContract = getCakeContract(chainId)
         try {
           const [stakedBalances, pendingRewards, totalStaking] = await Promise.all([
-            fetchUserStakeBalances(account),
-            fetchUserPendingRewards(account),
+            fetchUserStakeBalances(account, chainId),
+            fetchUserPendingRewards(account, chainId),
             cakeContract.balanceOf(initialData.data.contractAddress[DEFAULT_CHAIN_ID]),
           ])
 

@@ -14,11 +14,11 @@ const ClaimPointsCallout: React.FC<{ onSuccess?: () => void }> = ({ onSuccess = 
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const { profile, refresh: refreshProfile } = useProfile()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   useEffect(() => {
     const fetchIfoClaims = async () => {
-      const ifoData = await getClaimableIfoData(account)
+      const ifoData = await getClaimableIfoData(account, chainId)
       setClaimableAchievement(ifoData)
     }
 

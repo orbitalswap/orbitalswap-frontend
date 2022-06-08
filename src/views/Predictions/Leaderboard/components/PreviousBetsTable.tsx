@@ -7,6 +7,7 @@ import { getBetHistory, transformBetResponse } from 'state/predictions/helpers'
 import { Bet } from 'state/types'
 import PositionLabel from './PositionLabel'
 import { NetWinnings } from './Results/styles'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface PreviousBetsTableProps {
   numberOfBets?: number
@@ -17,6 +18,7 @@ const PreviousBetsTable: React.FC<PreviousBetsTableProps> = ({ numberOfBets = 5,
   const [isFetching, setIsFetching] = useState(false)
   const [bets, setBets] = useState<Bet[]>([])
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const orderedBets = orderBy(bets, ['round.epoch'], ['desc'])
 
   useEffect(() => {
@@ -24,6 +26,7 @@ const PreviousBetsTable: React.FC<PreviousBetsTableProps> = ({ numberOfBets = 5,
       setIsFetching(true)
       try {
         const response = await getBetHistory(
+          chainId,
           {
             user: account.toLowerCase(),
           },

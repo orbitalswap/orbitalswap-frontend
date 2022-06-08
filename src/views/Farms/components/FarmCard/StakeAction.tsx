@@ -34,6 +34,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   token,
   lpSymbol,
   pid,
+  chainId,
   multiplier,
   apr,
   displayApr,
@@ -66,7 +67,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
           {t('Your funds have been staked in the farm')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      dispatch(fetchFarmUserDataAsync({ account, chainId, pids: [pid] }))
     }
   }
 
@@ -81,7 +82,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
           {t('Your earnings have also been harvested to your wallet')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      dispatch(fetchFarmUserDataAsync({ account, chainId, pids: [pid] }))
     }
   }
 

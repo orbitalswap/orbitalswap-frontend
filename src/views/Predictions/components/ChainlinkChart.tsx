@@ -20,6 +20,7 @@ import { NodeRound } from 'state/types'
 import useSwiper from '../hooks/useSwiper'
 import usePollOraclePrice from '../hooks/usePollOraclePrice'
 import { CHART_DOT_CLICK_EVENT } from '../helpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 function useChainlinkLatestRound() {
   const chainlinkOracleContract = useChainlinkOracleContract(false)
@@ -37,14 +38,14 @@ function useChainlinkLatestRound() {
   return lastRound
 }
 
-const chainlinkAddress = getChainlinkOracleAddress()
 function useChainlinkRoundDataSet() {
+  const { chainId } = useActiveWeb3React()
   const lastRound = useChainlinkLatestRound()
 
   const calls = useMemo(() => {
     return lastRound.data
       ? Array.from({ length: 50 }).map((_, i) => ({
-          address: chainlinkAddress,
+          address:  getChainlinkOracleAddress(chainId),
           name: 'getRoundData',
           params: [lastRound.data.sub(i)],
         }))
@@ -53,6 +54,7 @@ function useChainlinkRoundDataSet() {
 
   const { data, error } = useSWRMulticall<Awaited<ReturnType<ChainlinkOracle['getRoundData']>>[]>(
     chainlinkOracleAbi,
+    chainId,
     calls,
     {
       use: [laggyMiddleware],

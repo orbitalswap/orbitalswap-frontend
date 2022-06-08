@@ -4,9 +4,11 @@ import { useTranslation } from 'contexts/Localization'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import { NftToken } from 'state/nftMarket/types'
 import { getLatestListedNfts, getNftsFromDifferentCollectionsApi } from 'state/nftMarket/helpers'
-import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
+import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { CollectibleLinkCard } from '../components/CollectibleCard'
 import GridPlaceholder from '../components/GridPlaceholder'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 
 /**
  * Fetch latest NFTs data from SG+API and combine them
@@ -14,12 +16,13 @@ import GridPlaceholder from '../components/GridPlaceholder'
  */
 const useNewestNfts = () => {
   const [newestNfts, setNewestNfts] = useState<NftToken[]>(null)
+  const { chainId } = useActiveWeb3React()
 
   useEffect(() => {
     const fetchNewestNfts = async () => {
-      const nftsFromSg = await getLatestListedNfts(16)
+      const nftsFromSg = await getLatestListedNfts(chainId, 16)
       const nftsFromApi = await getNftsFromDifferentCollectionsApi(
-        nftsFromSg.map((nft) => ({ collectionAddress: nft.collection.id, tokenId: nft.tokenId })),
+        nftsFromSg.map((nft) => ({ collectionAddress: nft.collection.id, tokenId: nft.tokenId, chainId: nft.chainId })),
       )
 
       const nfts = nftsFromSg
@@ -64,7 +67,7 @@ const Newest: React.FC = () => {
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
         >
           {nfts.map((nft) => {
-            const isPBCollection = nft.collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
+            const isPBCollection = nft.collectionAddress.toLowerCase() === getPancakeBunniesAddress(nft.chainId).toLowerCase()
             const currentAskPrice =
               !isPBCollection && nft.marketData?.isTradable ? parseFloat(nft.marketData?.currentAskPrice) : undefined
             return (

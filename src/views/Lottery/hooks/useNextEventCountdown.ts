@@ -2,12 +2,14 @@ import { useEffect, useState, useRef } from 'react'
 import { useAppDispatch } from 'state'
 import { useLottery } from 'state/lottery/hooks'
 import { fetchCurrentLottery, setLotteryIsTransitioning } from 'state/lottery'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useNextEventCountdown = (nextEventTime: number): number => {
   const dispatch = useAppDispatch()
   const [secondsRemaining, setSecondsRemaining] = useState(null)
   const timer = useRef(null)
   const { currentLotteryId } = useLottery()
+  const { chainId } = useActiveWeb3React()
 
   useEffect(() => {
     dispatch(setLotteryIsTransitioning({ isTransitioning: false }))
@@ -21,7 +23,7 @@ const useNextEventCountdown = (nextEventTime: number): number => {
         if (prevSecondsRemaining <= 1) {
           clearInterval(timer.current)
           dispatch(setLotteryIsTransitioning({ isTransitioning: true }))
-          dispatch(fetchCurrentLottery({ currentLotteryId }))
+          dispatch(fetchCurrentLottery({ currentLotteryId, chainId }))
         }
         return prevSecondsRemaining - 1
       })

@@ -1,15 +1,18 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { Activity, NftToken, TokenIdWithCollectionAddress } from 'state/nftMarket/types'
 import { getNftsFromCollectionApi, getNftsFromDifferentCollectionsApi } from 'state/nftMarket/helpers'
 import uniqBy from 'lodash/uniqBy'
-import { pancakeBunniesAddress } from '../../constants'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 
-export const fetchActivityNftMetadata = async (activities: Activity[]): Promise<NftToken[]> => {
+export const fetchActivityNftMetadata = async (chainId: ChainId, activities: Activity[]): Promise<NftToken[]> => {
+  const pancakeBunniesAddress = getPancakeBunniesAddress(chainId)
+
   const hasPBCollections = activities.some(
     (activity) => activity.nft.collection.id.toLowerCase() === pancakeBunniesAddress.toLowerCase(),
   )
   let bunniesMetadata
   if (hasPBCollections) {
-    bunniesMetadata = await getNftsFromCollectionApi(pancakeBunniesAddress)
+    bunniesMetadata = await getNftsFromCollectionApi(pancakeBunniesAddress, chainId)
   }
 
   const pbNfts = bunniesMetadata
@@ -20,6 +23,7 @@ export const fetchActivityNftMetadata = async (activities: Activity[]): Promise<
           return {
             ...bunniesMetadata.data[activity.nft.otherId],
             tokenId: activity.nft.tokenId,
+            chainId: activity.nft.chainId,
             attributes: [{ traitType: 'bunnyId', value: activity.nft.otherId }],
             collectionAddress: activity.nft.collection.id,
             collectionName,
@@ -31,7 +35,7 @@ export const fetchActivityNftMetadata = async (activities: Activity[]): Promise<
     activities
       .filter((activity) => activity.nft.collection.id.toLowerCase() !== pancakeBunniesAddress.toLowerCase())
       .map((activity): TokenIdWithCollectionAddress => {
-        return { tokenId: activity.nft.tokenId, collectionAddress: activity.nft.collection.id }
+        return { tokenId: activity.nft.tokenId, collectionAddress: activity.nft.collection.id, chainId: activity.nft.chainId }
       }),
     'tokenId',
   )

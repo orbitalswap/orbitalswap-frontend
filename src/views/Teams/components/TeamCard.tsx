@@ -6,6 +6,7 @@ import { getTeam } from 'state/teams/helpers'
 import { useTranslation } from 'contexts/Localization'
 import ComingSoon from './ComingSoon'
 import IconStatBox from './IconStatBox'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface TeamCardProps {
   id: string
@@ -75,8 +76,9 @@ const StatRow = styled.div`
 
 const TeamCard: React.FC<TeamCardProps> = ({ id }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const idNumber = Number(id)
-  const { data: team, status } = useSWR(['team', id], async () => getTeam(idNumber))
+  const { data: team, status } = useSWR(['team', id], async () => getTeam(idNumber, chainId))
 
   return (
     <Wrapper>

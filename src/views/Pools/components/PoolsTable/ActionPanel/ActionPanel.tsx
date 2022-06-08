@@ -158,6 +158,7 @@ const YieldBoostDurationRow = ({ lockEndTime, lockStartTime }) => {
 
 const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded, expanded, breakpoints }) => {
   const {
+    chainId,
     stakingToken,
     earningToken,
     totalStaked,
@@ -172,8 +173,8 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
     isFinished,
   } = pool
   const { t } = useTranslation()
-  const poolContractAddress = getAddress(contractAddress)
-  const vaultContractAddress = getVaultPoolAddress(vaultKey)
+  const poolContractAddress = getAddress(contractAddress, chainId)
+  const vaultContractAddress = getVaultPoolAddress(vaultKey, chainId)
   const currentBlock = useCurrentBlock()
   const { isXs, isSm, isMd } = breakpoints
   const { isMobile } = useMatchBreakpoints()

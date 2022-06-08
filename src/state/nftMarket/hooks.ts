@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { isAddress } from 'utils'
 import { FetchStatus } from 'config/constants/types'
 import erc721Abi from 'config/abi/erc721.json'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useSWRMulticall } from 'hooks/useSWRContract'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import useSWR from 'swr'
@@ -19,23 +20,26 @@ const DEFAULT_NFT_ACTIVITY_FILTER = { typeFilters: [], collectionFilters: [] }
 const EMPTY_OBJECT = {}
 
 export const useGetCollections = (): { data: ApiCollections; status: FetchStatus } => {
-  const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections())
+  const { chainId } = useActiveWeb3React()
+  const { data, status } = useSWR(['nftMarket', 'collections'], async () => getCollections(chainId))
   const collections = data ?? ({} as ApiCollections)
   return { data: collections, status }
 }
 
 export const useGetCollection = (collectionAddress: string): Collection | undefined => {
+  const { chainId } = useActiveWeb3React()
   const checksummedCollectionAddress = isAddress(collectionAddress) || ''
   const { data } = useSWR(
     checksummedCollectionAddress ? ['nftMarket', 'collections', checksummedCollectionAddress.toLowerCase()] : null,
-    async () => getCollection(checksummedCollectionAddress),
+    async () => getCollection(checksummedCollectionAddress, chainId),
   )
   const collectionObject = data ?? {}
   return collectionObject[checksummedCollectionAddress]
 }
 
 export const useGetShuffledCollections = (): { data: Collection[]; status: FetchStatus } => {
-  const { data } = useSWRImmutable(['nftMarket', 'collections'], async () => getCollections())
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWRImmutable(['nftMarket', 'collections'], async () => getCollections(chainId))
   const collections = data ?? ({} as ApiCollections)
   const { data: shuffledCollections, status } = useSWRImmutable(
     !isEmpty(collections) ? ['nftMarket', 'shuffledCollections'] : null,
@@ -53,6 +57,7 @@ export const useNftsFromCollection = (collectionAddress: string) => {
 }
 
 export const useApprovalNfts = (nftsInWallet: NftToken[]) => {
+  const { chainId } = useActiveWeb3React()
   const nftApprovalCalls = useMemo(
     () =>
       nftsInWallet.map((nft: NftToken) => {
@@ -67,13 +72,13 @@ export const useApprovalNfts = (nftsInWallet: NftToken[]) => {
     [nftsInWallet],
   )
 
-  const { data } = useSWRMulticall(erc721Abi, nftApprovalCalls)
+  const { data } = useSWRMulticall(erc721Abi, chainId, nftApprovalCalls)
 
   const approvedTokenIds = Array.isArray(data)
     ? data
         .flat()
         .reduce(
-          (acc, address, index) => ({ ...acc, [nftsInWallet[index].tokenId]: getPancakeProfileAddress() === address }),
+          (acc, address, index) => ({ ...acc, [nftsInWallet[index].tokenId]: getPancakeProfileAddress(chainId) === address }),
           {},
         )
     : null

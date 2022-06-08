@@ -36,6 +36,7 @@ import { fetchPublicVaultData, fetchVaultFees } from './fetchVaultPublic'
 import fetchVaultUser from './fetchVaultUser'
 import { getTokenPricesFromFarm } from './helpers'
 import { resetUserState } from '../global/actions'
+import { ChainId } from '@orbitalswap/sdk'
 
 export const initialPoolVaultState = Object.freeze({
   totalShares: null,
@@ -71,13 +72,12 @@ const initialState: PoolsState = {
   cakeVault: initialPoolVaultState,
 }
 
-const cakeVaultAddress = getCakeVaultAddress()
 
-export const fetchCakePoolUserDataAsync = (account: string) => async (dispatch) => {
+export const fetchCakePoolUserDataAsync = (account: string, chainId: ChainId) => async (dispatch) => {
   const allowanceCall = {
     address: tokens.cake.address,
     name: 'allowance',
-    params: [account, cakeVaultAddress],
+    params: [account, getCakeVaultAddress(chainId)],
   }
   const balanceOfCall = {
     address: tokens.cake.address,
@@ -85,7 +85,7 @@ export const fetchCakePoolUserDataAsync = (account: string) => async (dispatch) 
     params: [account],
   }
   const cakeContractCalls = [allowanceCall, balanceOfCall]
-  const [[allowance], [stakingTokenBalance]] = await multicallv2(cakeAbi, cakeContractCalls)
+  const [[allowance], [stakingTokenBalance]] = await multicallv2(cakeAbi, chainId, cakeContractCalls)
 
   dispatch(
     setPoolUserData({
@@ -98,14 +98,14 @@ export const fetchCakePoolUserDataAsync = (account: string) => async (dispatch) 
   )
 }
 
-export const fetchPoolsPublicDataAsync = (currentBlockNumber: number) => async (dispatch, getState) => {
+export const fetchPoolsPublicDataAsync = (currentBlockNumber: number, chainId: ChainId) => async (dispatch, getState) => {
   try {
-    const blockLimits = await fetchPoolsBlockLimits()
-    const totalStakings = await fetchPoolsTotalStaking()
-    const profileRequirements = await fetchPoolsProfileRequirement()
+    const blockLimits = await fetchPoolsBlockLimits(chainId)
+    const totalStakings = await fetchPoolsTotalStaking(chainId)
+    const profileRequirements = await fetchPoolsProfileRequirement(chainId)
     let currentBlock = currentBlockNumber
     if (!currentBlock) {
-      currentBlock = await simpleRpcProvider().getBlockNumber()
+      currentBlock = await simpleRpcProvider(chainId).getBlockNumber()
     }
 
     const activePriceHelperLpsConfig = priceHelperLpsConfig.filter((priceHelperLpConfig) => {
@@ -122,7 +122,7 @@ export const fetchPoolsPublicDataAsync = (currentBlockNumber: number) => async (
       )
     })
     const poolsWithDifferentFarmToken =
-      activePriceHelperLpsConfig.length > 0 ? await fetchFarms(priceHelperLpsConfig) : []
+      activePriceHelperLpsConfig.length > 0 ? await fetchFarms(priceHelperLpsConfig.filter(farm => farm.chainId === chainId), chainId) : []
     const farmsData = getState().farms.data
     const bnbBusdFarm =
       activePriceHelperLpsConfig.length > 0
@@ -173,13 +173,13 @@ export const fetchPoolsPublicDataAsync = (currentBlockNumber: number) => async (
   }
 }
 
-export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => {
+export const fetchPoolsStakingLimitsAsync = (chainId: ChainId) => async (dispatch, getState) => {
   const poolsWithStakingLimit = getState()
     .pools.data.filter(({ stakingLimit }) => stakingLimit !== null && stakingLimit !== undefined)
-    .map((pool) => pool.sousId)
+    .map((pool) => pool.sousId && pool.chainId === chainId)
 
   try {
-    const stakingLimits = await fetchPoolsStakingLimits(poolsWithStakingLimit)
+    const stakingLimits = await fetchPoolsStakingLimits(poolsWithStakingLimit, chainId)
 
     const stakingLimitData = poolsConfig.map((pool) => {
       if (poolsWithStakingLimit.includes(pool.sousId)) {
@@ -203,13 +203,13 @@ export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => 
 }
 
 export const fetchPoolsUserDataAsync =
-  (account: string): AppThunk =>
+  (account: string, chainId: ChainId): AppThunk =>
   async (dispatch) => {
     try {
-      const allowances = await fetchPoolsAllowance(account)
-      const stakingTokenBalances = await fetchUserBalances(account)
-      const stakedBalances = await fetchUserStakeBalances(account)
-      const pendingRewards = await fetchUserPendingRewards(account)
+      const allowances = await fetchPoolsAllowance(account, chainId)
+      const stakingTokenBalances = await fetchUserBalances(account, chainId)
+      const stakedBalances = await fetchUserStakeBalances(account, chainId)
+      const pendingRewards = await fetchUserPendingRewards(account, chainId)
 
       const userData = poolsConfig.map((pool) => ({
         sousId: pool.sousId,
@@ -226,47 +226,47 @@ export const fetchPoolsUserDataAsync =
   }
 
 export const updateUserAllowance =
-  (sousId: number, account: string): AppThunk =>
+  (sousId: number, account: string, chainId: ChainId): AppThunk =>
   async (dispatch) => {
-    const allowances = await fetchPoolsAllowance(account)
+    const allowances = await fetchPoolsAllowance(account, chainId)
     dispatch(updatePoolsUserData({ sousId, field: 'allowance', value: allowances[sousId] }))
   }
 
 export const updateUserBalance =
-  (sousId: number, account: string): AppThunk =>
+  (sousId: number, account: string, chainId: ChainId): AppThunk =>
   async (dispatch) => {
-    const tokenBalances = await fetchUserBalances(account)
+    const tokenBalances = await fetchUserBalances(account, chainId)
     dispatch(updatePoolsUserData({ sousId, field: 'stakingTokenBalance', value: tokenBalances[sousId] }))
   }
 
 export const updateUserStakedBalance =
-  (sousId: number, account: string): AppThunk =>
+  (sousId: number, account: string, chainId: ChainId): AppThunk =>
   async (dispatch) => {
-    const stakedBalances = await fetchUserStakeBalances(account)
+    const stakedBalances = await fetchUserStakeBalances(account, chainId)
     dispatch(updatePoolsUserData({ sousId, field: 'stakedBalance', value: stakedBalances[sousId] }))
   }
 
 export const updateUserPendingReward =
-  (sousId: number, account: string): AppThunk =>
+  (sousId: number, account: string, chainId: ChainId): AppThunk =>
   async (dispatch) => {
-    const pendingRewards = await fetchUserPendingRewards(account)
+    const pendingRewards = await fetchUserPendingRewards(account, chainId)
     dispatch(updatePoolsUserData({ sousId, field: 'pendingReward', value: pendingRewards[sousId] }))
   }
 
-export const fetchCakeVaultPublicData = createAsyncThunk<SerializedCakeVault>('cakeVault/fetchPublicData', async () => {
-  const publicVaultInfo = await fetchPublicVaultData()
+export const fetchCakeVaultPublicData = createAsyncThunk<SerializedCakeVault, {chainId: ChainId}>('cakeVault/fetchPublicData', async ({chainId}) => {
+  const publicVaultInfo = await fetchPublicVaultData(chainId)
   return publicVaultInfo
 })
 
-export const fetchCakeVaultFees = createAsyncThunk<SerializedVaultFees>('cakeVault/fetchFees', async () => {
-  const vaultFees = await fetchVaultFees()
+export const fetchCakeVaultFees = createAsyncThunk<SerializedVaultFees, {chainId: ChainId}>('cakeVault/fetchFees', async ({chainId}) => {
+  const vaultFees = await fetchVaultFees(chainId)
   return vaultFees
 })
 
-export const fetchCakeVaultUserData = createAsyncThunk<SerializedLockedVaultUser, { account: string }>(
+export const fetchCakeVaultUserData = createAsyncThunk<SerializedLockedVaultUser, { account: string; chainId: ChainId }>(
   'cakeVault/fetchUser',
-  async ({ account }) => {
-    const userData = await fetchVaultUser(account)
+  async ({ account, chainId }) => {
+    const userData = await fetchVaultUser(account, chainId)
     return userData
   },
 )

@@ -1,5 +1,7 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { TOKEN_BLACKLIST } from 'config/constants/info'
 import { gql } from 'graphql-request'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useEffect, useState } from 'react'
 import { infoClient } from 'utils/graphql'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
@@ -15,8 +17,9 @@ interface TopTokensResponse {
  * The actual data is later requested in tokenData.ts
  * Note: dailyTxns_gt: 300 is there to prevent fetching incorrectly priced tokens with high dailyVolumeUSD
  */
-const fetchTopTokens = async (timestamp24hAgo: number): Promise<string[]> => {
+const fetchTopTokens = async (chainId: ChainId, timestamp24hAgo: number): Promise<string[]> => {
   try {
+    if(!infoClient(chainId)) return []
     const query = gql`
       query topTokens($blacklist: [String!], $timestamp24hAgo: Int) {
         tokenDayDatas(
@@ -29,7 +32,7 @@ const fetchTopTokens = async (timestamp24hAgo: number): Promise<string[]> => {
         }
       }
     `
-    const data = await infoClient.request<TopTokensResponse>(query, { blacklist: TOKEN_BLACKLIST, timestamp24hAgo })
+    const data = await infoClient(chainId).request<TopTokensResponse>(query, { blacklist: TOKEN_BLACKLIST, timestamp24hAgo })
     // tokenDayDatas id has compound id "0xTOKENADDRESS-NUMBERS", extracting token address with .split('-')
     return data.tokenDayDatas.map((t) => t.id.split('-')[0])
   } catch (error) {
@@ -42,12 +45,13 @@ const fetchTopTokens = async (timestamp24hAgo: number): Promise<string[]> => {
  * Fetch top addresses by volume
  */
 const useTopTokenAddresses = (): string[] => {
+  const { chainId } = useActiveWeb3React()
   const [topTokenAddresses, setTopTokenAddresses] = useState([])
   const [timestamp24hAgo] = getDeltaTimestamps()
 
   useEffect(() => {
     const fetch = async () => {
-      const addresses = await fetchTopTokens(timestamp24hAgo)
+      const addresses = await fetchTopTokens(chainId, timestamp24hAgo)
       setTopTokenAddresses(addresses)
     }
     if (topTokenAddresses.length === 0) {

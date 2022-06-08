@@ -25,12 +25,12 @@ const useLaunchpadPublicData = (ifo: Launchpad, dependency?: any): PublicLaunchp
     totalSold: BIG_ZERO,
     raised: BIG_ZERO,
     fundersCounter: BIG_ZERO,
-    presaleStatus: 0
+    presaleStatus: 0,
   })
 
-  const ifoAddress = getAddress(ifo.address)
+  const ifoAddress = getAddress(ifo.address, ifo.chainId)
 
-  const { slowRefresh, fastRefresh } = useRefresh()
+  const { fastRefresh } = useRefresh()
 
   useEffect(() => {
     const fetchLaunchpadPublicData = async () => {
@@ -46,16 +46,28 @@ const useLaunchpadPublicData = (ifo: Launchpad, dependency?: any): PublicLaunchp
         'totalSold',
         'status',
         'totalRaised',
-        'fundersCounter'
+        'fundersCounter',
       ].map((method) => ({
         address: ifoAddress,
-        name: method
+        name: method,
       }))
-      const [startDate, endDate, liquidityPercent, hardcap, softcap, presalePrice, minPerTx, maxPerUser, totalSold, status, totalRaised, fundersCounter] = await multicall(launchpadAbi, ifoCalls)
+      const [
+        startDate,
+        endDate,
+        liquidityPercent,
+        hardcap,
+        softcap,
+        presalePrice,
+        minPerTx,
+        maxPerUser,
+        totalSold,
+        status,
+        totalRaised,
+        fundersCounter,
+      ] = await multicall(launchpadAbi, ifo.chainId, ifoCalls)
 
       const startDateNum = parseInt(startDate, 10)
       const endDateNum = parseInt(endDate, 10)
-
 
       setData({
         ...ifo,
@@ -71,7 +83,7 @@ const useLaunchpadPublicData = (ifo: Launchpad, dependency?: any): PublicLaunchp
         fundersCounter: getBalanceAmount(new BigNumber(fundersCounter), 0),
         presaleStatus: status[0],
         endDateNum,
-        startDateNum
+        startDateNum,
       })
     }
 

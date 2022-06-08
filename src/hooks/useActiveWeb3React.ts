@@ -14,12 +14,12 @@ const useActiveWeb3React = (): Web3ReactContextInterface<Web3Provider> => {
   const { library, chainId: connectedChainId, ...web3React } = useWeb3React()
   const refEth = useRef(library)
 
-  const [provider, setProvider] = useState(library || simpleRpcProvider())
+  const [provider, setProvider] = useState(library || simpleRpcProvider(DEFAULT_CHAIN_ID))
   const [chainId, setChainId] = useState(DEFAULT_CHAIN_ID)
 
   useEffect(() => {
     if (library !== refEth.current) {
-      setProvider(library || simpleRpcProvider())
+      setProvider(library || simpleRpcProvider(DEFAULT_CHAIN_ID))
       refEth.current = library
     }
 

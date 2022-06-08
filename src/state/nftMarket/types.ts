@@ -1,5 +1,6 @@
 import { FetchStatus } from 'config/constants/types'
 import { BigNumberish } from '@ethersproject/bignumber'
+import { ChainId } from '@orbitalswap/sdk'
 
 // Collections -> Nfts -> Transactions
 // Users -> Nft tokens IDs
@@ -65,6 +66,7 @@ export enum NftLocation {
 // Market data regarding specific token ID, acquired via subgraph
 export interface TokenMarketData {
   tokenId: string
+  chainId: ChainId
   collection: {
     id: string
   }
@@ -83,6 +85,7 @@ export interface TokenMarketData {
 // Represents single NFT token, either Squad-like NFT or single PancakeBunny.
 export interface NftToken {
   tokenId: string
+  chainId: ChainId
   name: string
   description: string
   collectionName: string
@@ -114,6 +117,7 @@ export interface NftActivityFilter {
 export interface TokenIdWithCollectionAddress {
   collectionAddress: string
   tokenId: string
+  chainId: ChainId
   nftLocation?: NftLocation
 }
 
@@ -127,6 +131,7 @@ export interface NftAttribute {
 // Most fields are populated from API (via ApiCollection type)
 export interface Collection {
   id: string
+  chainId: ChainId
   address: string
   name: string
   createdAt?: string
@@ -166,6 +171,7 @@ export interface User {
 
 export interface ApiCollection {
   address: string
+  chainId: ChainId  
   owner: string
   name: string
   description: string
@@ -226,6 +232,7 @@ export interface ApiResponseCollectionTokens {
 export interface ApiResponseSpecificToken {
   data: {
     tokenId: string
+    chainId: ChainId
     name: string
     description: string
     image: Image

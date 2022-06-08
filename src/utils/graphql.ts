@@ -18,14 +18,20 @@ export const getGQLHeaders = (endpoint: string) => {
   return undefined
 }
 
-export const infoClient = new GraphQLClient(INFO_CLIENT, { headers: getGQLHeaders(INFO_CLIENT) })
+export const infoClient = (chainId) =>
+  INFO_CLIENT[chainId]
+    ? new GraphQLClient(INFO_CLIENT[chainId], { headers: getGQLHeaders(INFO_CLIENT[chainId]) })
+    : null
 
-export const infoServerClient = new GraphQLClient(INFO_CLIENT, {
-  headers: {
-    'X-Sf': process.env.SF_HEADER,
-  },
-  timeout: 5000,
-})
+export const infoServerClient = (chainId) =>
+  INFO_CLIENT[chainId]
+    ? new GraphQLClient(INFO_CLIENT[chainId], {
+        headers: {
+          'X-Sf': process.env.SF_HEADER,
+        },
+        timeout: 5000,
+      })
+    : null
 
 export const bitQueryServerClient = new GraphQLClient(process.env.NEXT_PUBLIC_BIT_QUERY_ENDPOINT, {
   headers: {

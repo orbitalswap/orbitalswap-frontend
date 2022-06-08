@@ -9,9 +9,11 @@ import orderBy from 'lodash/orderBy'
 import { DeserializedFarm } from 'state/types'
 import { FetchStatus } from 'config/constants/types'
 import { FarmWithStakedValue } from '../../Farms/components/types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useGetTopFarmsByApr = (isIntersecting: boolean) => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
   const { data: farms, regularCakePerBlock } = useFarms()
   const [fetchStatus, setFetchStatus] = useState(FetchStatus.Idle)
   const [topFarms, setTopFarms] = useState<FarmWithStakedValue[]>([null, null, null, null, null])
@@ -20,9 +22,9 @@ const useGetTopFarmsByApr = (isIntersecting: boolean) => {
   useEffect(() => {
     const fetchFarmData = async () => {
       setFetchStatus(FetchStatus.Fetching)
-      const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0)
+      const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0 && farm.chainId === chainId)
       try {
-        await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+        await dispatch(fetchFarmsPublicDataAsync({chainId, pids: activeFarms.map((farm) => farm.pid)}))
         setFetchStatus(FetchStatus.Fetched)
       } catch (e) {
         console.error(e)

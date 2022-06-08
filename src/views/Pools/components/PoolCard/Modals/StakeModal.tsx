@@ -64,7 +64,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
   isRemovingStake = false,
   onDismiss,
 }) => {
-  const { sousId, stakingToken, earningTokenPrice, apr, userData, stakingLimit, earningToken } = pool
+  const { sousId, chainId, stakingToken, earningTokenPrice, apr, userData, stakingLimit, earningToken } = pool
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
@@ -164,9 +164,9 @@ const StakeModal: React.FC<StakeModalProps> = ({
           </ToastDescriptionWithTx>,
         )
       }
-      dispatch(updateUserStakedBalance(sousId, account))
-      dispatch(updateUserPendingReward(sousId, account))
-      dispatch(updateUserBalance(sousId, account))
+      dispatch(updateUserStakedBalance(sousId, account, chainId))
+      dispatch(updateUserPendingReward(sousId, account, chainId))
+      dispatch(updateUserBalance(sousId, account, chainId))
       onDismiss?.()
     }
   }

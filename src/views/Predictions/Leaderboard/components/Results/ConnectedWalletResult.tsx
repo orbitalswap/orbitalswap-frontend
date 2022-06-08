@@ -10,7 +10,7 @@ import DesktopRow from './DesktopRow'
 import MobileRow from './MobileRow'
 
 const ConnectedWalletResult = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const accountResult = useGetOrFetchLeaderboardAddressResult(account)
@@ -18,7 +18,7 @@ const ConnectedWalletResult = () => {
 
   useEffect(() => {
     if (account) {
-      dispatch(fetchAddressResult(account))
+      dispatch(fetchAddressResult({account, chainId}))
     }
   }, [account, dispatch])
 

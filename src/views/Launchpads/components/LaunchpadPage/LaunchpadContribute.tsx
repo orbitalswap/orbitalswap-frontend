@@ -25,9 +25,9 @@ const LaunchpadContribute: React.FC<Props> = ({
   toggleStatus
 }) => {
   const [pendingTx, setPendingTx] = useState(false)
-  const { address, minPerTx, maxPerUser, presaleStatus, softcap, hardcap, raised } = ifoPublicData
+  const { address, chainId, minPerTx, maxPerUser, presaleStatus, softcap, hardcap, raised } = ifoPublicData
   const { contributedAmount, claimed } = ifoUserData
-  const ifoContract = useLaunchpadContract(getAddress(address))
+  const ifoContract = useLaunchpadContract(getAddress(address, chainId))
   const onClaim = useLaunchpadClaim(ifoContract)
 
   const [onPresentContributeModal] = useModal(

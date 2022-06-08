@@ -10,6 +10,7 @@ import RoundSwitcher from './RoundSwitcher'
 import { getDrawnDate, processLotteryResponse } from '../../helpers'
 import PreviousRoundCardBody from '../PreviousRoundCard/Body'
 import PreviousRoundCardFooter from '../PreviousRoundCard/Footer'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -31,6 +32,7 @@ const AllHistoryCard = () => {
     currentLanguage: { locale },
   } = useTranslation()
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
   const {
     currentLotteryId,
     lotteriesData,
@@ -57,7 +59,7 @@ const AllHistoryCard = () => {
     setSelectedLotteryNodeData(null)
 
     const fetchLotteryData = async () => {
-      const lotteryData = await fetchLottery(selectedRoundId)
+      const lotteryData = await fetchLottery(selectedRoundId, chainId)
       const processedLotteryData = processLotteryResponse(lotteryData)
       setSelectedLotteryNodeData(processedLotteryData)
     }
@@ -70,7 +72,7 @@ const AllHistoryCard = () => {
     }, 1000)
 
     return () => clearInterval(timer.current)
-  }, [selectedRoundId, currentLotteryId, numRoundsFetched, dispatch])
+  }, [selectedRoundId, currentLotteryId, chainId, numRoundsFetched, dispatch])
 
   const handleInputChange = (event) => {
     const {

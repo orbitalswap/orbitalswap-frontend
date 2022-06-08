@@ -8,6 +8,8 @@ export function serializeToken(token: Token): SerializedToken {
     address: token.address,
     decimals: token.decimals,
     symbol: token.symbol,
+    isNative: token.isNative,
+    isToken: token.isToken,
     name: token.name,
     projectLink: token.projectLink,
     logoURI: token instanceof WrappedTokenInfo ? token.logoURI : undefined,

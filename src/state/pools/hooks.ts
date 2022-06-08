@@ -4,6 +4,7 @@ import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import farmsConfig from 'config/constants/farms'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import {
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
@@ -23,32 +24,34 @@ import {
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
 
   useSlowRefreshEffect(
     (currentBlock) => {
       const fetchPoolsDataWithFarms = async () => {
-        const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0)
-        await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+        const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0 && farm.chainId === chainId)
+        await dispatch(fetchFarmsPublicDataAsync({chainId, pids: activeFarms.map((farm) => farm.pid)}))
         batch(() => {
-          dispatch(fetchPoolsPublicDataAsync(currentBlock))
-          dispatch(fetchPoolsStakingLimitsAsync())
+          dispatch(fetchPoolsPublicDataAsync(currentBlock, chainId))
+          dispatch(fetchPoolsStakingLimitsAsync(chainId))
         })
       }
 
       fetchPoolsDataWithFarms()
     },
-    [dispatch],
+    [dispatch, chainId],
   )
 }
 
 export const useFetchUserPools = (account) => {
   const dispatch = useAppDispatch()
+  const { chainId } = useActiveWeb3React()
 
   useFastRefreshEffect(() => {
     if (account) {
-      dispatch(fetchPoolsUserDataAsync(account))
+      dispatch(fetchPoolsUserDataAsync(account, chainId))
     }
-  }, [account, dispatch])
+  }, [account, chainId, dispatch])
 }
 
 export const usePools = (): { pools: DeserializedPool[]; userDataLoaded: boolean } => {
@@ -65,25 +68,25 @@ export const usePoolsWithVault = () => {
 }
 
 export const usePoolsPageFetch = () => {
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const dispatch = useAppDispatch()
   useFetchPublicPoolsData()
 
   useFastRefreshEffect(() => {
     batch(() => {
-      dispatch(fetchCakeVaultPublicData())
+      dispatch(fetchCakeVaultPublicData({chainId}))
       if (account) {
-        dispatch(fetchPoolsUserDataAsync(account))
-        dispatch(fetchCakeVaultUserData({ account }))
+        dispatch(fetchPoolsUserDataAsync(account, chainId))
+        dispatch(fetchCakeVaultUserData({ account, chainId }))
       }
     })
-  }, [account, dispatch])
+  }, [account, chainId, dispatch])
 
   useEffect(() => {
     batch(() => {
-      dispatch(fetchCakeVaultFees())
+      dispatch(fetchCakeVaultFees({chainId}))
     })
-  }, [dispatch])
+  }, [dispatch, chainId])
 }
 
 export const useCakeVault = () => {

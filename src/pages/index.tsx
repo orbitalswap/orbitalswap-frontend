@@ -1,4 +1,4 @@
-import { FACTORY_ADDRESS_MAP } from '@orbitalswap/sdk'
+import { ChainId, FACTORY_ADDRESS_MAP } from '@orbitalswap/sdk'
 import { getUnixTime, sub } from 'date-fns'
 import { gql } from 'graphql-request'
 import { GetStaticProps } from 'next'
@@ -34,7 +34,7 @@ const addressCount = 4425459
 
 const tvl = 6082955532.115718
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {  
   const totalTxQuery = gql`
     query TotalTransactions($id: ID!, $block: Block_height) {
       pancakeFactory(id: $id, block: $block) {
@@ -42,7 +42,6 @@ export const getStaticProps: GetStaticProps = async () => {
       }
     }
   `
-
   const days30Ago = sub(new Date(), { days: 30 })
 
   const results = {
@@ -53,16 +52,23 @@ export const getStaticProps: GetStaticProps = async () => {
 
   if (process.env.SF_HEADER) {
     try {
-      const [days30AgoBlock] = await getBlocksFromTimestamps([getUnixTime(days30Ago)])
+      if (!infoServerClient(ChainId.BSC_MAINNET)) {
+        return {
+          props: results,
+          revalidate: 60 * 60 * 24 * 30, // 30 days
+        }
+      }
+
+      const [days30AgoBlock] = await getBlocksFromTimestamps(ChainId.BSC_MAINNET, [getUnixTime(days30Ago)])
 
       if (!days30AgoBlock) {
         throw new Error('No block found for 30 days ago')
       }
 
-      const totalTx = await infoServerClient.request(totalTxQuery, {
+      const totalTx = await infoServerClient(ChainId.BSC_MAINNET).request(totalTxQuery, {
         id: FACTORY_ADDRESS_MAP[DEFAULT_CHAIN_ID],
       })
-      const totalTx30DaysAgo = await infoServerClient.request(totalTxQuery, {
+      const totalTx30DaysAgo = await infoServerClient(ChainId.BSC_MAINNET).request(totalTxQuery, {
         block: {
           number: days30AgoBlock.number,
         },
@@ -112,7 +118,7 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 
   try {
-    const result = await infoServerClient.request(gql`
+    const result = await infoServerClient(ChainId.BSC_MAINNET).request(gql`
       query tvl {
         pancakeFactories(first: 1) {
           totalLiquidityUSD
@@ -123,8 +129,8 @@ export const getStaticProps: GetStaticProps = async () => {
       }
     `)
     const { totalLiquidityUSD } = result.pancakeFactories[0]
-    const cakeVaultV2 = getCakeVaultAddress()
-    const cakeContract = getCakeContract()
+    const cakeVaultV2 = getCakeVaultAddress(ChainId.BSC_MAINNET)
+    const cakeContract = getCakeContract(ChainId.BSC_MAINNET)
     const totalCakeInVault = await cakeContract.balanceOf(cakeVaultV2)
     results.tvl = parseFloat(formatEther(totalCakeInVault)) * result.token.derivedUSD + parseFloat(totalLiquidityUSD)
   } catch (error) {

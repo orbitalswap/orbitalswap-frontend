@@ -15,6 +15,7 @@ import {
 } from '@pancakeswap/uikit'
 import { FetchStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import orderBy from 'lodash/orderBy'
 import { useAppDispatch } from 'state'
 import { useGetNftFilterLoadingState, useGetNftFilters } from 'state/nftMarket/hooks'
@@ -48,6 +49,7 @@ const CloseButton = styled(IconButton)`
 
 export const ListTraitFilter: React.FC<ListTraitFilterProps> = ({ title, traitType, items, collectionAddress }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [orderState, setOrderState] = useState<ListOrderState>({ orderKey: 'count', orderDir: 'asc' })
@@ -74,6 +76,7 @@ export const ListTraitFilter: React.FC<ListTraitFilterProps> = ({ title, traitTy
     dispatch(
       filterNftsFromCollection({
         collectionAddress,
+        chainId,
         nftFilters: newFilters,
       }),
     )
@@ -90,6 +93,7 @@ export const ListTraitFilter: React.FC<ListTraitFilterProps> = ({ title, traitTy
     dispatch(
       filterNftsFromCollection({
         collectionAddress,
+        chainId,
         nftFilters: { ...nftFilters, [traitType]: attr },
       }),
     )

@@ -4,6 +4,8 @@ import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { BLOCKS_CLIENT } from 'config/constants/endpoints'
 import { Block } from 'state/info/types'
 import orderBy from 'lodash/orderBy'
+import { ChainId } from '@orbitalswap/sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const getBlockSubqueries = (timestamps: number[]) =>
   timestamps.map((timestamp) => {
@@ -25,18 +27,19 @@ const blocksQueryConstructor = (subqueries: string[]) => {
  * @param {Array} timestamps
  */
 export const getBlocksFromTimestamps = async (
+  chainId: ChainId,
   timestamps: number[],
   sortDirection: 'asc' | 'desc' = 'desc',
   skipCount = 500,
 ): Promise<Block[]> => {
-  if (timestamps?.length === 0) {
+  if (timestamps?.length === 0 || !BLOCKS_CLIENT[chainId]) {
     return []
   }
 
   const fetchedData: any = await multiQuery(
     blocksQueryConstructor,
     getBlockSubqueries(timestamps),
-    BLOCKS_CLIENT,
+    BLOCKS_CLIENT[chainId],
     skipCount,
   )
 
@@ -71,6 +74,7 @@ export const useBlocksFromTimestamps = (
   blocks?: Block[]
   error: boolean
 } => {
+  const { chainId } = useActiveWeb3React()
   const [blocks, setBlocks] = useState<Block[]>()
   const [error, setError] = useState(false)
 
@@ -80,7 +84,7 @@ export const useBlocksFromTimestamps = (
   useEffect(() => {
     const fetchData = async () => {
       const timestampsArray = JSON.parse(timestampsString)
-      const result = await getBlocksFromTimestamps(timestampsArray, sortDirection, skipCount)
+      const result = await getBlocksFromTimestamps(chainId, timestampsArray, sortDirection, skipCount)
       if (result.length === 0) {
         setError(true)
       } else {

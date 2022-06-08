@@ -30,6 +30,7 @@ import {
   UserResponse,
 } from './queries'
 import { ROUNDS_PER_PAGE } from './config'
+import { ChainId } from '@orbitalswap/sdk'
 
 export enum Result {
   WIN = 'win',
@@ -219,9 +220,11 @@ export const getFilteredBets = (bets: Bet[], filter: HistoryFilter) => {
   }
 }
 
-export const getTotalWon = async (): Promise<number> => {
+export const getTotalWon = async (chainId: ChainId): Promise<number> => {
+  if (!GRAPH_API_PREDICTION[chainId]) return 0
+
   const { market } = (await request(
-    GRAPH_API_PREDICTION,
+    GRAPH_API_PREDICTION[chainId],
     gql`
       query getTotalWonData {
         market(id: 1) {
@@ -240,9 +243,16 @@ export const getTotalWon = async (): Promise<number> => {
 
 type WhereClause = Record<string, string | number | boolean | string[]>
 
-export const getBetHistory = async (where: WhereClause = {}, first = 1000, skip = 0): Promise<BetResponse[]> => {
+export const getBetHistory = async (
+  chainId: ChainId,
+  where: WhereClause = {},
+  first = 1000,
+  skip = 0,
+): Promise<BetResponse[]> => {
+  if (!GRAPH_API_PREDICTION[chainId]) return []
+
   const response = await request(
-    GRAPH_API_PREDICTION,
+    GRAPH_API_PREDICTION[chainId],
     gql`
       query getBetHistory($first: Int!, $skip: Int!, $where: Bet_filter) {
         bets(first: $first, skip: $skip, where: $where, order: createdAt, orderDirection: desc) {
@@ -261,9 +271,11 @@ export const getBetHistory = async (where: WhereClause = {}, first = 1000, skip 
   return response.bets
 }
 
-export const getBet = async (betId: string): Promise<BetResponse> => {
+export const getBet = async (betId: string, chainId: ChainId): Promise<BetResponse> => {
+  if (!GRAPH_API_PREDICTION[chainId]) return null
+
   const response = await request(
-    GRAPH_API_PREDICTION,
+    GRAPH_API_PREDICTION[chainId],
     gql`
       query getBet($id: ID!) {
         bet(id: $id) {
@@ -284,14 +296,14 @@ export const getBet = async (betId: string): Promise<BetResponse> => {
   return response.bet
 }
 
-export const getLedgerData = async (account: string, epochs: number[]) => {
-  const address = getPredictionsAddress()
+export const getLedgerData = async (account: string, chainId: ChainId, epochs: number[]) => {
+  const address = getPredictionsAddress(chainId)
   const ledgerCalls = epochs.map((epoch) => ({
     address,
     name: 'ledger',
     params: [epoch, account],
   }))
-  const response = await multicallv2<PredictionsLedgerResponse[]>(predictionsAbi, ledgerCalls)
+  const response = await multicallv2<PredictionsLedgerResponse[]>(predictionsAbi, chainId, ledgerCalls)
   return response
 }
 
@@ -323,10 +335,15 @@ export const getHasRoundFailed = (oracleCalled: boolean, closeTimestamp: number,
   return false
 }
 
-export const getPredictionUsers = async (options: GetPredictionUsersOptions = {}): Promise<UserResponse[]> => {
+export const getPredictionUsers = async (
+  chainId: ChainId,
+  options: GetPredictionUsersOptions = {},
+): Promise<UserResponse[]> => {
+  if (!GRAPH_API_PREDICTION[chainId]) return []
+
   const { first, skip, where, orderBy, orderDir } = { ...defaultPredictionUserOptions, ...options }
   const response = await request(
-    GRAPH_API_PREDICTION,
+    GRAPH_API_PREDICTION[chainId],
     gql`
       query getUsers($first: Int!, $skip: Int!, $where: User_filter, $orderBy: User_orderBy, $orderDir: OrderDirection) {
         users(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDir) {
@@ -339,9 +356,11 @@ export const getPredictionUsers = async (options: GetPredictionUsersOptions = {}
   return response.users
 }
 
-export const getPredictionUser = async (account: string): Promise<UserResponse> => {
+export const getPredictionUser = async (account: string, chainId: ChainId): Promise<UserResponse> => {
+  if (!GRAPH_API_PREDICTION[chainId]) return null
+
   const response = await request(
-    GRAPH_API_PREDICTION,
+    GRAPH_API_PREDICTION[chainId],
     gql`
       query getUser($id: ID!) {
         user(id: $id) {
@@ -358,15 +377,16 @@ export const getPredictionUser = async (account: string): Promise<UserResponse> 
 
 export const getClaimStatuses = async (
   account: string,
+  chainId: ChainId,
   epochs: number[],
 ): Promise<PredictionsState['claimableStatuses']> => {
-  const address = getPredictionsAddress()
+  const address = getPredictionsAddress(chainId)
   const claimableCalls = epochs.map((epoch) => ({
     address,
     name: 'claimable',
     params: [epoch, account],
   }))
-  const claimableResponses = await multicallv2<[PredictionsClaimableResponse][]>(predictionsAbi, claimableCalls)
+  const claimableResponses = await multicallv2<[PredictionsClaimableResponse][]>(predictionsAbi, chainId, claimableCalls)
 
   return claimableResponses.reduce((accum, claimableResponse, index) => {
     const epoch = epochs[index]
@@ -380,13 +400,13 @@ export const getClaimStatuses = async (
 }
 
 export type MarketData = Pick<PredictionsState, 'status' | 'currentEpoch' | 'intervalSeconds' | 'minBetAmount'>
-export const getPredictionData = async (): Promise<MarketData> => {
-  const address = getPredictionsAddress()
+export const getPredictionData = async (chainId: ChainId): Promise<MarketData> => {
+  const address = getPredictionsAddress(chainId)
   const staticCalls = ['currentEpoch', 'intervalSeconds', 'minBetAmount', 'paused'].map((method) => ({
     address,
     name: method,
   }))
-  const [[currentEpoch], [intervalSeconds], [minBetAmount], [paused]] = await multicallv2(predictionsAbi, staticCalls)
+  const [[currentEpoch], [intervalSeconds], [minBetAmount], [paused]] = await multicallv2(predictionsAbi, chainId, staticCalls)
 
   return {
     status: paused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
@@ -396,14 +416,14 @@ export const getPredictionData = async (): Promise<MarketData> => {
   }
 }
 
-export const getRoundsData = async (epochs: number[]): Promise<PredictionsRoundsResponse[]> => {
-  const address = getPredictionsAddress()
+export const getRoundsData = async (chainId: ChainId, epochs: number[]): Promise<PredictionsRoundsResponse[]> => {
+  const address = getPredictionsAddress(chainId)
   const calls = epochs.map((epoch) => ({
     address,
     name: 'rounds',
     params: [epoch],
   }))
-  const response = await multicallv2<PredictionsRoundsResponse[]>(predictionsAbi, calls)
+  const response = await multicallv2<PredictionsRoundsResponse[]>(predictionsAbi, chainId, calls)
   return response
 }
 
@@ -525,9 +545,9 @@ export const parseBigNumberObj = <T = Record<string, any>, K = Record<string, an
   }, {}) as K
 }
 
-export const fetchUsersRoundsLength = async (account: string) => {
+export const fetchUsersRoundsLength = async (account: string, chainId: ChainId) => {
   try {
-    const contract = getPredictionsContract()
+    const contract = getPredictionsContract(chainId)
     const length = await contract.getUserRoundsLength(account)
     return length
   } catch {
@@ -540,10 +560,11 @@ export const fetchUsersRoundsLength = async (account: string) => {
  */
 export const fetchUserRounds = async (
   account: string,
+  chainId: ChainId,
   cursor = 0,
   size = ROUNDS_PER_PAGE,
 ): Promise<{ [key: string]: ReduxNodeLedger }> => {
-  const contract = getPredictionsContract()
+  const contract = getPredictionsContract(chainId)
 
   try {
     const [rounds, ledgers] = await contract.getUserRounds(account, cursor, size)

@@ -1,10 +1,12 @@
 import useSWR from 'swr'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useFarmAuctionContract } from 'hooks/useContract'
 import { AUCTION_BIDDERS_TO_FETCH } from 'config'
 import { processAuctionData, sortAuctionBidders } from '../helpers'
 
 export const useFarmAuction = (auctionId: number, configuration?: any) => {
   const farmAuctionContract = useFarmAuctionContract(false)
+  const { chainId } = useActiveWeb3React()
 
   const {
     data = {
@@ -16,7 +18,7 @@ export const useFarmAuction = (auctionId: number, configuration?: any) => {
     Number.isFinite(auctionId) && auctionId > 0 ? ['farmAuction', auctionId] : null,
     async () => {
       const auctionData = await farmAuctionContract.auctions(auctionId)
-      const processedAuction = await processAuctionData(auctionId, auctionData)
+      const processedAuction = await processAuctionData(auctionId, chainId, auctionData)
       const [currentAuctionBidders] = await farmAuctionContract.viewBidsPerAuction(
         processedAuction.id,
         0,

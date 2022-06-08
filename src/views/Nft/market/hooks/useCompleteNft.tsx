@@ -7,6 +7,8 @@ import { NftLocation, NftToken, TokenMarketData } from 'state/nftMarket/types'
 import { useProfile } from 'state/profile/hooks'
 import useSWR from 'swr'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
+import { ChainId } from '@orbitalswap/sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: TokenMarketData) => {
   const { account } = useWeb3React()
@@ -45,13 +47,15 @@ const useNftOwn = (collectionAddress: string, tokenId: string, marketData?: Toke
 }
 
 export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
+  const { chainId } = useActiveWeb3React()
   const { data: nft, mutate } = useSWR(
     collectionAddress && tokenId ? ['nft', collectionAddress, tokenId] : null,
     async () => {
-      const metadata = await getNftApi(collectionAddress, tokenId)
+      const metadata = await getNftApi(collectionAddress, tokenId, chainId)
       if (metadata) {
         const basicNft: NftToken = {
           tokenId,
+          chainId,
           collectionAddress,
           collectionName: metadata.collection.name,
           name: metadata.name,
@@ -69,8 +73,8 @@ export const useCompleteNft = (collectionAddress: string, tokenId: string) => {
     collectionAddress && tokenId ? ['nft', 'marketData', collectionAddress, tokenId] : null,
     async () => {
       const [onChainMarketDatas, marketDatas] = await Promise.all([
-        getNftsOnChainMarketData(collectionAddress.toLowerCase(), [tokenId]),
-        getNftsMarketData({ collection: collectionAddress.toLowerCase(), tokenId }, 1),
+        getNftsOnChainMarketData(chainId, collectionAddress.toLowerCase(), [tokenId]),
+        getNftsMarketData(chainId, { collection: collectionAddress.toLowerCase(), tokenId }, 1),
       ])
       const onChainMarketData = onChainMarketDatas[0]
 

@@ -8,9 +8,8 @@ import uniq from 'lodash/uniq'
 import { BigNumber } from '@ethersproject/bignumber'
 import { getNftMarketContract } from 'utils/contractHelpers'
 import { NOT_ON_SALE_SELLER } from 'config/constants'
-import { pancakeBunniesAddress } from 'views/Nft/market/constants'
 import { formatBigNumber } from 'utils/formatBalance'
-import { getNftMarketAddress } from 'utils/addressHelpers'
+import { getNftMarketAddress, getPancakeBunniesAddress } from 'utils/addressHelpers'
 import nftMarketAbi from 'config/abi/nftMarket.json'
 import fromPairs from 'lodash/fromPairs'
 import {
@@ -35,6 +34,7 @@ import {
   MarketEvent,
 } from './types'
 import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } from './queries'
+import { ChainId } from '@orbitalswap/sdk'
 
 /**
  * API HELPERS
@@ -44,8 +44,10 @@ import { getBaseNftFields, getBaseTransactionFields, getCollectionBaseFields } f
  * Fetch static data from all collections using the API
  * @returns
  */
-export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
-  const res = await fetch(`${API_NFT}/collections`)
+export const getCollectionsApi = async (chainId: ChainId): Promise<ApiCollectionsResponse> => {
+  if (!API_NFT[chainId]) return null
+
+  const res = await fetch(`${API_NFT[chainId]}/collections`)
   if (res.ok) {
     const json = await res.json()
     return json
@@ -54,7 +56,7 @@ export const getCollectionsApi = async (): Promise<ApiCollectionsResponse> => {
   return null
 }
 
-const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promise<number[]> => {
+const fetchCollectionsTotalSupply = async (collections: ApiCollection[], chainId: ChainId): Promise<number[]> => {
   const totalSupplyCalls = collections
     .filter((collection) => collection?.address)
     .map((collection) => ({
@@ -62,7 +64,7 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
       name: 'totalSupply',
     }))
   if (totalSupplyCalls.length > 0) {
-    const totalSupplyRaw = await multicallv2(erc721Abi, totalSupplyCalls, { requireSuccess: false })
+    const totalSupplyRaw = await multicallv2(erc721Abi, chainId, totalSupplyCalls, { requireSuccess: false })
     const totalSupply = totalSupplyRaw.flat()
     return totalSupply.map((totalCount) => (totalCount ? totalCount.toNumber() : 0))
   }
@@ -72,11 +74,11 @@ const fetchCollectionsTotalSupply = async (collections: ApiCollection[]): Promis
 /**
  * Fetch all collections data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
  */
-export const getCollections = async (): Promise<Record<string, Collection>> => {
+export const getCollections = async (chainId: ChainId): Promise<Record<string, Collection>> => {
   try {
-    const [collections, collectionsMarket] = await Promise.all([getCollectionsApi(), getCollectionsSg()])
+    const [collections, collectionsMarket] = await Promise.all([getCollectionsApi(chainId), getCollectionsSg(chainId)])
     const collectionApiData: ApiCollection[] = collections?.data ?? []
-    const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData)
+    const collectionsTotalSupply = await fetchCollectionsTotalSupply(collectionApiData, chainId)
     const collectionApiDataCombinedOnChain = collectionApiData.map((collection, index) => {
       const totalSupplyFromApi = Number(collection?.totalSupply) || 0
       const totalSupplyFromOnChain = collectionsTotalSupply[index]
@@ -96,14 +98,17 @@ export const getCollections = async (): Promise<Record<string, Collection>> => {
 /**
  * Fetch collection data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
  */
-export const getCollection = async (collectionAddress: string): Promise<Record<string, Collection> | null> => {
+export const getCollection = async (
+  collectionAddress: string,
+  chainId: ChainId,
+): Promise<Record<string, Collection> | null> => {
   try {
     const [collection, collectionMarket] = await Promise.all([
-      getCollectionApi(collectionAddress),
-      getCollectionSg(collectionAddress),
+      getCollectionApi(collectionAddress, chainId),
+      getCollectionSg(collectionAddress, chainId),
     ])
 
-    const collectionsTotalSupply = await fetchCollectionsTotalSupply([collection])
+    const collectionsTotalSupply = await fetchCollectionsTotalSupply([collection], chainId)
     const totalSupplyFromApi = Number(collection?.totalSupply) || 0
     const totalSupplyFromOnChain = collectionsTotalSupply[0]
     const collectionApiDataCombinedOnChain = {
@@ -122,8 +127,10 @@ export const getCollection = async (collectionAddress: string): Promise<Record<s
  * Fetch static data from a collection using the API
  * @returns
  */
-export const getCollectionApi = async (collectionAddress: string): Promise<ApiCollection> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}`)
+export const getCollectionApi = async (collectionAddress: string, chainId: ChainId): Promise<ApiCollection> => {
+  if (!API_NFT[chainId]) return null
+
+  const res = await fetch(`${API_NFT[chainId]}/collections/${collectionAddress}`)
   if (res.ok) {
     const json = await res.json()
     return json.data
@@ -141,13 +148,16 @@ export const getCollectionApi = async (collectionAddress: string): Promise<ApiCo
  */
 export const getNftsFromCollectionApi = async (
   collectionAddress: string,
+  chainId: ChainId,
   size = 100,
   page = 1,
 ): Promise<ApiResponseCollectionTokens> => {
-  const isPBCollection = collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
-  const requestPath = `${API_NFT}/collections/${collectionAddress}/tokens${
+  const isPBCollection = collectionAddress.toLowerCase() === getPancakeBunniesAddress(chainId).toLowerCase()
+  const requestPath = `${API_NFT[chainId]}/collections/${collectionAddress}/tokens${
     !isPBCollection ? `?page=${page}&size=${size}` : ``
   }`
+
+  if (!API_NFT[chainId]) return null
 
   try {
     const res = await fetch(requestPath)
@@ -182,10 +192,14 @@ export const getNftsFromCollectionApi = async (
 export const getNftApi = async (
   collectionAddress: string,
   tokenId: string,
+  chainId: ChainId,
 ): Promise<ApiResponseSpecificToken['data']> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}/tokens/${tokenId}`)
+  if (!API_NFT[chainId]) return null
+
+  const res = await fetch(`${API_NFT[chainId]}/collections/${collectionAddress}/tokens/${tokenId}`)
   if (res.ok) {
     const json = await res.json()
+    json.data.data = json.data.data.map(d => ({...d, chainId}))
     return json.data
   }
 
@@ -199,9 +213,9 @@ export const getNftApi = async (
  * @returns Array of NFT from API
  */
 export const getNftsFromDifferentCollectionsApi = async (
-  from: { collectionAddress: string; tokenId: string }[],
+  from: { collectionAddress: string; tokenId: string; chainId: ChainId }[]
 ): Promise<NftToken[]> => {
-  const promises = from.map((nft) => getNftApi(nft.collectionAddress, nft.tokenId))
+  const promises = from.map((nft) => getNftApi(nft.collectionAddress, nft.tokenId, nft.chainId))
   const responses = await Promise.all(promises)
   // Sometimes API can't find some tokens (e.g. 404 response)
   // at least return the ones that returned successfully
@@ -209,6 +223,7 @@ export const getNftsFromDifferentCollectionsApi = async (
     .filter((resp) => resp)
     .map((res, index) => ({
       tokenId: res.tokenId,
+      chainId: res.chainId,
       name: res.name,
       collectionName: res.collection.name,
       collectionAddress: from[index].collectionAddress,
@@ -228,10 +243,15 @@ export const getNftsFromDifferentCollectionsApi = async (
  * Fetch market data from a collection using the Subgraph
  * @returns
  */
-export const getCollectionSg = async (collectionAddress: string): Promise<CollectionMarketDataBaseFields> => {
+export const getCollectionSg = async (
+  collectionAddress: string,
+  chainId: ChainId,
+): Promise<CollectionMarketDataBaseFields> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) return null
+
   try {
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getCollectionData($collectionAddress: String!) {
           collection(id: $collectionAddress) {
@@ -252,10 +272,12 @@ export const getCollectionSg = async (collectionAddress: string): Promise<Collec
  * Fetch market data from all collections using the Subgraph
  * @returns
  */
-export const getCollectionsSg = async (): Promise<CollectionMarketDataBaseFields[]> => {
+export const getCollectionsSg = async (chainId: ChainId): Promise<CollectionMarketDataBaseFields[]> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) return []
+
   try {
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         {
           collections {
@@ -280,15 +302,17 @@ export const getCollectionsSg = async (): Promise<CollectionMarketDataBaseFields
  */
 export const getNftsFromCollectionSg = async (
   collectionAddress: string,
+  chainId: ChainId,
   first = 1000,
   skip = 0,
 ): Promise<TokenMarketData[]> => {
   // Squad to be sorted by tokenId as this matches the order of the paginated API return. For PBs - get the most recent,
-  const isPBCollection = collectionAddress.toLowerCase() === pancakeBunniesAddress.toLowerCase()
+  const isPBCollection = collectionAddress.toLowerCase() === getPancakeBunniesAddress(chainId).toLowerCase()
+  if (!GRAPH_API_NFTMARKET[chainId]) return []
 
   try {
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getNftCollectionMarketData($collectionAddress: String!) {
           collection(id: $collectionAddress) {
@@ -317,15 +341,18 @@ export const getNftsFromCollectionSg = async (
 export const getNftsByBunnyIdSg = async (
   bunnyId: string,
   existingTokenIds: string[],
+  chainId: ChainId,
   orderDirection: 'asc' | 'desc',
 ): Promise<TokenMarketData[]> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) return []
+
   try {
     const where =
       existingTokenIds.length > 0
         ? { otherId: bunnyId, isTradable: true, tokenId_not_in: existingTokenIds }
         : { otherId: bunnyId, isTradable: true }
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getNftsByBunnyIdSg($collectionAddress: String!, $where: NFT_filter, $orderDirection: String!) {
           nfts(first: 30, where: $where, orderBy: currentAskPrice, orderDirection: $orderDirection) {
@@ -334,7 +361,7 @@ export const getNftsByBunnyIdSg = async (
         }
       `,
       {
-        collectionAddress: pancakeBunniesAddress.toLowerCase(),
+        collectionAddress: getPancakeBunniesAddress(chainId).toLowerCase(),
         where,
         orderDirection,
       },
@@ -355,13 +382,16 @@ export const getNftsByBunnyIdSg = async (
 export const getMarketDataForTokenIds = async (
   collectionAddress: string,
   existingTokenIds: string[],
+  chainId: ChainId,
 ): Promise<TokenMarketData[]> => {
   try {
     if (existingTokenIds.length === 0) {
       return []
     }
+    if (!GRAPH_API_NFTMARKET[chainId]) return []
+
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getMarketDataForTokenIds($collectionAddress: String!, $where: NFT_filter) {
           collection(id: $collectionAddress) {
@@ -385,11 +415,12 @@ export const getMarketDataForTokenIds = async (
 }
 
 export const getNftsOnChainMarketData = async (
+  chainId: ChainId,
   collectionAddress: string,
   tokenIds: string[],
 ): Promise<TokenMarketData[]> => {
   try {
-    const nftMarketContract = getNftMarketContract()
+    const nftMarketContract = getNftMarketContract(chainId)
     const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     const askInfo = response?.askInfo
 
@@ -405,6 +436,7 @@ export const getNftsOnChainMarketData = async (
         return {
           collection: { id: collectionAddress.toLowerCase() },
           tokenId: tokenIds[index],
+          chainId,
           currentSeller,
           isTradable,
           currentAskPrice,
@@ -418,11 +450,12 @@ export const getNftsOnChainMarketData = async (
 }
 
 export const getNftsUpdatedMarketData = async (
+  chainId: ChainId,
   collectionAddress: string,
   tokenIds: string[],
 ): Promise<{ tokenId: string; currentSeller: string; currentAskPrice: BigNumber; isTradable: boolean }[]> => {
   try {
-    const nftMarketContract = getNftMarketContract()
+    const nftMarketContract = getNftMarketContract(chainId)
     const response = await nftMarketContract.viewAsksByCollectionAndTokenIds(collectionAddress.toLowerCase(), tokenIds)
     const askInfo = response?.askInfo
 
@@ -445,11 +478,12 @@ export const getNftsUpdatedMarketData = async (
 }
 
 export const getAccountNftsOnChainMarketData = async (
+  chainId: ChainId,
   collections: ApiCollections,
   account: string,
 ): Promise<TokenMarketData[]> => {
   try {
-    const nftMarketAddress = getNftMarketAddress()
+    const nftMarketAddress = getNftMarketAddress(chainId)
     const collectionList = Object.values(collections)
     const askCalls = collectionList.map((collection) => {
       const { address: collectionAddress } = collection
@@ -460,7 +494,7 @@ export const getAccountNftsOnChainMarketData = async (
       }
     })
 
-    const askCallsResultsRaw = await multicallv2(nftMarketAbi, askCalls, { requireSuccess: false })
+    const askCallsResultsRaw = await multicallv2(nftMarketAbi, chainId, askCalls, { requireSuccess: false })
     const askCallsResults = askCallsResultsRaw
       .map((askCallsResultRaw, askCallIndex) => {
         if (!askCallsResultRaw?.tokenIds || !askCallsResultRaw?.askInfo || !collectionList[askCallIndex]?.address)
@@ -475,6 +509,7 @@ export const getAccountNftsOnChainMarketData = async (
             return {
               collection: { id: collectionList[askCallIndex].address.toLowerCase() },
               tokenId: tokenId.toString(),
+              chainId,
               account,
               isTradable: true,
               currentAskPrice,
@@ -493,15 +528,18 @@ export const getAccountNftsOnChainMarketData = async (
 }
 
 export const getNftsMarketData = async (
+  chainId: ChainId,
   where = {},
   first = 1000,
   orderBy = 'id',
   orderDirection: 'asc' | 'desc' = 'desc',
   skip = 0,
 ): Promise<TokenMarketData[]> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) return []
+
   try {
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getNftsMarketData($first: Int, $skip: Int!, $where: NFT_filter, $orderBy: NFT_orderBy, $orderDirection: OrderDirection) {
           nfts(where: $where, first: $first, orderBy: $orderBy, orderDirection: $orderDirection, skip: $skip) {
@@ -522,7 +560,12 @@ export const getNftsMarketData = async (
   }
 }
 
-export const getAllPancakeBunniesLowestPrice = async (bunnyIds: string[]): Promise<Record<string, number>> => {
+export const getAllPancakeBunniesLowestPrice = async (
+  bunnyIds: string[],
+  chainId: ChainId,
+): Promise<Record<string, number>> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) return {}
+
   try {
     const singlePancakeBunnySubQueries = bunnyIds.map(
       (
@@ -533,7 +576,7 @@ export const getAllPancakeBunniesLowestPrice = async (bunnyIds: string[]): Promi
     `,
     )
     const rawResponse: Record<string, { currentAskPrice: string }[]> = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getAllPancakeBunniesLowestPrice {
           ${singlePancakeBunnySubQueries}
@@ -554,7 +597,12 @@ export const getAllPancakeBunniesLowestPrice = async (bunnyIds: string[]): Promi
   }
 }
 
-export const getAllPancakeBunniesRecentUpdatedAt = async (bunnyIds: string[]): Promise<Record<string, number>> => {
+export const getAllPancakeBunniesRecentUpdatedAt = async (
+  bunnyIds: string[],
+  chainId: ChainId,
+): Promise<Record<string, number>> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) return {}
+
   try {
     const singlePancakeBunnySubQueries = bunnyIds.map(
       (
@@ -565,7 +613,7 @@ export const getAllPancakeBunniesRecentUpdatedAt = async (bunnyIds: string[]): P
     `,
     )
     const rawResponse: Record<string, { updatedAt: string }[]> = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getAllPancakeBunniesLowestPrice {
           ${singlePancakeBunnySubQueries}
@@ -590,10 +638,12 @@ export const getAllPancakeBunniesRecentUpdatedAt = async (bunnyIds: string[]): P
  */
 export const getLeastMostPriceInCollection = async (
   collectionAddress: string,
+  chainId: ChainId,
   orderDirection: 'asc' | 'desc' = 'asc',
 ) => {
   try {
     const response = await getNftsMarketData(
+      chainId,
       { collection: collectionAddress.toLowerCase(), isTradable: true },
       1,
       'currentAskPrice',
@@ -619,10 +669,19 @@ export const getLeastMostPriceInCollection = async (
  */
 export const getUserActivity = async (
   address: string,
+  chainId: ChainId,
 ): Promise<{ askOrderHistory: AskOrder[]; buyTradeHistory: Transaction[]; sellTradeHistory: Transaction[] }> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) {
+    return {
+      askOrderHistory: [],
+      buyTradeHistory: [],
+      sellTradeHistory: [],
+    }
+  }
+
   try {
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getUserActivity($address: String!) {
           user(id: $address) {
@@ -667,6 +726,7 @@ export const getUserActivity = async (
 
 export const getCollectionActivity = async (
   address: string,
+  chainId: ChainId,
   nftActivityFilter: NftActivityFilter,
   itemPerQuery,
 ): Promise<{ askOrders?: AskOrder[]; transactions?: Transaction[] }> => {
@@ -745,9 +805,16 @@ export const getCollectionActivity = async (
           }`
     : ``
 
+  if (!GRAPH_API_NFTMARKET[chainId]) {
+    return {
+      askOrders: [],
+      transactions: [],
+    }
+  }
+
   try {
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getCollectionActivity {
           ${askOrderGql}
@@ -769,10 +836,18 @@ export const getCollectionActivity = async (
 export const getTokenActivity = async (
   tokenId: string,
   collectionAddress: string,
+  chainId: ChainId,
 ): Promise<{ askOrders: AskOrder[]; transactions: Transaction[] }> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) {
+    return {
+      askOrders: [],
+      transactions: [],
+    }
+  }
+
   try {
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getCollectionActivity($tokenId: BigInt!, $address: ID!) {
           nfts(where:{tokenId: $tokenId, collection: $address}) {
@@ -819,10 +894,12 @@ export const getTokenActivity = async (
  * @param first Number of nfts to retrieve
  * @returns NftTokenSg[]
  */
-export const getLatestListedNfts = async (first: number): Promise<TokenMarketData[]> => {
+export const getLatestListedNfts = async (chainId: ChainId, first: number): Promise<TokenMarketData[]> => {
+  if (!GRAPH_API_NFTMARKET[chainId]) return []
+
   try {
     const res = await request(
-      GRAPH_API_NFTMARKET,
+      GRAPH_API_NFTMARKET[chainId],
       gql`
         query getLatestNftMarketData($first: Int) {
           nfts(where: { isTradable: true }, orderBy: updatedAt , orderDirection: desc, first: $first) {
@@ -850,9 +927,12 @@ export const getLatestListedNfts = async (first: number): Promise<TokenMarketDat
  */
 export const fetchNftsFiltered = async (
   collectionAddress: string,
+  chainId: ChainId,
   filters: Record<string, string | number>,
 ): Promise<ApiTokenFilterResponse> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}/filter?${stringify(filters)}`)
+  if (!API_NFT[chainId]) return null
+
+  const res = await fetch(`${API_NFT[chainId]}/collections/${collectionAddress}/filter?${stringify(filters)}`)
 
   if (res.ok) {
     const data = await res.json()
@@ -901,10 +981,11 @@ export const combineApiAndSgResponseToNftToken = (
 ) => {
   return {
     tokenId: marketData.tokenId,
+    chainId: marketData.chainId,
     name: apiMetadata.name,
     description: apiMetadata.description,
     collectionName: apiMetadata.collection.name,
-    collectionAddress: pancakeBunniesAddress,
+    collectionAddress: getPancakeBunniesAddress(marketData.chainId),
     image: apiMetadata.image,
     marketData,
     attributes,
@@ -913,6 +994,7 @@ export const combineApiAndSgResponseToNftToken = (
 
 export const fetchWalletTokenIdsForCollections = async (
   account: string,
+  chainId: ChainId,
   collections: ApiCollections,
 ): Promise<TokenIdWithCollectionAddress[]> => {
   const balanceOfCalls = Object.values(collections).map((collection) => {
@@ -924,7 +1006,7 @@ export const fetchWalletTokenIdsForCollections = async (
     }
   })
 
-  const balanceOfCallsResultRaw = await multicallv2(erc721Abi, balanceOfCalls, { requireSuccess: false })
+  const balanceOfCallsResultRaw = await multicallv2(erc721Abi, chainId, balanceOfCalls, { requireSuccess: false })
   const balanceOfCallsResult = balanceOfCallsResultRaw.flat()
 
   const tokenIdCalls = Object.values(collections)
@@ -942,7 +1024,7 @@ export const fetchWalletTokenIdsForCollections = async (
     })
     .flat()
 
-  const tokenIdResultRaw = await multicallv2(erc721Abi, tokenIdCalls, { requireSuccess: false })
+  const tokenIdResultRaw = await multicallv2(erc721Abi, chainId, tokenIdCalls, { requireSuccess: false })
   const tokenIdResult = tokenIdResultRaw.flat()
 
   const nftLocation = NftLocation.WALLET
@@ -1036,6 +1118,7 @@ export const attachMarketDataToWalletNfts = (
     return (
       marketData ?? {
         tokenId: walletNft.tokenId,
+        chainId: walletNft.chainId,
         collection: {
           id: walletNft.collectionAddress.toLowerCase(),
         },
@@ -1097,12 +1180,13 @@ export const combineNftMarketAndMetadata = (
 
 const fetchWalletMarketData = async (
   walletNftsByCollection: { collectionAddress: string; idWithCollectionAddress: TokenIdWithCollectionAddress[] }[],
+  chainId: ChainId,
 ): Promise<TokenMarketData[]> => {
   const walletMarketDataRequests = walletNftsByCollection.map(async (walletNftByCollection) => {
     const tokenIdIn = walletNftByCollection.idWithCollectionAddress.map((walletNft) => walletNft.tokenId)
     const [nftsOnChainMarketData, nftsMarketData] = await Promise.all([
-      getNftsOnChainMarketData(walletNftByCollection.collectionAddress.toLowerCase(), tokenIdIn),
-      getNftsMarketData({
+      getNftsOnChainMarketData(chainId, walletNftByCollection.collectionAddress.toLowerCase(), tokenIdIn),
+      getNftsMarketData(chainId, {
         tokenId_in: tokenIdIn,
         collection: walletNftByCollection.collectionAddress.toLowerCase(),
       }),
@@ -1135,10 +1219,11 @@ const fetchWalletMarketData = async (
  */
 export const getCompleteAccountNftData = async (
   account: string,
+  chainId: ChainId,
   collections: ApiCollections,
   profileNftWithCollectionAddress?: TokenIdWithCollectionAddress,
 ): Promise<NftToken[]> => {
-  const walletNftIdsWithCollectionAddress = await fetchWalletTokenIdsForCollections(account, collections)
+  const walletNftIdsWithCollectionAddress = await fetchWalletTokenIdsForCollections(account, chainId, collections)
   if (profileNftWithCollectionAddress?.tokenId) {
     walletNftIdsWithCollectionAddress.unshift(profileNftWithCollectionAddress)
   }
@@ -1156,7 +1241,7 @@ export const getCompleteAccountNftData = async (
     }
   })
 
-  const walletMarketData = await fetchWalletMarketData(walletNftsByCollection)
+  const walletMarketData = await fetchWalletMarketData(walletNftsByCollection, chainId)
 
   const walletNftsWithMarketData = attachMarketDataToWalletNfts(walletNftIdsWithCollectionAddress, walletMarketData)
 
@@ -1167,17 +1252,16 @@ export const getCompleteAccountNftData = async (
     })
     .map((nft) => nft.tokenId)
 
-  const onChainForSaleNfts = await getAccountNftsOnChainMarketData(collections, account)
+  const onChainForSaleNfts = await getAccountNftsOnChainMarketData(chainId, collections, account)
   const tokenIdsForSale = onChainForSaleNfts.map((nft) => nft.tokenId)
 
   const forSaleNftIds = onChainForSaleNfts.map((nft) => {
-    return { collectionAddress: nft.collection.id, tokenId: nft.tokenId }
+    return { collectionAddress: nft.collection.id, tokenId: nft.tokenId, chainId: nft.chainId }
   })
 
-  const metadataForAllNfts = await getNftsFromDifferentCollectionsApi([
-    ...forSaleNftIds,
-    ...walletNftIdsWithCollectionAddress,
-  ])
+  const metadataForAllNfts = await getNftsFromDifferentCollectionsApi(
+    [...forSaleNftIds, ...walletNftIdsWithCollectionAddress]
+  )
 
   const completeNftData = combineNftMarketAndMetadata(
     metadataForAllNfts,
@@ -1195,8 +1279,10 @@ export const getCompleteAccountNftData = async (
  * Fetch distribution information for a collection
  * @returns
  */
-export const getCollectionDistributionApi = async <T>(collectionAddress: string): Promise<T> => {
-  const res = await fetch(`${API_NFT}/collections/${collectionAddress}/distribution`)
+export const getCollectionDistributionApi = async <T>(collectionAddress: string, chainId: ChainId): Promise<T> => {
+  if(!API_NFT[chainId]) return null
+
+  const res = await fetch(`${API_NFT[chainId]}/collections/${collectionAddress}/distribution`)
   if (res.ok) {
     const data = await res.json()
     return data

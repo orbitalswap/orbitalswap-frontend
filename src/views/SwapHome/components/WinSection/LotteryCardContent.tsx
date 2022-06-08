@@ -11,6 +11,7 @@ import { getBalanceAmount } from 'utils/formatBalance'
 import useSWR from 'swr'
 import { SLOW_INTERVAL } from 'config/constants'
 import useSWRImmutable from 'swr/immutable'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const StyledLink = styled(NextLinkFromReactRouter)`
   width: 100%;
@@ -24,11 +25,12 @@ const StyledBalance = styled(Balance)`
 
 const LotteryCardContent = () => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const [loadData, setLoadData] = useState(false)
   const cakePriceBusd = usePriceCakeBusd()
   const { data: lotteryId = null } = useSWRImmutable(loadData ? ['lottery', 'currentLotteryId'] : null, async () => {
-    const { currentLotteryId } = await fetchCurrentLotteryIdAndMaxBuy()
+    const { currentLotteryId } = await fetchCurrentLotteryIdAndMaxBuy(chainId)
     if (currentLotteryId) {
       return currentLotteryId
     }
@@ -37,7 +39,7 @@ const LotteryCardContent = () => {
   const { data: currentLotteryPrizeInCake = null } = useSWR(
     lotteryId ? ['lottery', 'currentLotteryPrize'] : null,
     async () => {
-      const { amountCollectedInCake } = await fetchLottery(lotteryId)
+      const { amountCollectedInCake } = await fetchLottery(lotteryId, chainId)
       if (amountCollectedInCake) {
         return parseFloat(amountCollectedInCake)
       }

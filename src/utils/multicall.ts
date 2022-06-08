@@ -1,5 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 import { CallOverrides } from '@ethersproject/contracts'
+import { ChainId } from '@orbitalswap/sdk'
 import { getMulticallContract } from 'utils/contractHelpers'
 
 export interface Call {
@@ -12,8 +13,8 @@ export interface MulticallOptions extends CallOverrides {
   requireSuccess?: boolean
 }
 
-const multicall = async <T = any>(abi: any[], calls: Call[]): Promise<T> => {
-  const multi = getMulticallContract()
+const multicall = async <T = any>(abi: any[], chainId: ChainId, calls: Call[]): Promise<T> => {
+  const multi = getMulticallContract(chainId)
   const itf = new Interface(abi)
 
   const calldata = calls.map((call) => ({
@@ -33,9 +34,9 @@ const multicall = async <T = any>(abi: any[], calls: Call[]): Promise<T> => {
  * 1. If "requireSuccess" is false multicall will not bail out if one of the calls fails
  * 2. The return includes a boolean whether the call was successful e.g. [wasSuccessful, callResult]
  */
-export const multicallv2 = async <T = any>(abi: any[], calls: Call[], options?: MulticallOptions): Promise<T> => {
+export const multicallv2 = async <T = any>(abi: any[], chainId: ChainId, calls: Call[], options?: MulticallOptions): Promise<T> => {
   const { requireSuccess = true, ...overrides } = options || {}
-  const multi = getMulticallContract()
+  const multi = getMulticallContract(chainId)
   const itf = new Interface(abi)
 
   const calldata = calls.map((call) => ({

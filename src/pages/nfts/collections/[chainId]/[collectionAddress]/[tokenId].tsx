@@ -25,7 +25,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { collectionAddress, tokenId } = params
+  const { collectionAddress, chainId, tokenId } = params
 
   if (typeof collectionAddress !== 'string' || typeof tokenId !== 'string') {
     return {
@@ -33,8 +33,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
   }
 
-  const metadata = await getNftApi(collectionAddress, tokenId)
-  const collection = await getCollection(collectionAddress)
+  const metadata = await getNftApi(collectionAddress, tokenId, +chainId)
+  const collection = await getCollection(collectionAddress, +chainId)
   if (!metadata) {
     return {
       notFound: true,
@@ -44,6 +44,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const nft: NftToken = {
     tokenId,
+    chainId: +chainId,
     collectionAddress,
     collectionName: metadata.collection.name,
     name: metadata.name,

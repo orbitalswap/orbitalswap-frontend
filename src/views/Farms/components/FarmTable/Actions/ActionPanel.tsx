@@ -147,7 +147,7 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,
   })
-  const lpAddress = getAddress(farm.lpAddresses)
+  const lpAddress = getAddress(farm.lpAddresses, farm.chainId)
   const bsc = getBscScanLink(lpAddress, 'address')
   const info = `/info/pool/${lpAddress}`
 

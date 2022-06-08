@@ -1,4 +1,5 @@
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { ChainId } from '@orbitalswap/sdk'
 import { SWRConfig } from 'swr'
 import Teams from '../../views/Teams'
 import { getTeams } from '../../state/teams/helpers'
@@ -17,7 +18,7 @@ const TeamsPage = ({ fallback }: InferGetStaticPropsType<typeof getStaticProps>)
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const fetchedTeams = await getTeams()
+  const fetchedTeams = await getTeams(ChainId.BSC_MAINNET)
   if (!fetchedTeams) {
     return {
       props: {

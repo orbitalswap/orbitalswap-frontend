@@ -20,7 +20,7 @@ const StyledClaimCheck = styled(Flex)`
 const ClaimCheck = () => {
   const [isFetching, setIsFetching] = useState(false)
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
 
   const [onPresentCollectWinningsModal] = useModal(<CollectRoundWinningsModal />, false)
 
@@ -29,7 +29,7 @@ const ClaimCheck = () => {
   const handleClick = async () => {
     try {
       setIsFetching(true)
-      const betHistory = await getAllV1History({ user: account.toLowerCase(), claimed: false })
+      const betHistory = await getAllV1History(chainId, { user: account.toLowerCase(), claimed: false })
 
       // Filter out bets that can be claimed
       const unclaimedBets = betHistory.filter((bet) => {

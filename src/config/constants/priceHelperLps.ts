@@ -1,3 +1,4 @@
+import { ChainId } from '@orbitalswap/sdk'
 import tokens from './tokens'
 import { SerializedFarmConfig } from './types'
 
@@ -11,6 +12,7 @@ const priceHelperLps: SerializedFarmConfig[] = [
    */
   {
     pid: null,
+    chainId: ChainId.BSC_MAINNET,
     lpSymbol: 'ANKR-BNB LP',
     lpAddresses: {
       97: '',

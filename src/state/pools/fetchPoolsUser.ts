@@ -13,29 +13,31 @@ const nonBnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol !== 'B
 const bnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol === 'BNB')
 const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)
 
-export const fetchPoolsAllowance = async (account) => {
-  const calls = nonBnbPools.map((pool) => ({
-    address: pool.stakingToken.address,
-    name: 'allowance',
-    params: [account, getAddress(pool.contractAddress)],
-  }))
+export const fetchPoolsAllowance = async (account, chainId) => {
+  const calls = nonBnbPools
+    .filter((p) => p.chainId === chainId)
+    .map((pool) => ({
+      address: pool.stakingToken.address,
+      name: 'allowance',
+      params: [account, getAddress(pool.contractAddress, chainId)],
+    }))
 
-  const allowances = await multicall(erc20ABI, calls)
+  const allowances = await multicall(erc20ABI, chainId, calls)
   return nonBnbPools.reduce(
     (acc, pool, index) => ({ ...acc, [pool.sousId]: new BigNumber(allowances[index]).toJSON() }),
     {},
   )
 }
 
-export const fetchUserBalances = async (account) => {
+export const fetchUserBalances = async (account, chainId) => {
   // Non BNB pools
-  const tokens = uniq(nonBnbPools.map((pool) => pool.stakingToken.address))
+  const tokens = uniq(nonBnbPools.filter((p) => p.chainId === chainId).map((pool) => pool.stakingToken.address))
   const calls = tokens.map((token) => ({
     address: token,
     name: 'balanceOf',
     params: [account],
   }))
-  const tokenBalancesRaw = await multicall(erc20ABI, calls)
+  const tokenBalancesRaw = await multicall(erc20ABI, chainId, calls)
   const tokenBalances = tokens.reduce((acc, token, index) => ({ ...acc, [token]: tokenBalancesRaw[index] }), {})
   const poolTokenBalances = nonBnbPools.reduce(
     (acc, pool) => ({
@@ -48,7 +50,7 @@ export const fetchUserBalances = async (account) => {
   )
 
   // BNB pools
-  const bnbBalance = await simpleRpcProvider().getBalance(account)
+  const bnbBalance = await simpleRpcProvider(chainId).getBalance(account)
   const bnbBalances = bnbPools.reduce(
     (acc, pool) => ({ ...acc, [pool.sousId]: new BigNumber(bnbBalance.toString()).toJSON() }),
     {},
@@ -57,13 +59,15 @@ export const fetchUserBalances = async (account) => {
   return { ...poolTokenBalances, ...bnbBalances }
 }
 
-export const fetchUserStakeBalances = async (account) => {
-  const calls = nonMasterPools.map((p) => ({
-    address: getAddress(p.contractAddress),
-    name: 'userInfo',
-    params: [account],
-  }))
-  const userInfo = await multicall(sousChefABI, calls)
+export const fetchUserStakeBalances = async (account, chainId) => {
+  const calls = nonMasterPools
+    .filter((p) => p.chainId === chainId)
+    .map((p) => ({
+      address: getAddress(p.contractAddress, chainId),
+      name: 'userInfo',
+      params: [account],
+    }))
+  const userInfo = await multicall(sousChefABI, chainId, calls)
   return nonMasterPools.reduce(
     (acc, pool, index) => ({
       ...acc,
@@ -73,13 +77,15 @@ export const fetchUserStakeBalances = async (account) => {
   )
 }
 
-export const fetchUserPendingRewards = async (account) => {
-  const calls = nonMasterPools.map((p) => ({
-    address: getAddress(p.contractAddress),
-    name: 'pendingReward',
-    params: [account],
-  }))
-  const res = await multicall(sousChefABI, calls)
+export const fetchUserPendingRewards = async (account, chainId) => {
+  const calls = nonMasterPools
+    .filter((p) => p.chainId === chainId)
+    .map((p) => ({
+      address: getAddress(p.contractAddress, chainId),
+      name: 'pendingReward',
+      params: [account],
+    }))
+  const res = await multicall(sousChefABI, chainId, calls)
   return nonMasterPools.reduce(
     (acc, pool, index) => ({
       ...acc,

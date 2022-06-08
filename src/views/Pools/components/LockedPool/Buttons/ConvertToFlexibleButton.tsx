@@ -16,7 +16,7 @@ import { VaultKey } from 'state/types'
 const ConvertToFlexibleButton: React.FC<ButtonProps> = (props) => {
   const dispatch = useAppDispatch()
 
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
   const vaultPoolContract = useVaultPoolContract()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -40,7 +40,7 @@ const ConvertToFlexibleButton: React.FC<ButtonProps> = (props) => {
           {t('Your funds have been staked in the pool')}
         </ToastDescriptionWithTx>,
       )
-      dispatch(fetchCakeVaultUserData({ account }))
+      dispatch(fetchCakeVaultUserData({ account, chainId }))
     }
   }, [t, toastSuccess, account, callWithGasPrice, dispatch, fetchWithCatchTxError, vaultPoolContract])
 

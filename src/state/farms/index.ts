@@ -24,6 +24,7 @@ import {
 import { SerializedFarmsState, SerializedFarm } from '../types'
 import { fetchMasterChefFarmPoolLength } from './fetchMasterChefData'
 import { resetUserState } from '../global/actions'
+import { ChainId } from '@orbitalswap/sdk'
 
 const noAccountFarmConfig = farmsConfig.map((farm) => ({
   ...farm,
@@ -45,14 +46,14 @@ const initialState: SerializedFarmsState = {
 // Async thunks
 export const fetchFarmsPublicDataAsync = createAsyncThunk<
   [SerializedFarm[], number, number],
-  number[],
+  {chainId: ChainId; pids: number[]},
   {
     state: AppState
   }
 >(
   'farms/fetchFarmsPublicDataAsync',
-  async (pids) => {
-    const masterChefAddress = getMasterChefAddress()
+  async ({chainId, pids}) => {
+    const masterChefAddress = getMasterChefAddress(chainId)
     const calls = [
       {
         address: masterChefAddress,
@@ -64,12 +65,12 @@ export const fetchFarmsPublicDataAsync = createAsyncThunk<
         params: [true],
       },
     ]
-    const [[poolLength], [cakePerBlockRaw]] = await multicall(masterchefABI, calls)
+    const [[poolLength], [cakePerBlockRaw]] = await multicall(masterchefABI, chainId, calls)
     const regularCakePerBlock = getBalanceAmount(ethersToBigNumber(cakePerBlockRaw))
     const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.pid))
     const farmsCanFetch = farmsToFetch.filter((f) => poolLength.gt(f.pid))
 
-    const farms = await fetchFarms(farmsCanFetch)
+    const farms = await fetchFarms(farmsCanFetch, chainId)
     const farmsWithPrices = getFarmsPrices(farms)
 
     return [farmsWithPrices, poolLength.toNumber(), regularCakePerBlock.toNumber()]
@@ -96,20 +97,20 @@ interface FarmUserDataResponse {
 
 export const fetchFarmUserDataAsync = createAsyncThunk<
   FarmUserDataResponse[],
-  { account: string; pids: number[] },
+  { account: string; chainId: ChainId; pids: number[] },
   {
     state: AppState
   }
 >(
   'farms/fetchFarmUserDataAsync',
-  async ({ account, pids }) => {
-    const poolLength = await fetchMasterChefFarmPoolLength()
+  async ({ account, chainId, pids }) => {
+    const poolLength = await fetchMasterChefFarmPoolLength(chainId)
     const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.pid))
     const farmsCanFetch = farmsToFetch.filter((f) => poolLength.gt(f.pid))
-    const userFarmAllowances = await fetchFarmUserAllowances(account, farmsCanFetch)
-    const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsCanFetch)
-    const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsCanFetch)
-    const userFarmEarnings = await fetchFarmUserEarnings(account, farmsCanFetch)
+    const userFarmAllowances = await fetchFarmUserAllowances(account, chainId, farmsCanFetch)
+    const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, chainId, farmsCanFetch)
+    const userStakedBalances = await fetchFarmUserStakedBalances(account, chainId, farmsCanFetch)
+    const userFarmEarnings = await fetchFarmUserEarnings(account, chainId, farmsCanFetch)
 
     return userFarmAllowances.map((farmAllowance, index) => {
       return {

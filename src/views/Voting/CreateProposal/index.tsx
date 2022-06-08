@@ -60,7 +60,7 @@ const CreateProposal = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const initialBlock = useInitialBlock()
   const { push } = useRouter()
   const { library, connector } = useWeb3Provider()
@@ -99,7 +99,7 @@ const CreateProposal = () => {
         const msg: Message = { address: account, msg: proposal, sig }
 
         // Save proposal to snapshot
-        const data = await sendSnapshotData(msg)
+        const data = await sendSnapshotData(msg, chainId)
 
         // Redirect user to newly created proposal page
         push(`/voting/proposal/${data.ipfsHash}`)

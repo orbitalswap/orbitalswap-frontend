@@ -6,7 +6,8 @@ import { useTranslation } from 'contexts/Localization'
 import { getBscScanLinkForNft } from 'utils'
 import { HorizontalDivider, RoundedImage } from './BuySellModals/shared/styles'
 import EditProfileModal from '../Profile/components/EditProfileModal'
-import { nftsBaseUrl, pancakeBunniesAddress } from '../constants'
+import { nftsBaseUrl } from '../constants'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 
 export const StyledModal = styled(Modal)`
   & > div:last-child {
@@ -28,7 +29,7 @@ const ProfileNftModal: React.FC<ProfileNftModalProps> = ({ nft, onDismiss, onSuc
   const { t } = useTranslation()
   const { theme } = useTheme()
 
-  const itemPageUrlId = nft.collectionAddress === pancakeBunniesAddress ? nft.attributes[0].value : nft.tokenId
+  const itemPageUrlId = nft.collectionAddress === getPancakeBunniesAddress(nft.chainId) ? nft.attributes[0].value : nft.tokenId
 
   return (
     <StyledModal title={t('Details')} onDismiss={onDismiss} headerBackground={theme.colors.gradients.cardHeader}>

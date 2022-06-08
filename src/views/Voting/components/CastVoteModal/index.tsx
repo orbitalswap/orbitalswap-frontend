@@ -17,7 +17,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
   const [modalIsOpen, setModalIsOpen] = useState(true)
   const [isPending, setIsPending] = useState(false)
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { t } = useTranslation()
   const { toastError } = useToast()
   const { library, connector } = useWeb3Provider()
@@ -64,7 +64,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
       const msg: Message = { address: account, msg: voteMsg, sig }
 
       // Save proposal to snapshot
-      await sendSnapshotData(msg)
+      await sendSnapshotData(msg, chainId)
 
       await onSuccess()
 

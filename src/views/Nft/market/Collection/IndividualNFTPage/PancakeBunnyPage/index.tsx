@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Flex } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import { getNftsFromCollectionApi } from 'state/nftMarket/helpers'
 import { NftToken, ApiResponseCollectionTokens } from 'state/nftMarket/types'
+import { getPancakeBunniesAddress } from 'utils/addressHelpers'
 import PageLoader from 'components/Loader/PageLoader'
 import { useGetCollectionDistributionPB } from 'views/Nft/market/hooks/useGetCollectionDistribution'
 import MainPancakeBunnyCard from './MainPancakeBunnyCard'
@@ -12,7 +14,6 @@ import PropertiesCard from '../shared/PropertiesCard'
 import DetailsCard from '../shared/DetailsCard'
 import MoreFromThisCollection from '../shared/MoreFromThisCollection'
 import ForSaleTableCard from './ForSaleTableCard'
-import { pancakeBunniesAddress } from '../../../constants'
 import { TwoColumnsContainer } from '../shared/styles'
 import { usePancakeBunnyCheapestNft, usePBCheapestOtherSellersNft } from '../../../hooks/usePancakeBunnyCheapestNfts'
 
@@ -21,7 +22,8 @@ interface IndividualPancakeBunnyPageProps {
 }
 
 const IndividualPancakeBunnyPage = (props: IndividualPancakeBunnyPageProps) => {
-  const collection = useGetCollection(pancakeBunniesAddress)
+  const { chainId } = useActiveWeb3React()
+  const collection = useGetCollection(getPancakeBunniesAddress(chainId))
 
   if (!collection) {
     return <PageLoader />
@@ -31,6 +33,8 @@ const IndividualPancakeBunnyPage = (props: IndividualPancakeBunnyPageProps) => {
 }
 
 const IndividualPancakeBunnyPageBase: React.FC<IndividualPancakeBunnyPageProps> = ({ bunnyId }) => {
+  const { chainId } = useActiveWeb3React()
+  const pancakeBunniesAddress = getPancakeBunniesAddress(chainId)
   const collection = useGetCollection(pancakeBunniesAddress)
   const totalBunnyCount = Number(collection?.totalSupply)
   const [nothingForSaleBunny, setNothingForSaleBunny] = useState<NftToken>(null)
@@ -55,7 +59,7 @@ const IndividualPancakeBunnyPageBase: React.FC<IndividualPancakeBunnyPageProps> 
 
   useEffect(() => {
     const fetchNftMetadata = async () => {
-      const metadata = await getNftsFromCollectionApi(pancakeBunniesAddress)
+      const metadata = await getNftsFromCollectionApi(pancakeBunniesAddress, collection.chainId)
       setNftMetadata(metadata)
     }
 
@@ -69,6 +73,7 @@ const IndividualPancakeBunnyPageBase: React.FC<IndividualPancakeBunnyPageProps> 
       setNothingForSaleBunny({
         // In this case tokenId doesn't matter, this token can't be bought
         tokenId: nftMetadata.data[bunnyId].name,
+        chainId: collection.chainId,
         name: nftMetadata.data[bunnyId].name,
         description: nftMetadata.data[bunnyId].description,
         collectionName: nftMetadata.data[bunnyId].collection.name,

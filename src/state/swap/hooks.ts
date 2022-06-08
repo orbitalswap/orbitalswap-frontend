@@ -326,6 +326,7 @@ export const useFetchPairPrices = ({
   const pairData = useSelector(pairByDataIdSelector({ pairId, timeWindow }))
   const derivedPairData = useSelector(derivedPairByDataIdSelector({ pairId, timeWindow }))
   const dispatch = useDispatch()
+  const { chainId } = useActiveWeb3React()
 
   useEffect(() => {
     const fetchDerivedData = async () => {
@@ -336,7 +337,7 @@ export const useFetchPairPrices = ({
         // Try to get at least derived data for chart
         // This is used when there is no direct data for pool
         // i.e. when multihops are necessary
-        const derivedData = await fetchDerivedPriceData(token0Address, token1Address, timeWindow)
+        const derivedData = await fetchDerivedPriceData(chainId, token0Address, token1Address, timeWindow)
         if (derivedData) {
           const normalizedDerivedData = normalizeDerivedChartData(derivedData)
           dispatch(updateDerivedPairData({ pairData: normalizedDerivedData, pairId, timeWindow }))
@@ -353,7 +354,7 @@ export const useFetchPairPrices = ({
 
     const fetchAndUpdatePairPrice = async () => {
       setIsLoading(true)
-      const { data } = await fetchPairPriceData({ pairId, timeWindow })
+      const { data } = await fetchPairPriceData({ pairId, chainId, timeWindow })
       if (data) {
         // Find out if Liquidity Pool has enough liquidity
         // low liquidity pool might mean that the price is incorrect
@@ -379,6 +380,7 @@ export const useFetchPairPrices = ({
     }
   }, [
     pairId,
+    chainId,
     timeWindow,
     pairData,
     currentSwapPrice,
@@ -392,7 +394,7 @@ export const useFetchPairPrices = ({
   useEffect(() => {
     const updatePairId = () => {
       try {
-        const pairAddress = getLpAddress(token0Address, token1Address)?.toLowerCase()
+        const pairAddress = getLpAddress(chainId, token0Address, token1Address)?.toLowerCase()
         if (pairAddress !== pairId) {
           setPairId(pairAddress)
         }

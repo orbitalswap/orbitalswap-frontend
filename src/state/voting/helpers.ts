@@ -4,10 +4,13 @@ import { getVotingPowerByCakeStrategy } from 'views/Voting/helpers'
 import { Proposal, ProposalState, Vote, VoteWhere } from 'state/types'
 import _chunk from 'lodash/chunk'
 import _flatten from 'lodash/flatten'
+import { ChainId } from '@orbitalswap/sdk'
 
-export const getProposals = async (first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
+export const getProposals = async (chainId: ChainId, first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
+  if(!SNAPSHOT_API[chainId]) return []
+
   const response: { proposals: Proposal[] } = await request(
-    SNAPSHOT_API,
+    SNAPSHOT_API[chainId],
     gql`
       query getProposals($first: Int!, $skip: Int!, $state: String!, $orderDirection: OrderDirection) {
         proposals(
@@ -38,9 +41,11 @@ export const getProposals = async (first = 5, skip = 0, state = ProposalState.AC
   return response.proposals
 }
 
-export const getProposal = async (id: string): Promise<Proposal> => {
+export const getProposal = async (id: string, chainId: ChainId): Promise<Proposal> => {
+  if(!SNAPSHOT_API[chainId]) return null
+
   const response: { proposal: Proposal } = await request(
-    SNAPSHOT_API,
+    SNAPSHOT_API[chainId],
     gql`
       query getProposal($id: String) {
         proposal(id: $id) {
@@ -66,9 +71,11 @@ export const getProposal = async (id: string): Promise<Proposal> => {
   return response.proposal
 }
 
-export const getVotes = async (first: number, skip: number, where: VoteWhere): Promise<Vote[]> => {
+export const getVotes = async (chainId: ChainId, first: number, skip: number, where: VoteWhere): Promise<Vote[]> => {
+  if(!SNAPSHOT_API[chainId]) return []
+
   const response: { votes: Vote[] } = await request(
-    SNAPSHOT_API,
+    SNAPSHOT_API[chainId],
     gql`
       query getVotes($first: Int, $skip: Int, $where: VoteWhere) {
         votes(first: $first, skip: $skip, where: $where) {
@@ -91,13 +98,13 @@ export const getVotes = async (first: number, skip: number, where: VoteWhere): P
   return response.votes
 }
 
-export const getAllVotes = async (proposal: Proposal, votesPerChunk = 30000): Promise<Vote[]> => {
+export const getAllVotes = async (proposal: Proposal, chainId: ChainId, votesPerChunk = 30000): Promise<Vote[]> => {
   const voters = await new Promise<Vote[]>((resolve, reject) => {
     let votes: Vote[] = []
 
     const fetchVoteChunk = async (newSkip: number) => {
       try {
-        const voteChunk = await getVotes(votesPerChunk, newSkip, { proposal: proposal.id })
+        const voteChunk = await getVotes(chainId, votesPerChunk, newSkip, { proposal: proposal.id })
 
         if (voteChunk.length === 0) {
           resolve(votes)

@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useFetchProtocolData from 'state/info/queries/protocol/overview'
 import useFetchGlobalChartData from 'state/info/queries/protocol/chart'
 import fetchTopTransactions from 'state/info/queries/protocol/transactions'
@@ -19,6 +20,7 @@ import {
 } from './hooks'
 
 export const ProtocolUpdater: React.FC = () => {
+  const { chainId } = useActiveWeb3React()
   const [protocolData, setProtocolData] = useProtocolData()
   const { data: fetchedProtocolData, error } = useFetchProtocolData()
 
@@ -43,7 +45,7 @@ export const ProtocolUpdater: React.FC = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const data = await fetchTopTransactions()
+      const data = await fetchTopTransactions(chainId)
       if (data) {
         updateTransactions(data)
       }
@@ -51,7 +53,7 @@ export const ProtocolUpdater: React.FC = () => {
     if (!transactions) {
       fetch()
     }
-  }, [transactions, updateTransactions])
+  }, [chainId, transactions, updateTransactions])
 
   return null
 }

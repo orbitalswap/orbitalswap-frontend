@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { Flex, Skeleton, Heading, Box, Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { LotteryRound, LotteryRoundGraphEntity } from 'state/types'
 import { usePriceCakeBusd } from 'state/farms/hooks'
 import { useGetLotteryGraphDataById } from 'state/lottery/hooks'
@@ -26,19 +27,20 @@ const PreviousRoundCardFooter: React.FC<{ lotteryNodeData: LotteryRound; lottery
   lotteryId,
 }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const [fetchedLotteryGraphData, setFetchedLotteryGraphData] = useState<LotteryRoundGraphEntity>()
   const lotteryGraphDataFromState = useGetLotteryGraphDataById(lotteryId)
   const cakePriceBusd = usePriceCakeBusd()
 
   useEffect(() => {
     const getGraphData = async () => {
-      const fetchedGraphData = await getGraphLotteries(undefined, undefined, { id_in: [lotteryId] })
+      const fetchedGraphData = await getGraphLotteries(chainId, undefined, undefined, { id_in: [lotteryId] })
       setFetchedLotteryGraphData(fetchedGraphData[0])
     }
     if (!lotteryGraphDataFromState) {
       getGraphData()
     }
-  }, [lotteryGraphDataFromState, lotteryId])
+  }, [lotteryGraphDataFromState, lotteryId, chainId])
 
   let prizeInBusd = new BigNumber(NaN)
   if (lotteryNodeData) {

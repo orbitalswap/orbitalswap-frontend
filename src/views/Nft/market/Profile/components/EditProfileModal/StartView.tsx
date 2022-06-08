@@ -43,7 +43,7 @@ const AvatarWrapper = styled.div`
 
 const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemove, onDismiss }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { reader: cakeContract } = useCake()
   const { profile } = useProfile()
   const { balance: cakeBalance, fetchStatus } = useGetCakeBalance()
@@ -64,7 +64,7 @@ const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemo
       const approvalNeeded = await requiresApproval(
         cakeContract,
         account,
-        getPancakeProfileAddress(),
+        getPancakeProfileAddress(chainId),
         minimumCakeRequired,
       )
       setNeedsApproval(approvalNeeded)

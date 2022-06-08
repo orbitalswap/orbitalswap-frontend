@@ -1,4 +1,6 @@
+import { ChainId } from '@orbitalswap/sdk'
 import { gql } from 'graphql-request'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useEffect, useState } from 'react'
 import { infoClient } from 'utils/graphql'
 import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
@@ -44,12 +46,20 @@ interface PricesResponse {
 }
 
 const fetchBnbPrices = async (
+  chainId: ChainId,
   block24: number,
   block48: number,
   blockWeek: number,
 ): Promise<{ bnbPrices: BnbPrices | undefined; error: boolean }> => {
+  if(!infoClient(chainId)) {
+    return {
+      error: true,
+      bnbPrices: undefined,
+    }
+  }
+
   try {
-    const data = await infoClient.request<PricesResponse>(BNB_PRICES, {
+    const data = await infoClient(chainId).request<PricesResponse>(BNB_PRICES, {
       block24,
       block48,
       blockWeek,
@@ -76,6 +86,7 @@ const fetchBnbPrices = async (
  * Returns BNB prices at current, 24h, 48h, and 7d intervals
  */
 export const useBnbPrices = (): BnbPrices | undefined => {
+  const { chainId } = useActiveWeb3React()
   const [prices, setPrices] = useState<BnbPrices | undefined>()
   const [error, setError] = useState(false)
 
@@ -85,7 +96,7 @@ export const useBnbPrices = (): BnbPrices | undefined => {
   useEffect(() => {
     const fetch = async () => {
       const [block24, block48, blockWeek] = blocks
-      const { bnbPrices, error: fetchError } = await fetchBnbPrices(block24.number, block48.number, blockWeek.number)
+      const { bnbPrices, error: fetchError } = await fetchBnbPrices(chainId, block24.number, block48.number, blockWeek.number)
       if (fetchError) {
         setError(true)
       } else {
@@ -95,7 +106,7 @@ export const useBnbPrices = (): BnbPrices | undefined => {
     if (!prices && !error && blocks && !blockError) {
       fetch()
     }
-  }, [error, prices, blocks, blockError])
+  }, [error, prices, chainId, blocks, blockError])
 
   return prices
 }

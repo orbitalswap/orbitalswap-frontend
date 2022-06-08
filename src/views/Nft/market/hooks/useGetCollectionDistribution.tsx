@@ -6,12 +6,13 @@ import { multicallv2 } from 'utils/multicall'
 import pancakeBunniesAbi from 'config/abi/pancakeBunnies.json'
 import useSWRImmutable from 'swr/immutable'
 import { FetchStatus } from 'config/constants/types'
-import { pancakeBunniesAddress } from '../constants'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useGetCollectionDistribution = (collectionAddress: string) => {
+  const { chainId } = useActiveWeb3React()
   const { data, status } = useSWRImmutable(
     collectionAddress ? ['distribution', collectionAddress] : null,
-    async () => (await getCollectionDistributionApi<ApiCollectionDistribution>(collectionAddress)).data,
+    async () => (await getCollectionDistributionApi<ApiCollectionDistribution>(collectionAddress, chainId)).data,
   )
 
   return {
@@ -26,6 +27,7 @@ interface StatePB {
 }
 
 export const useGetCollectionDistributionPB = () => {
+  const { chainId } = useActiveWeb3React()
   const [state, setState] = useState<StatePB>({ isFetching: false, data: null })
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export const useGetCollectionDistributionPB = () => {
       setState((prevState) => ({ ...prevState, isFetching: true }))
       let apiResponse: ApiResponseCollectionTokens
       try {
-        apiResponse = await getNftsFromCollectionApi(pancakeBunniesAddress)
+        apiResponse = await getNftsFromCollectionApi(getPancakeBunniesAddress(chainId), chainId)
         if (!apiResponse) {
           setState((prevState) => ({ ...prevState, isFetching: false }))
           return
@@ -45,12 +47,12 @@ export const useGetCollectionDistributionPB = () => {
       // Use on chain data to get most updated totalSupply and bunnyCount data. Nft Api Data not updated frequently.
       const tokenIds = Object.keys(apiResponse.attributesDistribution)
       const bunnyCountCalls = tokenIds.map((tokenId) => ({
-        address: getPancakeBunniesAddress(),
+        address: getPancakeBunniesAddress(chainId),
         name: 'bunnyCount',
         params: [tokenId],
       }))
       try {
-        const response = await multicallv2(pancakeBunniesAbi, bunnyCountCalls)
+        const response = await multicallv2(pancakeBunniesAbi, chainId, bunnyCountCalls)
         const tokenListResponse = response.reduce((obj, tokenCount, index) => {
           return {
             ...obj,

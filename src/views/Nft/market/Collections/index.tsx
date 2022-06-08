@@ -78,8 +78,8 @@ const Collectible = () => {
       shuffledCollections.map(async (collection) => {
         return {
           ...collection,
-          lowestPrice: await getLeastMostPriceInCollection(collection.address, 'asc'),
-          highestPrice: await getLeastMostPriceInCollection(collection.address, 'desc'),
+          lowestPrice: await getLeastMostPriceInCollection(collection.address, collection.chainId, 'asc'),
+          highestPrice: await getLeastMostPriceInCollection(collection.address, collection.chainId, 'desc'),
         }
       }),
     )

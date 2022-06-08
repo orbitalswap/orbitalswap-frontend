@@ -54,7 +54,7 @@ interface ClaimPrizesModalModalProps {
 
 const ClaimPrizesModal: React.FC<ClaimPrizesModalModalProps> = ({ onDismiss, roundsToClaim }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useWeb3React()
   const { currentLotteryId } = useLottery()
   const dispatch = useAppDispatch()
 
@@ -76,7 +76,7 @@ const ClaimPrizesModal: React.FC<ClaimPrizesModalModalProps> = ({ onDismiss, rou
       <ModalBody p="24px">
         <ClaimPrizesInner
           onSuccess={() => {
-            dispatch(fetchUserLotteries({ account, currentLotteryId }))
+            dispatch(fetchUserLotteries({ account, chainId, currentLotteryId }))
             onDismiss?.()
           }}
           roundsToClaim={roundsToClaim}

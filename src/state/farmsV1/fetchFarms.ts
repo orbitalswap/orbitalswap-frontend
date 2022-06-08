@@ -3,10 +3,11 @@ import BigNumber from 'bignumber.js'
 import { BIG_TEN, BIG_ZERO } from '../../utils/bigNumber'
 import { fetchPublicFarmsData } from './fetchPublicFarmData'
 import { fetchMasterChefData } from './fetchMasterChefData'
+import { ChainId } from '@orbitalswap/sdk'
 
-const fetchFarms = async (farmsToFetch: SerializedFarmConfig[]) => {
-  const farmResult = await fetchPublicFarmsData(farmsToFetch)
-  const masterChefResult = await fetchMasterChefData(farmsToFetch)
+const fetchFarms = async (farmsToFetch: SerializedFarmConfig[], chainId: ChainId) => {
+  const farmResult = await fetchPublicFarmsData(farmsToFetch, chainId)
+  const masterChefResult = await fetchMasterChefData(farmsToFetch, chainId)
 
   return farmsToFetch.map((farm, index) => {
     const [tokenBalanceLP, quoteTokenBalanceLP, lpTokenBalanceMC, lpTotalSupply, tokenDecimals, quoteTokenDecimals] =

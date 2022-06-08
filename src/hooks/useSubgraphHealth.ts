@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { request, gql } from 'graphql-request'
 import { simpleRpcProvider } from 'utils/providers'
 import { GRAPH_HEALTH } from 'config/constants/endpoints'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useSlowRefreshEffect } from './useRefreshEffect'
 
 export enum SubgraphStatus {
@@ -23,6 +24,7 @@ const NOT_OK_BLOCK_DIFFERENCE = 200 // ~15 minutes delay
 const WARNING_BLOCK_DIFFERENCE = 50 // ~2.5 minute delay
 
 const useSubgraphHealth = (subgraphName: string) => {
+  const { chainId } = useActiveWeb3React()
   const [sgHealth, setSgHealth] = useState<SubgraphHealthState>({
     status: SubgraphStatus.UNKNOWN,
     currentBlock: 0,
@@ -34,9 +36,20 @@ const useSubgraphHealth = (subgraphName: string) => {
   useSlowRefreshEffect(
     (currentBlockNumber) => {
       const getSubgraphHealth = async () => {
+        if (!GRAPH_HEALTH[chainId]) {
+          setSgHealth({
+            status: SubgraphStatus.UNKNOWN,
+            currentBlock: 0,
+            chainHeadBlock: 0,
+            latestBlock: 0,
+            blockDifference: 0,
+          })
+          return
+        }
+        
         try {
           const { indexingStatusForCurrentVersion } = await request(
-            GRAPH_HEALTH,
+            GRAPH_HEALTH[chainId],
             gql`
             query getNftMarketSubgraphHealth {
               indexingStatusForCurrentVersion(subgraphName: "${subgraphName}") {
@@ -55,7 +68,7 @@ const useSubgraphHealth = (subgraphName: string) => {
           `,
           )
 
-          const currentBlock = currentBlockNumber || (await simpleRpcProvider().getBlockNumber())
+          const currentBlock = currentBlockNumber || (await simpleRpcProvider(chainId).getBlockNumber())
           const isHealthy = indexingStatusForCurrentVersion.health === 'healthy'
           const chainHeadBlock = parseInt(indexingStatusForCurrentVersion.chains[0].chainHeadBlock.number)
           const latestBlock = parseInt(indexingStatusForCurrentVersion.chains[0].latestBlock.number)
@@ -83,7 +96,7 @@ const useSubgraphHealth = (subgraphName: string) => {
       }
       getSubgraphHealth()
     },
-    [subgraphName],
+    [subgraphName, chainId],
   )
 
   return sgHealth
