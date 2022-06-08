@@ -15,9 +15,10 @@ import LaunchpadCard from './components/LaunchpadCard'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const Launchpads = () => {
-  const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const { theme } = useTheme()
+  
   const { data, status} = useSWR('launhcpads', async ()=> getLaunchpads())
   const launchpadList = data? Object.values(data).filter(l => l.chainId === chainId) : []
 

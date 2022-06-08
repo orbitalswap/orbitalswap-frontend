@@ -57,7 +57,7 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({
             </Display>
             <div>
               <Button variant="primary">
-                <Link href={`/launchpads/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
+                <Link href={`/launchpads/${ifo.chainId}/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
                   {t('View Pool')}
                 </Link>
               </Button>
@@ -84,7 +84,7 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({
           </Display>
           <div>
             <Button variant="primary">
-              <Link href={`/launchpads/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
+              <Link href={`/launchpads/${ifo?.chainId}/${ifo?.address[ChainId.BSC_MAINNET]}`} passHref>
                 {t('View Pool')}
               </Link>
             </Button>
