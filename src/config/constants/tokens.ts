@@ -139,6 +139,22 @@ export const mainnetTokens = defineTokens({
     'Binance-Peg Ethereum Token',
     'https://ethereum.org/en/',
   ),
+  avax: new Token(
+    MAINNET,
+    '0x1CE0c2827e2eF14D5C4f29a091d735A204794041',
+    18,
+    'AVAX',
+    'Binance-Peg Avalanche Token',
+    'https://www.avalabs.org/',
+  ),
+  piggy: new Token(
+    MAINNET,
+    '0x31CdD9F5a6a1E39a38A6b073Fc3FaBE6CbfeAc76',
+    18,
+    'PIGGY',
+    'PIGGY',
+    'https://piggyfinance.io/',
+  ),
   usdc: new Token(
     MAINNET,
     '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',

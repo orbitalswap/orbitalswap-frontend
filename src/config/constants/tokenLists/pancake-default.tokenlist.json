@@ -59,6 +59,22 @@
       "logoURI": "https://orbitalswap.com/images/tokens/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c.png"
     },
     {
+      "name": "Binance-Peg Avalanche Token",
+      "symbol": "AVAX",
+      "address": "0x1CE0c2827e2eF14D5C4f29a091d735A204794041",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://orbitalswap.com/images/tokens/0x1CE0c2827e2eF14D5C4f29a091d735A204794041.png"
+    },
+    {
+      "name": "PIGGY",
+      "symbol": "PIGGY",
+      "address": "0x31CdD9F5a6a1E39a38A6b073Fc3FaBE6CbfeAc76",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://orbitalswap.com/images/tokens/0x31CdD9F5a6a1E39a38A6b073Fc3FaBE6CbfeAc76.png"
+    },
+    {
       "name": "Tether USD",
       "symbol": "USDT",
       "address": "0x55d398326f99059fF775485246999027B3197955",
