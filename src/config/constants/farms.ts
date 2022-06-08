@@ -88,6 +88,36 @@ const farms: SerializedFarmConfig[] = [
     token: serializedTokens.orb,
     quoteToken: serializedTokens.busd,
   },
+  {
+    pid: 9,
+    lpSymbol: 'ORB-USDC LP',
+    lpAddresses: {
+      97: '',
+      56: '0xaB5d13feE7B4eCC6B2D019BB16793D18ab8c9982',
+    },
+    token: serializedTokens.orb,
+    quoteToken: serializedTokens.usdc,
+  },
+  {
+    pid: 10,
+    lpSymbol: 'ETH-USDC LP',
+    lpAddresses: {
+      97: '',
+      56: '0x80fBD8Daa1516ac96c26b02798df6CC4919ef354',
+    },
+    token: serializedTokens.eth,
+    quoteToken: serializedTokens.usdc,
+  },
+  {
+    pid: 11,
+    lpSymbol: 'ETH-BTCB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x9fb8c330d0804C6Af7cC3E044cE8717021AaEBCE',
+    },
+    token: serializedTokens.eth,
+    quoteToken: serializedTokens.btcb,
+  },
 ].filter((f) => !!f.lpAddresses[CHAIN_ID])
 
 export default farms
