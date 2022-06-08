@@ -6,7 +6,6 @@ import {
   Flex,
   Image,
   Button,
-  Slider,
   BalanceInput,
   AutoRenewIcon,
   CalculateIcon,
@@ -33,9 +32,11 @@ import { fetchCakeVaultUserData } from 'state/pools'
 import { DeserializedPool } from 'state/types'
 import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 import { ToastDescriptionWithTx } from 'components/Toast'
+import { Slider } from 'components/Slider'
 import { vaultPoolConfig } from 'config/constants/pools'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { VaultRoiCalculatorModal } from '../Vault/VaultRoiCalculatorModal'
+
 import FeeSummary from './FeeSummary'
 
 // min deposit and withdraw amount
@@ -139,7 +140,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   }
 
   const handleWithdrawal = async () => {
-    // trigger withdrawAll function if the withdrawal will leave 0.00001 CAKE or less
+    // trigger withdrawAll function if the withdrawal will leave 0.00001 ORB or less
     const isWithdrawingAll = stakingMax.minus(convertedStakeAmount).lte(MIN_AMOUNT)
 
     const receipt = await fetchWithCatchTxError(() => {

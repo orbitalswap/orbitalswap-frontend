@@ -5,7 +5,7 @@ export const DEFAULT_META: PageMeta = {
   title: 'OrbitalSwap',
   description:
     'The Future of Defi, The Next Generation In Defi Tools and Trading',
-  image: 'https://orbitalswap.netlify.app/images/hero.png',
+  image: 'https://orbitalswap.com/images/hero.png',
 }
 
 export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
@@ -108,17 +108,17 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
     case '/info':
       return {
         title: `${t('Overview')} | ${t('OrbitalSwap Info & Analytics')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for Orbitalswap exchanges.',
       }
     case '/info/pools':
       return {
         title: `${t('Pools')} | ${t('OrbitalSwap Info & Analytics')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for Orbitalswap exchanges.',
       }
     case '/info/tokens':
       return {
         title: `${t('Tokens')} | ${t('OrbitalSwap Info & Analytics')}`,
-        description: 'View statistics for Pancakeswap exchanges.',
+        description: 'View statistics for Orbitalswap exchanges.',
       }
     case '/nfts':
       return {

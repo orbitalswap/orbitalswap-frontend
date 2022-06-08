@@ -7,7 +7,6 @@ import {
   Flex,
   Image,
   Button,
-  Slider,
   BalanceInput,
   AutoRenewIcon,
   Link,
@@ -27,6 +26,7 @@ import { DeserializedPool } from 'state/types'
 import { updateUserBalance, updateUserPendingReward, updateUserStakedBalance } from 'state/pools'
 import { useAppDispatch } from 'state'
 import { getInterestBreakdown } from 'utils/compoundApyHelpers'
+import { Slider } from 'components/Slider'
 import PercentageButton from './PercentageButton'
 import useStakePool from '../../../hooks/useStakePool'
 import useUnstakePool from '../../../hooks/useUnstakePool'

@@ -11,7 +11,6 @@ import {
   BinanceIcon,
   Text,
   BalanceInput,
-  Slider,
   Box,
   AutoRenewIcon,
 } from '@pancakeswap/uikit'
@@ -28,6 +27,7 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { BetPosition } from 'state/types'
 import { formatBigNumber, formatFixedNumber } from 'utils/formatBalance'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { Slider } from 'components/Slider'
 import PositionTag from '../PositionTag'
 import FlexRow from '../FlexRow'
 
