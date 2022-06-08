@@ -259,6 +259,14 @@ export const mainnetTokens = defineTokens({
     'SyrupBar Token',
     'https://pancakeswap.finance/',
   ),
+  magik: new Token(
+    MAINNET,
+    '0xD68F75b3aa54bee23e6Ac3AD4b3C28D3E6319725',
+    18,
+    'MAGIK',
+    'MAGIK',
+    'https://magik.finance/',
+  ),
   pha: new Token(
     MAINNET,
     '0x0112e557d400474717056C4e6D40eDD846F38351',

@@ -148,6 +148,16 @@ const farms: SerializedFarmConfig[] = [
     token: serializedTokens.piggy,
     quoteToken: serializedTokens.avax,
   },
+  {
+    pid: 15,
+    lpSymbol: 'MAGIK-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x3Cd3E322f0112a296192E3Dc2742E96D5107DcF8',
+    },
+    token: serializedTokens.magik,
+    quoteToken: serializedTokens.wbnb,
+  },
 ].filter((f) => !!f.lpAddresses[CHAIN_ID])
 
 export default farms

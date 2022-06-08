@@ -97,6 +97,14 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://orbitalswap.com/images/tokens/0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d.png"
+    },
+    {
+      "name": "MAGIK",
+      "symbol": "MAGIK",
+      "address": "0xD68F75b3aa54bee23e6Ac3AD4b3C28D3E6319725",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://orbitalswap.com/images/tokens/0xD68F75b3aa54bee23e6Ac3AD4b3C28D3E6319725.png"
     }
   ]
 }
