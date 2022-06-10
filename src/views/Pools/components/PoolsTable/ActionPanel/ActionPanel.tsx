@@ -378,7 +378,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
                   tokenAddress,
                   earningToken.symbol,
                   earningToken.decimals,
-                  `https://tokens.pancakeswap.finance/images/${tokenAddress}.png`,
+                  `https://orbitalswap.com/images/tokens/${tokenAddress}.png`,
                 )
               }
             >
