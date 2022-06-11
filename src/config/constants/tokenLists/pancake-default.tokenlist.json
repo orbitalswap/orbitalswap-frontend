@@ -105,6 +105,14 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://orbitalswap.com/images/tokens/0xD68F75b3aa54bee23e6Ac3AD4b3C28D3E6319725.png"
+    },
+    {
+      "name": "DRIP Token",
+      "symbol": "DRIP",
+      "address": "0x20f663CEa80FaCE82ACDFA3aAE6862d246cE0333",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://orbitalswap.com/images/tokens/0x20f663CEa80FaCE82ACDFA3aAE6862d246cE0333.png"
     }
   ]
 }
