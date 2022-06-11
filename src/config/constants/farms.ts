@@ -158,16 +158,16 @@ const farms: SerializedFarmConfig[] = [
     token: serializedTokens.magik,
     quoteToken: serializedTokens.wbnb,
   },
-  {
-    pid: 16,
-    lpSymbol: 'DRIP-BUSD LP',
-    lpAddresses: {
-      97: '',
-      56: '0x48ED1d5C8A428c191B94D99bEe674020e8956127',
-    },
-    token: serializedTokens.drip,
-    quoteToken: serializedTokens.busd,
-  },
+  // {
+  //   pid: 16,
+  //   lpSymbol: 'DRIP-BUSD LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x48ED1d5C8A428c191B94D99bEe674020e8956127',
+  //   },
+  //   token: serializedTokens.drip,
+  //   quoteToken: serializedTokens.busd,
+  // },
 ].filter((f) => !!f.lpAddresses[CHAIN_ID])
 
 export default farms
