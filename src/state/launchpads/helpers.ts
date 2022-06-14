@@ -9,6 +9,7 @@ import {
   PublicLaunchpadData,
 } from 'state/launchpads/types'
 import { ChainId } from '@orbitalswap/sdk'
+import { CHAIN_ID } from 'config/constants/networks'
 
 /**
  * Fetch collection data by combining data from the API (static metadata) and the Subgraph (dynamic market data)
@@ -24,7 +25,7 @@ export const getLaunchpad = async (launchpadAddress: string): Promise<PublicLaun
     const startDateNum = parseInt(startDate, 10)
     const endDateNum = parseInt(endDate, 10)
 
-    const staticLaunchpadInfo = launchpadList.find((staticLaunchpad) => staticLaunchpad.address[ChainId.MAINNET] === launchpadAddress)
+    const staticLaunchpadInfo = launchpadList.find((staticLaunchpad) => staticLaunchpad.address[CHAIN_ID] === launchpadAddress)
 
     return merge({}, staticLaunchpadInfo, {
       isLoading: false,

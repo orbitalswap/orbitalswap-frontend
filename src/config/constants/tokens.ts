@@ -46,6 +46,14 @@ export const mainnetTokens = defineTokens({
     'Tytan',
     'https://tytan.finance/',
   ),
+  usdibs: new Token(
+    MAINNET,
+    '0x8d2aa7b23aBE16E7eCa845F64C65A314d4ABa35A',
+    18,
+    'USCibs',
+    'Dibs USD',
+    'https://dibs.money/',
+  ),
   unc: new Token(
     MAINNET,
     '0x81d5791E65e0dB42687e2cAF205F14A5E550C2aF',
@@ -2140,11 +2148,19 @@ export const testnetTokens = defineTokens({
   ),
   busd: new Token(
     TESTNET,
-    '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',
+    '0x8a6d97947BD45F72EE234aab1c95FC9D41744d38',
     18,
     'BUSD',
     'Binance USD',
     'https://www.paxos.com/busd/',
+  ),
+  usdibs: new Token(
+    TESTNET,
+    '0xaA98aeD6474621f0302010241a451fA3Df0BdF3e',
+    18,
+    'USCibs',
+    'Dibs USD',
+    'https://dibs.money/',
   ),
   syrup: new Token(
     TESTNET,

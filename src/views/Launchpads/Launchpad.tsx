@@ -1,6 +1,7 @@
 import { SubMenuItems } from '@pancakeswap/uikit'
 import { PageMeta } from 'components/Layout/Page'
 import { launchpadsConfig } from 'config/constants'
+import { CHAIN_ID } from 'config/constants/networks'
 import { useTranslation } from 'contexts/Localization'
 import { useRouter } from 'next/router'
 import LaunchpadPage from './components/LaunchpadPage'
@@ -9,7 +10,7 @@ import LaunchpadPage from './components/LaunchpadPage'
 /**
  * Note: currently there should be only 1 active IFO at a time
  */
-const activeLaunchpad = launchpadsConfig.find((launchpad) => launchpad.isActive)
+
 
 const Launchpad = () => {
   
@@ -17,7 +18,8 @@ const Launchpad = () => {
   const router = useRouter()
   const isExact = router.route === '/launchpads'
   const launchpadAddress = router.query.launchpadAddress as string
-  
+  const activeLaunchpad = launchpadsConfig.find((launchpad) => (launchpad.address[CHAIN_ID] === launchpadAddress))
+
   return (
     <>
       <PageMeta />

@@ -67,7 +67,8 @@ export interface Launchpad {
   description?: string
   projectSiteUrl: string
   releaseAt: number
-  idoToken: string
+  currency?: SerializedToken
+  token: SerializedToken
 }
 
 export enum PoolCategory {

@@ -7,6 +7,7 @@ import { useTranslation } from 'contexts/Localization'
 import getTimePeriods from 'utils/getTimePeriods'
 import { PublicLaunchpadData } from 'views/Launchpads/types'
 import { ChainId } from '@orbitalswap/sdk'
+import { CHAIN_ID } from 'config/constants/networks'
 import { LaunchpadStatus } from 'config/constants/types'
 
 export interface LaunchpadCardDetailsProps {
@@ -84,7 +85,7 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({ ifo, status
             <Text>{timeUntil.days.toString().padStart(2, '0')}:{timeUntil.hours.toString().padStart(2, '0')}:{timeUntil.minutes.toString().padStart(2, '0')}:{timeUntil.seconds.toString().padStart(2, '0')}</Text>
           </Display>
           <div>
-          <Link href={`/launchpads/${ifo?.address[ChainId.MAINNET]}`} passHref>
+          <Link href={`/launchpads/${ifo?.address[CHAIN_ID]}`} passHref>
             <Button as="a" variant="primary">
               {t('View Pool')}
             </Button>
