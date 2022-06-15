@@ -11,7 +11,7 @@ const useLaunchpadContribute = (launchpadContract: Contract) => {
       if (isToken) {
         tx = await callWithGasPrice(launchpadContract, 'contribute', [amount])
       } else {
-        tx = await callWithGasPrice(launchpadContract, 'contribute', [], {
+        tx = await callWithGasPrice(launchpadContract, 'contribute', ["0"], {
           value: amount,
         })
       }
