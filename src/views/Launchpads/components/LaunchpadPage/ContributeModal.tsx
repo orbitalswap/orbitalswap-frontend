@@ -60,7 +60,7 @@ const ContributeModal: React.FC<Props> = ({
           setValue(Math.max(Number(tokenBalance.toFixed()) - 0.01, 0).toString())
         }}
         value={value}
-        currency={Currency.ETHER}
+        currency={currency ?? Currency.ETHER}
       />
       {(isLimit || tooSmall) && (
         <Text color="failure" fontSize="12px" textAlign="right">

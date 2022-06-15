@@ -26,7 +26,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   const launchpadContractAddress = getAddress(address)
   const launchpadContract = useLaunchpadContract(launchpadContractAddress)
 
-  const allowance = useLaunchpadAllowance(launchpadContractAddress)
+  const allowance = useLaunchpadAllowance(launchpadContractAddress, currency)
 
   const onClaim = useLaunchpadClaim(launchpadContract)
   const onApprove = useApproveLaunchpad(currency ?? unserializedTokens.wbnb, launchpadContractAddress)
