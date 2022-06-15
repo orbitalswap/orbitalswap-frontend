@@ -33,6 +33,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
 
   const [onPresentContributeModal] = useModal(
     <ContributeModal
+      launchpadId={launchpad.id}
       launchpadContract={launchpadContract}
       contributeLimit={maxPerUser.minus(contributedAmount)}
       minPerTx={minPerTx}

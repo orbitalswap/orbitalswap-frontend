@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { Contract } from '@ethersproject/contracts'
 import { Modal, Button, Flex, Text } from '@pancakeswap/uikit'
 import { Currency, Token } from '@orbitalswap/sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { fetchLaunchpadsPublicDataAsync, fetchLaunchpadUserDataAsync } from 'state/launchpads'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { getDecimalAmount } from 'utils/formatBalance'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import useLaunchpadContribute from '../../hooks/useLaunchpadContribute'
 
 interface Props {
+  launchpadId: number
   launchpadContract: Contract
   contributeLimit: BigNumber
   minPerTx: BigNumber
@@ -19,6 +22,7 @@ interface Props {
 }
 
 const ContributeModal: React.FC<Props> = ({
+  launchpadId,
   launchpadContract,
   contributeLimit,
   minPerTx,
@@ -26,6 +30,7 @@ const ContributeModal: React.FC<Props> = ({
   onDismiss,
   toggleStatus,
 }) => {
+  const dispatch = useDispatch()
   const [value, setValue] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const [isLimit, reachedLimit] = useState(false)
@@ -86,6 +91,9 @@ const ContributeModal: React.FC<Props> = ({
             try {
               setPendingTx(true)
               await onContribute(getDecimalAmount(new BigNumber(value)).toString(), !!currency)
+
+              dispatch(fetchLaunchpadsPublicDataAsync([launchpadId]))
+              dispatch(fetchLaunchpadUserDataAsync(account, [launchpadId]))
             } catch (err) {
               console.error(err)
             } finally {
