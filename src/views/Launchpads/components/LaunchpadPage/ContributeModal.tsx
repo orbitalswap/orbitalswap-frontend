@@ -7,7 +7,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { getDecimalAmount } from 'utils/formatBalance'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import useIfoContribute from '../../hooks/useLaunchpadContribute'
+import useLaunchpadContribute from '../../hooks/useLaunchpadContribute'
 
 interface Props {
   launchpadContract: Contract
@@ -31,8 +31,10 @@ const ContributeModal: React.FC<Props> = ({
   const [isLimit, reachedLimit] = useState(false)
   const [tooSmall, setTooSmall] = useState(false)
   const { account } = useActiveWeb3React()
+
   const tokenBalance = useCurrencyBalance(account ?? undefined, currency ?? Currency.ETHER)
-  const onContribute = useIfoContribute(launchpadContract)
+  const onContribute = useLaunchpadContribute(launchpadContract)
+
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const ContributeModal: React.FC<Props> = ({
           onClick={async () => {
             try {
               setPendingTx(true)
-              await onContribute(getDecimalAmount(new BigNumber(value)).toString())
+              await onContribute(getDecimalAmount(new BigNumber(value)).toString(), !!currency)
             } catch (err) {
               console.error(err)
             } finally {
