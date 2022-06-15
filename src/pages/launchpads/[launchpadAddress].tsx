@@ -1,12 +1,13 @@
+import { launchpadsConfig } from 'config/constants'
+import { CHAIN_ID } from 'config/constants/networks'
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getLaunchpad } from 'state/launchpads/helpers'
 // eslint-disable-next-line camelcase
 import { SWRConfig, unstable_serialize } from 'swr'
 import LaunchpadPageRouter from 'views/Launchpads/LaunchpadPageRouter'
 
-// import { getLaunchpad }
 
 const LaunchpadPage = ({ fallback = {} }: InferGetStaticPropsType<typeof getStaticProps>) => {
+
   return (
     <SWRConfig
       value={{
@@ -35,12 +36,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   try {
-    const launchpadData = await getLaunchpad(launchpadAddress)
+    const launchpadData = launchpadsConfig.find((launchpad) => (launchpad.address[CHAIN_ID] === launchpadAddress))
     if (launchpadData) {
       return {
         props: {
           fallback: {
-            [unstable_serialize(['launchpads', launchpadAddress.toLocaleLowerCase()])]: { ...launchpadData },
+            [unstable_serialize(['launchpads', launchpadAddress.toLocaleLowerCase()])]: { address: launchpadAddress },
           },
         },
         revalidate: 60 * 60 * 6, // 6 hours

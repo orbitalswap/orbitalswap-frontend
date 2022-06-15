@@ -6,7 +6,7 @@ import { LaunchpadStatus } from 'config/constants/types'
 import { LaunchpadStateTag } from './tags'
 
 interface LaunchpadCardHeaderProps {
-  ifoId: string
+  ifoId: number
   name: string
   subTitle: string
   status: LaunchpadStatus
@@ -43,7 +43,7 @@ const LaunchpadCardHeader: React.FC<LaunchpadCardHeaderProps> = ({ ifoId, name, 
   const theme = useTheme();
   return (
     <StyledLaunchpadCardHeader mb="24px">
-      <img src={`/images/launchpads/${theme.isDark ? ifoId : `${ifoId}-white`}.svg`} alt={ifoId} width="158px" height="29px" />
+      <img src={`/images/launchpads/${theme.isDark ? ifoId : `${ifoId}-white`}.svg`} alt={`launchpad-${ifoId}`} width="158px" height="29px" />
       <Item>
         <LaunchpadStateTag launchpadState={status} />
       </Item>

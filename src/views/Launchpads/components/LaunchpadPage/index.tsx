@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import {Box, Card, CardBody, CardRibbon, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Card, CardBody, CardRibbon, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
-import { Launchpad} from 'config/constants/types'
 import { getStatus } from 'views/Launchpads/hooks/helpers'
 import LaunchpadLayout, { LaunchpadLayoutWrapper } from '../LaunchpadLayout'
 import LaunchpadHeader from './LaunchpadHeader'
@@ -15,12 +14,11 @@ import LaunchpadDescription from './LaunchpadDescription'
 import LaunchpadDetails from './LaunchpadDetails'
 import LaunchpadTime from './LaunchpadTime'
 import LaunchpadContribute from './LaunchpadContribute'
-import useLaunchpadPublicData from '../../hooks/useLaunchpadPublicData'
-import useLaunchpadUserData from '../../hooks/useLaunchpadUserData'
 import LaunchpadStatusCard from './LaunchpadStatusCard'
+import { DeserializedLaunchpad } from 'state/types'
 
 export interface LaunchpadProps {
-  ifo: Launchpad
+  launchpad: DeserializedLaunchpad
 }
 
 const StyledLaunchpad = styled(Card)`
@@ -32,8 +30,7 @@ const StyledLaunchpad = styled(Card)`
   ${({ theme }) => theme.mediaQueries.md} {
     margin-top: 0px;
   }
-  margin-top:24px;
-
+  margin-top: 24px;
 `
 
 const StatusCard = styled(Card)`
@@ -49,77 +46,75 @@ const OwnerActivityContainer = styled(Flex)`
   gap: 22px;
 `
 
-const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
+const LaunchpadPage: React.FC<LaunchpadProps> = ({ launchpad }) => {
   const [statusChanged, changeStatus] = useState(false)
 
   const toggleStatus = () => {
     changeStatus(!statusChanged)
   }
 
-  const ifoPublicData = useLaunchpadPublicData(ifo)
-  const ifoUserData = useLaunchpadUserData(ifo, statusChanged)
-
-  const { 
+  const {
     id,
     name,
     description,
     subTitle,
-    liquidityPercent,
-    softcap, 
+    softcap,
     hardcap,
     totalSold,
-    raised,
-    isLoading, 
-    startDateNum, 
-    endDateNum, 
+    totalRaised,
+    startDate,
+    endDate,
     releaseAt,
-    fundersCounter,
     presaleStatus,
-  } = ifoPublicData
+  } = launchpad
 
   const [state, setState] = useState({
     status: null,
     progress: 0,
     secondsUntilStart: 0,
-    secondsUntilEnd: 0
+    secondsUntilEnd: 0,
   })
 
   const { account } = useWeb3React()
-  
+
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!isLoading) {
+      if (softcap.gt(0)) {
         const currentTime = Math.floor(Date.now() / 1000)
-        const status = getStatus(currentTime, startDateNum, endDateNum, raised.toNumber(), softcap.toNumber(), hardcap.toNumber(), presaleStatus)
-        const totalSeconds = endDateNum - startDateNum
-        const secondsRemaining = endDateNum - currentTime
-  
+        const status = getStatus(
+          currentTime,
+          startDate,
+          endDate,
+          totalRaised.toNumber(),
+          softcap.toNumber(),
+          hardcap.toNumber(),
+          presaleStatus,
+        )
+        const totalSeconds = endDate - startDate
+        const secondsRemaining = endDate - currentTime
+
         // Calculate the total progress until finished or until start
         const progress =
-          currentTime > startDateNum
-            ? ((currentTime - startDateNum) / totalSeconds) * 100
-            : ((currentTime - releaseAt) / (startDateNum - releaseAt)) * 100
-        
-            setState({
-              status, progress, secondsUntilStart: startDateNum - currentTime, secondsUntilEnd: secondsRemaining
-            })
+          currentTime > startDate
+            ? ((currentTime - startDate) / totalSeconds) * 100
+            : ((currentTime - releaseAt) / (startDate - releaseAt)) * 100
+
+        setState({
+          status,
+          progress,
+          secondsUntilStart: startDate - currentTime,
+          secondsUntilEnd: secondsRemaining,
+        })
       }
     }, 1000)
     return () => clearInterval(interval)
-  }, [isLoading, startDateNum, endDateNum, totalSold, softcap, hardcap, presaleStatus, releaseAt])
+  }, [softcap, startDate, endDate, totalSold, softcap, hardcap, presaleStatus, releaseAt])
 
   const { t } = useTranslation()
-
 
   const isActive = state.status === 'live' || state.status === 'filled'
   const isFinished = state.status === 'finished'
 
-
-
-  //
-
-  const { isMobile } = useMatchBreakpoints()
-  
   return (
     <LaunchpadLayout id="current-launchpad" py={['24px', '24px', '40px']}>
       <Container>
@@ -127,9 +122,9 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
           <Flex flexDirection="column" width="100%">
             <StyledLaunchpad>
               <CardBody>
-                <LaunchpadHeader ifoId={id} name={name} subTitle={subTitle} />
+                <LaunchpadHeader launchpadId={id} name={name} subTitle={subTitle} />
                 <LaunchpadDescription description={description} />
-                <LaunchpadDetails ifo={ifoPublicData} />
+                <LaunchpadDetails launchpad={launchpad} />
               </CardBody>
             </StyledLaunchpad>
           </Flex>
@@ -137,20 +132,23 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
             <StyledLaunchpad>
               <CardBody>
                 <LaunchpadTime
-                  isLoading={isLoading}
+                  isLoading={softcap.eq(0)}
                   status={state.status}
                   secondsUntilStart={state.secondsUntilStart}
                   secondsUntilEnd={state.secondsUntilEnd}
-                  block={isActive || isFinished ? endDateNum : startDateNum}
+                  block={isActive || isFinished ? endDate : startDate}
                 />
-                <LaunchpadProgress softcap={softcap.toNumber()} hardcap={hardcap.toNumber()} raised={raised.toNumber()}/>
+                <LaunchpadProgress
+                  softcap={softcap.toNumber()}
+                  hardcap={hardcap.toNumber()}
+                  raised={totalRaised.toNumber()}
+                  currency={launchpad.currency}
+                />
                 {!account && <ConnectWalletButton width="100%" />}
                 {account && (
                   <LaunchpadContribute
-                    ifoPublicData={ifoPublicData}
-                    ifoUserData={ifoUserData}
+                    launchpad={launchpad}
                     status={state.status}
-                    raisingAmount={raised}
                     toggleStatus={toggleStatus}
                   />
                 )}
@@ -158,17 +156,12 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ ifo }) => {
             </StyledLaunchpad>
             <StatusCard>
               <CardBody>
-                <LaunchpadStatusCard 
-                  ifo={ifoPublicData} 
-                  ifoUserData={ifoUserData}
-                  status={state.status}
-                />
+                <LaunchpadStatusCard launchpad={launchpad} status={state.status} />
               </CardBody>
             </StatusCard>
           </OwnerActivityContainer>
         </LaunchpadLayoutWrapper>
       </Container>
-
     </LaunchpadLayout>
   )
 }

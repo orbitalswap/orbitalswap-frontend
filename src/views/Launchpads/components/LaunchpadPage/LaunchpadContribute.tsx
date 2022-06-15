@@ -1,46 +1,48 @@
-import React, { useState, useEffect } from 'react'
-import { useModal, Button, Text } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
-import { Launchpad, LaunchpadStatus } from 'config/constants/types'
+import React, { useState } from 'react'
+import { useModal, Text } from '@pancakeswap/uikit'
+import { LaunchpadStatus } from 'config/constants/types'
 import { useLaunchpadContract } from 'hooks/useContract'
 import { getAddress } from 'utils/addressHelpers'
 import LabelButton from './LabelButton'
 import ContributeModal from './ContributeModal'
-import { PublicLaunchpadData, UserLaunchpadData } from '../../types'
 import useLaunchpadClaim from '../../hooks/useLaunchpadClaim'
+import { DeserializedLaunchpad } from 'state/types'
+import useLaunchpadAllowance from 'views/Launchpads/hooks/useLaunchpadAllowance'
+import useApproveLaunchpad from 'views/Launchpads/hooks/useApproveLaunchpad'
+import unserializedTokens from 'config/constants/tokens'
 
 export interface Props {
-  ifoPublicData: PublicLaunchpadData
-  ifoUserData: UserLaunchpadData
+  launchpad: DeserializedLaunchpad
   status: LaunchpadStatus
-  raisingAmount: BigNumber
   toggleStatus: () => void
 }
 
-const LaunchpadContribute: React.FC<Props> = ({
-  ifoPublicData,
-  ifoUserData,
-  status,
-  raisingAmount,
-  toggleStatus
-}) => {
+const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus }) => {
   const [pendingTx, setPendingTx] = useState(false)
-  const { address, minPerTx, maxPerUser, presaleStatus, softcap, hardcap, raised } = ifoPublicData
-  const { contributedAmount, claimed } = ifoUserData
-  const ifoContract = useLaunchpadContract(getAddress(address))
-  const onClaim = useLaunchpadClaim(ifoContract)
+  const { address, minPerTx, maxPerUser, totalRaised, currency } = launchpad
+  const { contributedAmount, claimed } = launchpad.userData
+  const buyTokenSymbol = currency?.symbol ?? 'BNB'
+
+  const launchpadContractAddress = getAddress(address)
+  const launchpadContract = useLaunchpadContract(launchpadContractAddress)
+
+  const allowance = useLaunchpadAllowance(launchpadContractAddress)
+
+  const onClaim = useLaunchpadClaim(launchpadContract)
+  const onApprove = useApproveLaunchpad(currency ?? unserializedTokens.wbnb, launchpadContractAddress)
 
   const [onPresentContributeModal] = useModal(
     <ContributeModal
-      ifoContract={ifoContract}
+      launchpadContract={launchpadContract}
       contributeLimit={maxPerUser.minus(contributedAmount)}
       minPerTx={minPerTx}
+      currency={currency}
       toggleStatus={toggleStatus}
     />,
   )
 
   const claim = async () => {
-    if (ifoContract) {
+    if (launchpadContract) {
       try {
         setPendingTx(true)
         await onClaim()
@@ -53,16 +55,47 @@ const LaunchpadContribute: React.FC<Props> = ({
     }
   }
 
+  const handleApprove = async () => {
+    try {
+      setPendingTx(true)
+      await onApprove()
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setPendingTx(false)
+    }
+  }
+
   const isFinished = status === 'upcoming'
-  const percentOfUserContribution = contributedAmount.div(raisingAmount).times(100)
+  const percentOfUserContribution = contributedAmount.div(totalRaised).times(100)
+
+  if(allowance.lt(minPerTx)) {
+    return (
+      <>
+        <LabelButton
+          disabled={pendingTx}
+          buttonLabel={`Approve ${buyTokenSymbol}`}
+          label={`Your contribution (${buyTokenSymbol})`}
+          value={
+            // eslint-disable-next-line no-nested-ternary
+            contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
+          }
+          onClick={handleApprove}
+        />
+        <Text fontSize="14px" color="textSubtle">
+          {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
+        </Text>
+      </>
+    )
+  }
 
   if (status === 'live') {
     return (
       <>
         <LabelButton
           disabled={claimed}
-          buttonLabel='Buy with BNB'
-          label="Your contribution (BNB)"
+          buttonLabel={`Buy with ${buyTokenSymbol}`}
+          label={`Your contribution (${buyTokenSymbol})`}
           value={
             // eslint-disable-next-line no-nested-ternary
             contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
@@ -70,9 +103,7 @@ const LaunchpadContribute: React.FC<Props> = ({
           onClick={claimed ? claim : onPresentContributeModal}
         />
         <Text fontSize="14px" color="textSubtle">
-          {isFinished
-            ? `You'll get tokens when you claim`
-            : `${percentOfUserContribution.toFixed(5)}% of total`}
+          {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
       </>
     )
@@ -84,7 +115,7 @@ const LaunchpadContribute: React.FC<Props> = ({
         <LabelButton
           disabled
           buttonLabel={claimed ? 'Claimed' : 'Claim'}
-          label="Your contribution (BNB)"
+          label={`Your contribution (${buyTokenSymbol})`}
           value={
             // eslint-disable-next-line no-nested-ternary
             contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
@@ -92,9 +123,7 @@ const LaunchpadContribute: React.FC<Props> = ({
           onClick={claim}
         />
         <Text fontSize="14px" color="textSubtle">
-          {isFinished
-            ? `You'll get tokens when you claim`
-            : `${percentOfUserContribution.toFixed(5)}% of total`}
+          {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
       </>
     )
@@ -107,8 +136,8 @@ const LaunchpadContribute: React.FC<Props> = ({
       <>
         <LabelButton
           disabled={!claimable}
-          buttonLabel={!noContribute? (claimable ? 'Claim' : 'Claimed') : 'Buy with BNB'}
-          label="Your contribution (BNB)"
+          buttonLabel={!noContribute ? (claimable ? 'Claim' : 'Claimed') : `Buy with ${buyTokenSymbol}`}
+          label={`Your contribution (${buyTokenSymbol})`}
           value={
             // eslint-disable-next-line no-nested-ternary
             contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
@@ -116,9 +145,7 @@ const LaunchpadContribute: React.FC<Props> = ({
           onClick={claim}
         />
         <Text fontSize="14px" color="textSubtle">
-          {isFinished
-            ? `You'll get tokens when you claim`
-            : `${percentOfUserContribution.toFixed(5)}% of total`}
+          {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
       </>
     )
@@ -128,8 +155,8 @@ const LaunchpadContribute: React.FC<Props> = ({
     <>
       <LabelButton
         disabled={isFinished}
-        buttonLabel={!isFinished ? (claimed ? 'Claimed' : 'Claim') : 'Buy with BNB'}
-        label="Your contribution (BNB)"
+        buttonLabel={!isFinished ? (claimed ? 'Claimed' : 'Claim') : `Buy with ${buyTokenSymbol}`}
+        label={`Your contribution (${buyTokenSymbol})`}
         value={
           // eslint-disable-next-line no-nested-ternary
           contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
@@ -137,9 +164,7 @@ const LaunchpadContribute: React.FC<Props> = ({
         onClick={isFinished ? claim : onPresentContributeModal}
       />
       <Text fontSize="14px" color="textSubtle">
-        {isFinished
-          ? `You'll get tokens when you claim`
-          : `${percentOfUserContribution.toFixed(5)}% of total`}
+        {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
       </Text>
     </>
   )

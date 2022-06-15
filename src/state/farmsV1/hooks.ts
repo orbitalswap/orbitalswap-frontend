@@ -9,7 +9,7 @@ import { deserializeToken } from 'state/user/hooks/helpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync } from '.'
-import { DeserializedFarm, DeserializedFarmsState, DeserializedFarmUserData, SerializedFarm, State } from '../types'
+import { DeserializedFarm, DeserializedFarmsState, DeserializedFarmUserData, DeserializedLaunchpad, DeserializedLaunchpadUserData, SerializedFarm, SerializedLaunchpad, State } from '../types'
 
 const deserializeFarmUserData = (farm: SerializedFarm): DeserializedFarmUserData => {
   return {

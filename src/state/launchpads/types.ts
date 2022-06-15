@@ -2,10 +2,9 @@ import BigNumber from 'bignumber.js'
 import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 
-
-import { Launchpad } from 'config/constants/types'
+import { SerializedLaunchpadConfig } from 'config/constants/types'
 // PoolCharacteristics retrieved from the contract
-export interface PublicLaunchpadData extends Launchpad {
+export interface PublicLaunchpadData extends SerializedLaunchpadConfig {
   isLoading: boolean
   startDateNum: number
   endDateNum: number
