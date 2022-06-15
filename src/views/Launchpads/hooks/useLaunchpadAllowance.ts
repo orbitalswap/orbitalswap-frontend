@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { Token } from '@orbitalswap/sdk'
 import { getBep20Contract } from 'utils/contractHelpers'
 import { ethers } from 'ethers'
+import { useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 
 const useLaunchpadAllowance = (spenderAddress: string, currency?: Token, dependency?: any): BigNumber => {
   const { account, library } = useWeb3React()
   const [allowance, setAllowance] = useState(BIG_ZERO)
 
-  useEffect(() => {
+  useSlowRefreshEffect(() => {
     const fetch = async () => {
       if (!currency) {
         setAllowance(new BigNumber(ethers.constants.MaxUint256.toJSON()))
