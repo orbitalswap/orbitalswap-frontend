@@ -46,7 +46,7 @@ export const fetchLaunchpadUserDataAsync = (account: string, pids) => async (dis
   const userLaunchpadTokenBalances = await fetchLaunchpadUserTokenBalances(account, launchpadsToFetch)
   const userLaunchpadContributedAmounts = await fetchLaunchpadUserContributedAmounts(account, launchpadsToFetch)
 
-  const data = launchpadsConfig.map((launchpadConfig) => ({
+  const data = launchpadsToFetch.map((launchpadConfig) => ({
     id: launchpadConfig.id,
     userData: {
       allowance: userLaunchpadAllowances[launchpadConfig.id],
@@ -67,7 +67,7 @@ export const launchpadsSlice = createSlice({
       const userData = action.payload
       state.data = state.data.map((launchpad) => {
         const userLaunchpadData = userData.find((entry) => entry.id === launchpad.id)
-        return { ...launchpad, userData: { ...launchpad.userData, ...userLaunchpadData} }
+        return { ...launchpad, userData: { ...launchpad.userData, ...userLaunchpadData.userData} }
       })
       state.userDataLoaded = true
     },

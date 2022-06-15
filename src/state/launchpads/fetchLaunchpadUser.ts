@@ -6,6 +6,7 @@ import { SerializedLaunchpadConfig } from 'config/constants/types'
 import { getAddress } from 'utils/addressHelpers'
 import multicall from 'utils/multicall'
 import { simpleRpcProvider } from 'utils/providers'
+import { getBalanceAmount } from 'utils/formatBalance'
 
 export const fetchLaunchpadUserTokenAllowances = async (account: string, launchpadsToFetch: SerializedLaunchpadConfig[]) => {
   const bnbLaunchpads = launchpadsToFetch.filter((launchpad) => !launchpad.currency)
@@ -50,6 +51,7 @@ export const fetchLaunchpadUserTokenBalances = async (
 
   for (let i = 0; i < bnbLaunchpads.length; i++) {
     const launchpad = bnbLaunchpads[i]
+    // eslint-disable-next-line no-await-in-loop
     const bnbBalance = await simpleRpcProvider.getBalance(account)
     parsedTokenBalances = { ...parsedTokenBalances, [launchpad.id]: new BigNumber(bnbBalance.toString()).toJSON() }
   }
@@ -75,7 +77,7 @@ export const fetchLaunchpadUserContributedAmounts = async (
       return ({
       ...acc,
       [launchpad.id]: {
-        amount: new BigNumber(rawContributedAmounts[index].amount._hex).toJSON(),
+        amount: getBalanceAmount(new BigNumber(rawContributedAmounts[index].amount._hex), launchpad.currency?.decimals ?? 18).toJSON(),
         claimed: rawContributedAmounts[index].claimed,
       },
     })},

@@ -7,6 +7,8 @@ import { useTranslation } from 'contexts/Localization'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
 import { getStatus } from 'views/Launchpads/hooks/helpers'
+import { DeserializedLaunchpad } from 'state/types'
+import { useLaunchpadsPageFetch } from 'state/launchpads/hooks'
 import LaunchpadLayout, { LaunchpadLayoutWrapper } from '../LaunchpadLayout'
 import LaunchpadHeader from './LaunchpadHeader'
 import LaunchpadProgress from './LaunchpadProgress'
@@ -15,7 +17,6 @@ import LaunchpadDetails from './LaunchpadDetails'
 import LaunchpadTime from './LaunchpadTime'
 import LaunchpadContribute from './LaunchpadContribute'
 import LaunchpadStatusCard from './LaunchpadStatusCard'
-import { DeserializedLaunchpad } from 'state/types'
 
 export interface LaunchpadProps {
   launchpad: DeserializedLaunchpad
@@ -52,6 +53,8 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ launchpad }) => {
   const toggleStatus = () => {
     changeStatus(!statusChanged)
   }
+
+  useLaunchpadsPageFetch()
 
   const {
     id,
@@ -108,7 +111,7 @@ const LaunchpadPage: React.FC<LaunchpadProps> = ({ launchpad }) => {
       }
     }, 1000)
     return () => clearInterval(interval)
-  }, [softcap, startDate, endDate, totalSold, softcap, hardcap, presaleStatus, releaseAt])
+  }, [startDate, endDate, totalSold, softcap, hardcap, presaleStatus, totalRaised, releaseAt])
 
   const { t } = useTranslation()
 
