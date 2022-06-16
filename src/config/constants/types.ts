@@ -120,6 +120,7 @@ interface LaunchpadConfigBaseProps {
   description?: string
   projectSiteUrl: string
   releaseAt: number
+  isTomFork?: boolean
 }
 
 export interface SerializedLaunchpadConfig extends LaunchpadConfigBaseProps {

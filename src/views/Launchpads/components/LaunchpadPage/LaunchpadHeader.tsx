@@ -28,12 +28,19 @@ const Description = styled(Text)`
   text-align: left;
   margin-left : 1.5rem;
 `
+const LogoItem = styled.div<{ isDark: boolean, launchpadId: number }>`
+  background-image: ${({ isDark, launchpadId }) => (isDark ? `url(/images/launchpads/${launchpadId}.svg)` : `url(/images/launchpads/${launchpadId}-white.svg)`)};
+  width: 158px;
+  height: 35px;
+  background-size: contain;
+  background-repeat-x: no-repeat;
+`
 
 const LaunchpadHeader: React.FC<LaunchpadHeaderProps> = ({ launchpadId, name, subTitle }) => {
   const { theme } = useTheme()
   return (
     <StyledLaunchpadHeader mb="24px" alignItems="center">
-      <img src={`/images/launchpads/${theme.isDark ? launchpadId : `${launchpadId}-white`}.svg`} alt={`launchpad-${launchpadId}`} width="158px" height="29px" />
+      <LogoItem isDark={theme.isDark} launchpadId={launchpadId}/>
       {/* <div>
         <Name>{name}</Name>
         <Description>{subTitle}</Description>

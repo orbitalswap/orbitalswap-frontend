@@ -9,6 +9,7 @@ interface LaunchpadProgressProps {
   raised: number,
   liquidityPercent: number
   currency?: Token
+  isTombFork?: boolean
 }
 
 const StyledProgress = styled.div`
@@ -30,7 +31,7 @@ const ProgressBar = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
 `
-const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised, liquidityPercent, currency }) => {
+const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised, liquidityPercent, currency, isTombFork }) => {
   const progress1 = raised / (hardcap ?? 1) * 100
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
@@ -54,11 +55,11 @@ const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hard
       </Item>
       <Item>
         <Display>Liquidity %</Display>
-        <Text>{liquidityPercent} %</Text>
+        <Text>{isTombFork? '-' : liquidityPercent} %</Text>
       </Item>
       <Item>
         <Display>Liquidity Lockup Time</Display>
-        <Text>180 days</Text>
+        <Text>{isTombFork? '-' : '180 days'}</Text>
       </Item>
     </StyledProgress>
   )

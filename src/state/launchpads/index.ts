@@ -67,7 +67,7 @@ export const launchpadsSlice = createSlice({
       const userData = action.payload
       state.data = state.data.map((launchpad) => {
         const userLaunchpadData = userData.find((entry) => entry.id === launchpad.id)
-        return { ...launchpad, userData: { ...launchpad.userData, ...userLaunchpadData.userData} }
+        return { ...launchpad, userData: { ...launchpad.userData, ...userLaunchpadData?.userData} }
       })
       state.userDataLoaded = true
     },

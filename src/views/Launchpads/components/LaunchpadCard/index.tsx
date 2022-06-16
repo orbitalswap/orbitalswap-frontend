@@ -49,6 +49,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
     releaseAt,
     presaleStatus,
     currency,
+    isTomFork,
   } = launchpad
 
   const [state, setState] = useState({
@@ -58,6 +59,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
     secondsUntilEnd: 0,
   })
 
+  console.log(isTomFork, 'fdgdfgdfgdfgdfgdf')
   useEffect(() => {
     const interval = setInterval(async () => {
       if (softcap.gt(0)) {
@@ -89,18 +91,19 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
       }
     }, 1000)
     return () => clearInterval(interval)
-  }, [softcap, startDate, endDate, releaseAt])
+  }, [softcap, hardcap, presaleStatus, totalRaised, startDate, endDate, releaseAt])
 
   return (
     <StyledLaunchpadCard ifoId={id}>
       <CardBody>
-        <LaunchpadCardHeader ifoId={id} name={name} subTitle={subTitle} status={state.status} />
+        <LaunchpadCardHeader launchpadId={id} name={name} subTitle={subTitle} status={state.status} />
         <LaunchpadCardProgress
           softcap={softcap.toNumber()}
           hardcap={hardcap.toNumber()}
           raised={totalRaised.toNumber()}
           liquidityPercent={liquidityPercent ?? 0}
           currency={currency}
+          isTombFork={isTomFork}
         />
         <LaunchpadCardDetails
           launchpad={launchpad}

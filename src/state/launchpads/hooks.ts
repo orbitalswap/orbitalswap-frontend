@@ -57,11 +57,12 @@ const deserializeLaunchpadUserData = (launchpad: SerializedLaunchpad): Deseriali
 }
 
 const deserializeLaunchpad = (launchpad: SerializedLaunchpad): DeserializedLaunchpad => {
-  const { id, isActive, address, name, subTitle, description, projectSiteUrl, releaseAt } = launchpad
+  const { id, isActive, isTomFork, address, name, subTitle, description, projectSiteUrl, releaseAt } = launchpad
 
   return {
     id,
     isActive,
+    isTomFork,
     address,
     name,
     subTitle,
