@@ -5,7 +5,6 @@ import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
 import {
   CampaignType,
   SerializedFarmConfig,
-  Launchpad,
   LotteryStatus,
   LotteryTicket,
   DeserializedPoolConfig,
@@ -14,6 +13,8 @@ import {
   TranslatableText,
   DeserializedFarmConfig,
   FetchStatus,
+  SerializedLaunchpadConfig,
+  DeserializedLaunchpadConfig,
 } from 'config/constants/types'
 import { Token, ChainId } from '@orbitalswap/sdk'
 import { TokenInfo, TokenList, Tags } from '@uniswap/token-lists'
@@ -180,6 +181,56 @@ export interface Profile {
   hasRegistered: boolean
 }
 
+interface SerializedLaunchpadUserData {
+  allowance: string
+  tokenBalance: string
+  contributedAmount: string
+  earnings: string
+  claimed: boolean
+}
+
+export interface DeserializedLaunchpadUserData {
+  allowance: BigNumber
+  tokenBalance: BigNumber
+  contributedAmount: BigNumber
+  earnings: BigNumber
+  claimed: boolean
+}
+
+export interface SerializedLaunchpad extends SerializedLaunchpadConfig {
+  liquidityPercent?: number
+  softcap?: SerializedBigNumber
+  hardcap?: SerializedBigNumber
+  presalePrice?: SerializedBigNumber
+  minPerTx?: SerializedBigNumber
+  maxPerUser?: SerializedBigNumber
+  totalSold?: SerializedBigNumber
+  totalRaised?: SerializedBigNumber
+  fundersCounter?: number
+  presaleStatus?: number
+  startDate?: number
+  endDate?: number
+
+  userData?: SerializedLaunchpadUserData
+}
+
+export interface DeserializedLaunchpad extends DeserializedLaunchpadConfig {
+  liquidityPercent?: number
+  softcap?: BigNumber
+  hardcap?: BigNumber
+  presalePrice?: BigNumber
+  minPerTx?: BigNumber
+  maxPerUser?: BigNumber
+  totalSold?: BigNumber
+  totalRaised?: BigNumber
+  fundersCounter?: number
+  presaleStatus?: number
+  startDate?: number
+  endDate?: number
+
+  userData?: DeserializedLaunchpadUserData
+}
+
 // Slices states
 
 export interface SerializedFarmsState {
@@ -197,6 +248,16 @@ export interface DeserializedFarmsState {
   userDataLoaded: boolean
   poolLength?: number
   regularCakePerBlock?: number
+}
+
+export interface SerializedLaunchpadsState {
+  data: SerializedLaunchpad[]
+  userDataLoaded: boolean
+}
+
+export interface DeserializedLaunchpadsState {
+  data: DeserializedLaunchpad[]
+  userDataLoaded: boolean
 }
 
 export interface SerializedVaultFees {
@@ -285,7 +346,7 @@ export type TeamsById = {
 }
 
 export type LaunchpadsById = {
-  [key: string]: Launchpad
+  [key: string]: SerializedLaunchpad
 }
 
 export interface Achievement {
@@ -634,6 +695,7 @@ export interface State {
   farms: SerializedFarmsState
   farmsV1: SerializedFarmsState
   pools: PoolsState
+  launchpads: SerializedLaunchpadsState
   predictions: PredictionsState
   lottery: LotteryState
   nftMarket: NftMarketState

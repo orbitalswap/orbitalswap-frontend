@@ -1,36 +1,46 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { Contract } from '@ethersproject/contracts'
 import { Modal, Button, Flex, Text } from '@pancakeswap/uikit'
-import { Currency, CurrencyAmount } from '@orbitalswap/sdk'
+import { Currency, Token } from '@orbitalswap/sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { fetchLaunchpadsPublicDataAsync, fetchLaunchpadUserDataAsync } from 'state/launchpads'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { getDecimalAmount } from 'utils/formatBalance'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import useIfoContribute from '../../hooks/useLaunchpadContribute'
+import useLaunchpadContribute from '../../hooks/useLaunchpadContribute'
 
 interface Props {
-  ifoContract: Contract
+  launchpadId: number
+  launchpadContract: Contract
   contributeLimit: BigNumber
   minPerTx: BigNumber
+  currency?: Token
   onDismiss?: () => void
   toggleStatus: () => void
 }
 
 const ContributeModal: React.FC<Props> = ({
-  ifoContract,
+  launchpadId,
+  launchpadContract,
   contributeLimit,
   minPerTx,
+  currency,
   onDismiss,
-  toggleStatus
+  toggleStatus,
 }) => {
+  const dispatch = useDispatch()
   const [value, setValue] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const [isLimit, reachedLimit] = useState(false)
   const [tooSmall, setTooSmall] = useState(false)
   const { account } = useActiveWeb3React()
-  const etherBalance = useCurrencyBalance(account ?? undefined, Currency.ETHER)
-  const onContribute = useIfoContribute(ifoContract)
+
+  const tokenBalance = useCurrencyBalance(account ?? undefined, currency ?? Currency.ETHER)
+  const onContribute = useLaunchpadContribute(launchpadContract)
+
+  const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
   useEffect(() => {
     if (new BigNumber(value).isGreaterThan(contributeLimit)) {
@@ -46,35 +56,44 @@ const ContributeModal: React.FC<Props> = ({
   }, [value, contributeLimit, minPerTx])
 
   return (
-    <Modal title="Contribute BNB" onDismiss={onDismiss}>
+    <Modal title={`Contribute ${buyTokenSymbol}`} onDismiss={onDismiss}>
       <CurrencyInputPanel
         id="ifo-contribute-input"
         onUserInput={(input) => setValue(input)}
         onCurrencySelect={undefined}
         disableCurrencySelect
         showMaxButton
-        onMax={() => { setValue(Math.max((Number(etherBalance.toFixed()) - 0.01), 0).toString()) }}
+        onMax={() => {
+          setValue(Math.max(Number(tokenBalance.toFixed()) - 0.01, 0).toString())
+        }}
         value={value}
-        currency={Currency.ETHER}
+        currency={currency ?? Currency.ETHER}
       />
-      {
-        (isLimit || tooSmall) && <Text color='failure' fontSize='12px' textAlign='right'>
-          {isLimit ? `Max ${contributeLimit.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} BNB contributable now.`
-            : tooSmall ? `Min.Tx ${minPerTx.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} BNB.`
-              : ''}
+      {(isLimit || tooSmall) && (
+        <Text color="failure" fontSize="12px" textAlign="right">
+          {isLimit
+            ? `Max ${contributeLimit
+                .toNumber()
+                .toLocaleString('en-US', { maximumFractionDigits: 3 })} ${buyTokenSymbol} contributable now.`
+            : tooSmall
+            ? `Min.Tx ${minPerTx.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} ${buyTokenSymbol}.`
+            : ''}
         </Text>
-      }
+      )}
       <Flex justifyContent="space-between" mt="24px">
-        <Button width='100%' variant="secondary" onClick={onDismiss} mr="8px">
+        <Button width="100%" variant="secondary" onClick={onDismiss} mr="8px">
           Cancel
         </Button>
         <Button
-          width='100%'
+          width="100%"
           disabled={pendingTx || new BigNumber(value).isNaN() || new BigNumber(value).isZero() || isLimit}
           onClick={async () => {
             try {
               setPendingTx(true)
-              await onContribute(getDecimalAmount(new BigNumber(value)).toString())
+              await onContribute(getDecimalAmount(new BigNumber(value)).toString(), !!currency)
+
+              dispatch(fetchLaunchpadsPublicDataAsync([launchpadId]))
+              dispatch(fetchLaunchpadUserDataAsync(account, [launchpadId]))
             } catch (err) {
               console.error(err)
             } finally {
@@ -86,6 +105,12 @@ const ContributeModal: React.FC<Props> = ({
           Confirm
         </Button>
       </Flex>
+      {/* <LinkExternal
+        href="https://exchange.pancakeswap.finance/#/add/ETH/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82"
+        style={{ margin: 'auto' }}
+      >
+        {`Get ${currency}`}
+      </LinkExternal> */}
     </Modal>
   )
 }

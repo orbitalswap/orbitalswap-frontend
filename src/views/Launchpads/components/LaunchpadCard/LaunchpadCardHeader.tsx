@@ -6,7 +6,7 @@ import { LaunchpadStatus } from 'config/constants/types'
 import { LaunchpadStateTag } from './tags'
 
 interface LaunchpadCardHeaderProps {
-  ifoId: string
+  launchpadId: number
   name: string
   subTitle: string
   status: LaunchpadStatus
@@ -18,6 +18,7 @@ const StyledLaunchpadCardHeader = styled(Flex)`
     flex: revert;
   }
   justify-content: space-between;
+  // height: 35px;
 `
 
 const Name = styled(Heading).attrs({ as: 'h3', size: 'lg' })`
@@ -37,13 +38,21 @@ const Item = styled.div`
   display: flex;
   margin-bottom: 4px;
 `
+const LogoItem = styled.div<{ isDark: boolean, launchpadId: number }>`
+  background-image: ${({ isDark, launchpadId }) => (isDark ? `url(/images/launchpads/${launchpadId}.svg)` : `url(/images/launchpads/${launchpadId}-white.svg)`)};
+  width: 158px;
+  height: 35px;
+  background-size: contain;
+  background-repeat-x: no-repeat;
+`
 
 
-const LaunchpadCardHeader: React.FC<LaunchpadCardHeaderProps> = ({ ifoId, name, subTitle, status }) => {
+const LaunchpadCardHeader: React.FC<LaunchpadCardHeaderProps> = ({ launchpadId, name, subTitle, status }) => {
   const theme = useTheme();
   return (
     <StyledLaunchpadCardHeader mb="24px">
-      <img src={`/images/launchpads/${theme.isDark ? ifoId : `${ifoId}-white`}.svg`} alt={ifoId} width="158px" height="29px" />
+      {/* <img src={`/images/launchpads/${theme.isDark ? ifoId : `${ifoId}-white`}.svg`} alt={`launchpad-${ifoId}`} width="158px" height="29px" /> */}
+      <LogoItem isDark={theme.isDark} launchpadId={launchpadId}/>
       <Item>
         <LaunchpadStateTag launchpadState={status} />
       </Item>

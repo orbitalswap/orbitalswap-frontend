@@ -2,12 +2,12 @@ import { useCallback } from 'react'
 import { ethers, Contract } from 'ethers'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 
-const useLaunchpadClaim = (ifoContract: Contract) => {
+const useLaunchpadClaim = (launchpadContract: Contract) => {
   const { callWithGasPrice } = useCallWithGasPrice()
   const onClaim = useCallback(async (): Promise<ethers.providers.TransactionReceipt> => {
-    const tx = await callWithGasPrice(ifoContract, 'withdraw', [])
+    const tx = await callWithGasPrice(launchpadContract, 'withdraw', [])
     return tx.wait()
-  }, [ifoContract, callWithGasPrice])
+  }, [launchpadContract, callWithGasPrice])
 
   return onClaim
 }

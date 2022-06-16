@@ -58,18 +58,6 @@ export interface Ifo {
   [PoolIds.poolUnlimited]: IfoPoolInfo
 }
 
-export interface Launchpad {
-  id: string
-  isActive: boolean
-  address: Address
-  name: string
-  subTitle?: string
-  description?: string
-  projectSiteUrl: string
-  releaseAt: number
-  idoToken: string
-}
-
 export enum PoolCategory {
   'COMMUNITY' = 'Community',
   'CORE' = 'Core',
@@ -121,6 +109,28 @@ export interface SerializedPoolConfig extends PoolConfigBaseProps {
 export interface DeserializedPoolConfig extends PoolConfigBaseProps {
   earningToken: Token
   stakingToken: Token
+}
+
+interface LaunchpadConfigBaseProps {
+  id: number
+  isActive: boolean
+  address: Address
+  name: string
+  subTitle?: string
+  description?: string
+  projectSiteUrl: string
+  releaseAt: number
+  isTomFork?: boolean
+}
+
+export interface SerializedLaunchpadConfig extends LaunchpadConfigBaseProps {
+  currency?: SerializedToken
+  token: SerializedToken
+}
+
+export interface DeserializedLaunchpadConfig extends LaunchpadConfigBaseProps {
+  currency?: Token
+  token: Token
 }
 
 export type Images = {

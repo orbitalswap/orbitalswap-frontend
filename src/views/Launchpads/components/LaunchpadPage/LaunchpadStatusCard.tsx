@@ -1,15 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import BigNumber from 'bignumber.js'
-import { Text, LinkExternal, Link } from '@pancakeswap/uikit'
+import { Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
-import { PublicLaunchpadData, UserLaunchpadData } from 'views/Launchpads/types'
 import { LaunchpadStatus } from 'config/constants/types'
+import { DeserializedLaunchpad } from 'state/types'
 import { Item } from '../LaunchpadLayout'
 
 export interface LaunchpadStatusProps {
-  ifo: PublicLaunchpadData,
-  ifoUserData: UserLaunchpadData,
+  launchpad: DeserializedLaunchpad
   status: LaunchpadStatus
 }
 
@@ -22,27 +20,13 @@ const Display = styled(Text)`
   flex: 1;
 `
 
-const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData, status }) => {
+const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status }) => {
   const { t } = useTranslation()
-  const {
-    startDateNum,
-    projectSiteUrl,
-    presalePrice,
-    minPerTx,
-    maxPerUser,
-    liquidityPercent,
-    hardcap,
-    softcap,
-    totalSold,
-    fundersCounter,
-    raised
-  } = ifo
+  const { presalePrice, minPerTx, maxPerUser, fundersCounter, currency } = launchpad
+  const { contributedAmount } = launchpad.userData
+  const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
-  const { contributedAmount } = ifoUserData
-  const buyTokenSymbol = 'BNB'
-
-  
-  const purchaseTokenAmount = (presalePrice.toNumber())*(contributedAmount?.toNumber()) || 0
+  const purchaseTokenAmount = presalePrice.toNumber() * contributedAmount?.toNumber() || 0
   return (
     <>
       <StyledLaunchpadStatus>
@@ -56,15 +40,19 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ ifo, ifoUserData,
         </Item>
         <Item>
           <Display>{t('Minimum Buy')}</Display>
-          <Text>{minPerTx.toNumber()} BNB</Text>
+          <Text>
+            {minPerTx.toNumber()} {buyTokenSymbol}
+          </Text>
         </Item>
         <Item>
           <Display>{t('Maximum Buy')}</Display>
-          <Text>{maxPerUser.toNumber()} BNB</Text>
+          <Text>
+            {maxPerUser.toNumber()} {buyTokenSymbol}
+          </Text>
         </Item>
         <Item>
           <Display>{t('Total Contributors')}</Display>
-          <Text>{fundersCounter.toNumber()}</Text>
+          <Text>{fundersCounter}</Text>
         </Item>
         <Item>
           <Display>{t('You Purchased')}</Display>
