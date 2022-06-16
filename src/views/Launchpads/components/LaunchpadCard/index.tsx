@@ -59,7 +59,6 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
     secondsUntilEnd: 0,
   })
 
-  console.log(isTomFork, 'fdgdfgdfgdfgdfgdf')
   useEffect(() => {
     const interval = setInterval(async () => {
       if (softcap.gt(0)) {
