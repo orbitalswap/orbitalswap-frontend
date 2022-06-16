@@ -39,8 +39,12 @@ const LogoItem = styled.div<{ isDark: boolean, launchpadId: number }>`
 const LaunchpadHeader: React.FC<LaunchpadHeaderProps> = ({ launchpadId, name, subTitle }) => {
   const { theme } = useTheme()
   return (
-    <StyledLaunchpadHeader mb="24px" alignItems="center">
-      <LogoItem isDark={theme.isDark} launchpadId={launchpadId}/>
+    <StyledLaunchpadHeader mb="24px" alignItems="center">      
+      {theme.isDark ? (
+        <img src={`/images/launchpads/${launchpadId}-white.svg`} alt="logo" style={{height: '35px'}} />
+      ) : (
+        <img src={`/images/launchpads/${launchpadId}-white.svg`} alt="logo" style={{height: '35px'}} />
+      )}
       {/* <div>
         <Name>{name}</Name>
         <Description>{subTitle}</Description>
