@@ -121,6 +121,14 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://orbitalswap.com/images/tokens/0x20f663CEa80FaCE82ACDFA3aAE6862d246cE0333.png"
+    },
+    {
+      "name": "Dibs USD",
+      "symbol": "USDibs",
+      "address": "0x8d2aa7b23aBE16E7eCa845F64C65A314d4ABa35A",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://orbitalswap.com/images/tokens/0x8d2aa7b23aBE16E7eCa845F64C65A314d4ABa35A.png"
     }
   ]
 }
