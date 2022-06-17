@@ -46,6 +46,14 @@ export const mainnetTokens = defineTokens({
     'Tytan',
     'https://tytan.finance/',
   ),
+  wtytan: new Token(
+    MAINNET,
+    '0x3593d409484e36aAd862101054FbDBe1C9a4fC9b',
+    18,
+    'wTYTAN',
+    'Wrapped TYTAN',
+    'https://tytan.finance/',
+  ),
   drip: new Token(
     MAINNET,
     '0x20f663CEa80FaCE82ACDFA3aAE6862d246cE0333',
