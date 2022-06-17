@@ -168,6 +168,16 @@ const farms: SerializedFarmConfig[] = [
     token: serializedTokens.drip,
     quoteToken: serializedTokens.busd,
   },
+  {
+    pid: 18,
+    lpSymbol: 'wTYTAN-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x2f60eFd93B1E1dFA93AEd5899d116d0ddeF6A75F',
+    },
+    token: serializedTokens.wtytan,
+    quoteToken: serializedTokens.busd,
+  },
 ].filter((f) => !!f.lpAddresses[CHAIN_ID])
 
 export default farms
