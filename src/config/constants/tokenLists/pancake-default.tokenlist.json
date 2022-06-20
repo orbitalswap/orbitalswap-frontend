@@ -129,6 +129,14 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://orbitalswap.com/images/tokens/0x8d2aa7b23aBE16E7eCa845F64C65A314d4ABa35A.png"
+    },
+    {
+      "name": "DSHARE",
+      "symbol": "DSHARE",
+      "address": "0x26d3163b165BE95137CEe97241E716b2791a7572",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://orbitalswap.com/images/tokens/0x26d3163b165BE95137CEe97241E716b2791a7572.png"
     }
   ]
 }
