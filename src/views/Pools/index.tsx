@@ -151,7 +151,7 @@ const sortPools = (account: string, sortOption: string, pools: DeserializedPool[
   }
 }
 
-const POOL_START_BLOCK_THRESHOLD = (60 / BSC_BLOCK_TIME) * 4
+const POOL_START_BLOCK_THRESHOLD = (60 / BSC_BLOCK_TIME) * 720
 
 const Pools: React.FC = () => {
   const router = useRouter()

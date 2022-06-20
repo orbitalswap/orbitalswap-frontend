@@ -56,6 +56,20 @@ const pools: SerializedPoolConfig[] = [
     sortOrder: 1,
     isFinished: false,
   },
+  {
+    sousId: 1,
+    stakingToken: serializedTokens.wtytan,
+    earningToken: serializedTokens.wbnb,
+    contractAddress: {
+      97: '',
+      56: '0xda35277302adfbea46403349aa343e342eb3fcb3',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    tokenPerBlock: '0.0001215',
+    sortOrder: 2,
+    isFinished: false,
+  },
 ].filter((p) => !!p.contractAddress[CHAIN_ID])
 
 export default pools
