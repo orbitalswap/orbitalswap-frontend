@@ -90,7 +90,7 @@ const pools: SerializedPoolConfig[] = [
     earningToken: serializedTokens.usdibs,
     contractAddress: {
       97: '',
-      56: '0xab3282f36eD32A3560A13f3cE238aBdc58b1222a',
+      56: '0xcC040C3B919E3BeeeBf2A79358D78Ebf2A55fb7d',
     },
     poolCategory: PoolCategory.CORE,
     harvest: true,
