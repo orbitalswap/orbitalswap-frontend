@@ -101,7 +101,7 @@
     {
       "name": "Grove Token",
       "symbol": "GVR",
-      "address": "0x7ed9B8C73C38ED4474902192cF4640f3E23b8A42",
+      "address": "0x2A27fe0a8bEB7576ba6bD8141f4CF593be0dfd5d",
       "chainId": 97,
       "decimals": 18,
       "logoURI": "https://orbitalswap.com/images/tokens/0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d.png"

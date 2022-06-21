@@ -2180,7 +2180,7 @@ export const testnetTokens = defineTokens({
   ),
   grove: new Token(
     TESTNET,
-    '0x7ed9B8C73C38ED4474902192cF4640f3E23b8A42',
+    '0x2A27fe0a8bEB7576ba6bD8141f4CF593be0dfd5d',
     18,
     'GVR',
     'Grove Token',
