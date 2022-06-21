@@ -2178,6 +2178,14 @@ export const testnetTokens = defineTokens({
     'Bakeryswap Token',
     'https://www.bakeryswap.org/',
   ),
+  grove: new Token(
+    TESTNET,
+    '0x7ed9B8C73C38ED4474902192cF4640f3E23b8A42',
+    18,
+    'GVR',
+    'Grove Token',
+    'https://www.grovetoken.com/',
+  ),
 } as const)
 
 const tokens = () => {
