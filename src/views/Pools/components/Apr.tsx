@@ -66,8 +66,6 @@ const Apr: React.FC<AprProps> = ({ pool, showIcon, stakedBalance, performanceFee
 
   const isValidate = apr !== undefined && !Number.isNaN(apr)
 
-  console.log(apr,stakingToken.symbol,vaultKey, 'rtertertertertert')
-
   return (
     <AprLabelContainer alignItems="center" justifyContent="flex-start" {...props}>
       {isValidate || isFinished ? (

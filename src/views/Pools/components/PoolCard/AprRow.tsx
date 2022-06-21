@@ -15,7 +15,6 @@ const AprRow: React.FC<AprRowProps> = ({ pool, stakedBalance, performanceFee = 0
   const { t } = useTranslation()
   const { vaultKey } = pool
 
-  console.log(pool, '444444444444')
   const tooltipContent = vaultKey
     ? t('APY includes compounding, APR doesn’t. This pool’s ORB is compounded automatically, so we show APY.')
     : t('This pool’s rewards aren’t compounded automatically, so we show APR')
