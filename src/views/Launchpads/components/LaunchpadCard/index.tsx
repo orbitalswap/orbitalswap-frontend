@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Card, CardBody, CardRibbon } from '@pancakeswap/uikit'
 import { LaunchpadStatus } from 'config/constants/types'
+import { DeserializedLaunchpad } from 'state/types'
 import { getStatus } from 'views/Launchpads/hooks/helpers'
 import LaunchpadCardHeader from './LaunchpadCardHeader'
 import LaunchpadCardProgress from './LaunchpadCardProgress'
 import LaunchpadCardDetails from './LaunchpadCardDetails'
-import { DeserializedLaunchpad } from 'state/types'
 
 export interface LaunchpadCardProps {
   launchpad: DeserializedLaunchpad
@@ -50,6 +50,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
     presaleStatus,
     currency,
     isTomFork,
+    liquidityLockupTime
   } = launchpad
 
   const [state, setState] = useState({
@@ -103,6 +104,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
           liquidityPercent={liquidityPercent ?? 0}
           currency={currency}
           isTombFork={isTomFork}
+          liquidityLockupTime={liquidityLockupTime}
         />
         <LaunchpadCardDetails
           launchpad={launchpad}

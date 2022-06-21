@@ -20,6 +20,7 @@ const fetchLaunchpadCalls = (launchpad: SerializedLaunchpad) => {
     'totalRaised',
     'status',
     'fundersCounter',
+    'LPTokenLockUpTime',
   ].map((method) => ({
     address: launchpadAddress,
     name: method,

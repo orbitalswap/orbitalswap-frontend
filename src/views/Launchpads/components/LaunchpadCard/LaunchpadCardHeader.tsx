@@ -52,9 +52,9 @@ const LaunchpadCardHeader: React.FC<LaunchpadCardHeaderProps> = ({ launchpadId, 
   return (
     <StyledLaunchpadCardHeader mb="24px">
       {theme.isDark ? (
-        <img src={`/images/launchpads/${launchpadId}.svg`} alt="logo" style={{height: '29px'}} />
+        <img src={`/images/launchpads/${launchpadId}.png`} alt="logo" style={{height: '29px'}} />
       ) : (
-        <img src={`/images/launchpads/${launchpadId}-white.svg`} alt="logo" style={{height: '29px'}} />
+        <img src={`/images/launchpads/${launchpadId}-white.png`} alt="logo" style={{height: '29px'}} />
       )}
       <Item>
         <LaunchpadStateTag launchpadState={status} />

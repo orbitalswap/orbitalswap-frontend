@@ -84,6 +84,7 @@ const deserializeLaunchpad = (launchpad: SerializedLaunchpad): DeserializedLaunc
     presaleStatus: launchpad.presaleStatus ?? 0,
     startDate: launchpad.startDate ? launchpad.startDate : 0,
     endDate: launchpad.endDate ? launchpad.endDate : 0,
+    liquidityLockupTime: launchpad.liquidityLockupTime ? launchpad.liquidityLockupTime : 0,
   }
 }
 

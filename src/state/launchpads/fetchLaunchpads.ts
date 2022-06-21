@@ -8,11 +8,12 @@ const fetchLaunchpads = async (launchpadsToFetch: SerializedLaunchpadConfig[]): 
   const launchpadResult = await fetchLaunchpadPublicData(launchpadsToFetch)
 
   return launchpadsToFetch.map((launchpad, index) => {
-    const [startDate, endDate, hardcap, softcap, presalePrice, minPerTx, maxPerUser, liquidityPercent, totalSold, totalRaised, status, fundersCounter] =
+    const [startDate, endDate, hardcap, softcap, presalePrice, minPerTx, maxPerUser, liquidityPercent, totalSold, totalRaised, status, fundersCounter, liquidityLockupTime] =
       launchpadResult[index]
 
     const startDateNum = parseInt(startDate, 10)
     const endDateNum = parseInt(endDate, 10)
+    const liquidityLockupTimeNum = parseInt(liquidityLockupTime, 10)
 
     return {
       ...launchpad,
@@ -40,6 +41,7 @@ const fetchLaunchpads = async (launchpadsToFetch: SerializedLaunchpadConfig[]): 
       presaleStatus: new BigNumber(status).toNumber(),
       startDate: startDateNum,
       endDate: endDateNum,
+      liquidityLockupTime: liquidityLockupTimeNum,
     }
   })
 }

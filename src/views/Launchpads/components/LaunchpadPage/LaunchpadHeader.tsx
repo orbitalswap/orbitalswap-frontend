@@ -41,9 +41,9 @@ const LaunchpadHeader: React.FC<LaunchpadHeaderProps> = ({ launchpadId, name, su
   return (
     <StyledLaunchpadHeader mb="24px" alignItems="center">      
       {theme.isDark ? (
-        <img src={`/images/launchpads/${launchpadId}.svg`} alt="logo" style={{height: '35px'}} />
+        <img src={`/images/launchpads/${launchpadId}.png`} alt="logo" style={{height: '35px'}} />
       ) : (
-        <img src={`/images/launchpads/${launchpadId}-white.svg`} alt="logo" style={{height: '35px'}} />
+        <img src={`/images/launchpads/${launchpadId}-white.png`} alt="logo" style={{height: '35px'}} />
       )}
       {/* <div>
         <Name>{name}</Name>

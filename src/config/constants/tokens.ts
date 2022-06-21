@@ -187,6 +187,14 @@ export const mainnetTokens = defineTokens({
     'PIGGY',
     'https://piggyfinance.io/',
   ),
+  surf: new Token(
+    MAINNET,
+    '0xB1E54EFf0378BC5148d1B700D599efAF10f82712',
+    18,
+    'SURF',
+    'Surf',
+    'https://www.riptidefi.com/',
+  ),
   usdc: new Token(
     MAINNET,
     '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',

@@ -210,6 +210,7 @@ export interface SerializedLaunchpad extends SerializedLaunchpadConfig {
   presaleStatus?: number
   startDate?: number
   endDate?: number
+  liquidityLockupTime?: number
 
   userData?: SerializedLaunchpadUserData
 }
@@ -227,6 +228,7 @@ export interface DeserializedLaunchpad extends DeserializedLaunchpadConfig {
   presaleStatus?: number
   startDate?: number
   endDate?: number
+  liquidityLockupTime?: number
 
   userData?: DeserializedLaunchpadUserData
 }
