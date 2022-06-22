@@ -15,16 +15,15 @@ type ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   [ChainId.MAINNET]: [
-    mainnetTokens.wbnb,
+    mainnetTokens.wcro,
     mainnetTokens.orb,
-    mainnetTokens.busd,
+    mainnetTokens.usdc,
     mainnetTokens.usdt,
-    mainnetTokens.btcb,
-    mainnetTokens.ust,
+    mainnetTokens.wbtc,
     mainnetTokens.eth,
     mainnetTokens.usdc,
   ],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
+  [ChainId.TESTNET]: [testnetTokens.wcro, testnetTokens.cake],
 }
 
 /**
@@ -46,21 +45,21 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
 
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
-  [ChainId.MAINNET]: [mainnetTokens.busd, mainnetTokens.orb, mainnetTokens.btcb],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
+  [ChainId.MAINNET]: [mainnetTokens.usdc, mainnetTokens.orb, mainnetTokens.wbtc],
+  [ChainId.TESTNET]: [testnetTokens.wcro, testnetTokens.cake],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-  [ChainId.MAINNET]: [mainnetTokens.wbnb, mainnetTokens.dai, mainnetTokens.busd, mainnetTokens.usdt, mainnetTokens.usdc],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
+  [ChainId.MAINNET]: [mainnetTokens.wcro, mainnetTokens.dai, mainnetTokens.usdc, mainnetTokens.usdt],
+  [ChainId.TESTNET]: [testnetTokens.wcro, testnetTokens.cake],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
   [ChainId.MAINNET]: [
-    [mainnetTokens.tytan, mainnetTokens.wbnb],
-    [mainnetTokens.orb, mainnetTokens.wbnb],
-    [mainnetTokens.busd, mainnetTokens.usdt],
+    [mainnetTokens.mmf, mainnetTokens.wcro],
+    [mainnetTokens.orb, mainnetTokens.wcro],
+    [mainnetTokens.usdc, mainnetTokens.usdt],
     // [mainnetTokens.dai, mainnetTokens.usdt],
   ],
 }

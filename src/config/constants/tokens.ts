@@ -95,6 +95,14 @@ export const mainnetTokens = defineTokens({
     'Dai Stablecoin',
     'https://makerdao.com/',
   ),
+  bondly: new Token(
+    MAINNET,
+    '0x96058f8C3e16576D9BD68766f3836d9A33158f89',
+    18,
+    'BONDLY',
+    'Bondly Token',
+    'https://www.bondly.finance/',
+  ),
 } as const)
 
 export const testnetTokens = defineTokens({
