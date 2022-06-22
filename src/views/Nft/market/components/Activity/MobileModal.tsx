@@ -1,4 +1,4 @@
-import { InjectedModalProps, Modal, Flex, Text, Button, Link, BinanceIcon, Box } from '@pancakeswap/uikit'
+import { InjectedModalProps, Modal, Flex, Text, Button, Link, CronosIcon, Box } from '@pancakeswap/uikit'
 import { Price } from '@orbitalswap/sdk'
 import useTheme from 'hooks/useTheme'
 import { Activity, NftToken } from 'state/nftMarket/types'
@@ -54,7 +54,7 @@ const MobileModal: React.FC<MobileModalProps> = ({
             <ActivityEventText fontSize="14px" marketEvent={activity.marketEvent} />
             {priceAsFloat ? (
               <Flex justifyContent="flex-end" alignItems="center">
-                <BinanceIcon width="12px" height="12px" mr="4px" />
+                <CronosIcon width="12px" height="12px" mr="4px" />
                 <Text mr="4px" bold>
                   {priceAsFloat}
                 </Text>

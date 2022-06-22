@@ -1,4 +1,4 @@
-import { Flex, Box, Card, CardBody, Text, Button, BinanceIcon, Skeleton, useModal } from '@pancakeswap/uikit'
+import { Flex, Box, Card, CardBody, Text, Button, CronosIcon, Skeleton, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { formatNumber } from 'utils/formatBalance'
 import { multiplyPriceByAmount } from 'utils/prices'
@@ -73,7 +73,7 @@ const MainPancakeBunnyCard: React.FC<MainPancakeBunnyCardProps> = ({
                     {t('Lowest price')}
                   </Text>
                   <Flex alignItems="center" mt="8px">
-                    <BinanceIcon width={18} height={18} mr="4px" />
+                    <CronosIcon width={18} height={18} mr="4px" />
                     <Text fontSize="24px" bold mr="4px">
                       {formatNumber(parseFloat(nftToDisplay?.marketData?.currentAskPrice), 0, 5)}
                     </Text>

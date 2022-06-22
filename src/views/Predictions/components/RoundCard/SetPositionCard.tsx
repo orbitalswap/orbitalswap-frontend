@@ -8,7 +8,7 @@ import {
   Heading,
   IconButton,
   Button,
-  BinanceIcon,
+  CronosIcon,
   Text,
   BalanceInput,
   Box,
@@ -174,7 +174,7 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
             {t('Commit')}:
           </Text>
           <Flex alignItems="center">
-            <BinanceIcon mr="4px  " />
+            <CronosIcon mr="4px  " />
             <Text bold textTransform="uppercase">
               BNB
             </Text>
