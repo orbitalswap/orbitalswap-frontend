@@ -8,7 +8,7 @@ const launchpads: SerializedLaunchpadConfig[] = [
     id: 3,
     address: {
       97: '',
-      56: '0xa4006583527B94974DA42499dcC67fd95bA4a443',
+      56: '0x76445a732b0ae2D27DA2D9416138c84C6c54a22D',
     },
     isActive: true,
     name: 'RIPTIDE FINANCE',
