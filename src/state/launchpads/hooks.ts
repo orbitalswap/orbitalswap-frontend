@@ -53,16 +53,18 @@ const deserializeLaunchpadUserData = (launchpad: SerializedLaunchpad): Deseriali
     contributedAmount: launchpad.userData ? new BigNumber(launchpad.userData.contributedAmount) : BIG_ZERO,
     earnings: launchpad.userData ? new BigNumber(launchpad.userData.earnings) : BIG_ZERO,
     claimed: launchpad.userData ? launchpad.userData.claimed : false,
+    whitelisted: launchpad.userData ? launchpad.userData.whitelisted : false,
   }
 }
 
 const deserializeLaunchpad = (launchpad: SerializedLaunchpad): DeserializedLaunchpad => {
-  const { id, isActive, isTomFork, address, name, subTitle, description, projectSiteUrl, releaseAt } = launchpad
+  const { id, isActive, isTomFork, isPrivatesale, address, name, subTitle, description, projectSiteUrl, releaseAt } = launchpad
 
   return {
     id,
     isActive,
     isTomFork,
+    isPrivatesale,
     address,
     name,
     subTitle,

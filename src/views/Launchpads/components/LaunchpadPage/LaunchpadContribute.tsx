@@ -3,13 +3,13 @@ import { useModal, Text } from '@pancakeswap/uikit'
 import { LaunchpadStatus } from 'config/constants/types'
 import { useLaunchpadContract } from 'hooks/useContract'
 import { getAddress } from 'utils/addressHelpers'
-import LabelButton from './LabelButton'
-import ContributeModal from './ContributeModal'
-import useLaunchpadClaim from '../../hooks/useLaunchpadClaim'
 import { DeserializedLaunchpad } from 'state/types'
 import useLaunchpadAllowance from 'views/Launchpads/hooks/useLaunchpadAllowance'
 import useApproveLaunchpad from 'views/Launchpads/hooks/useApproveLaunchpad'
 import unserializedTokens from 'config/constants/tokens'
+import LabelButton from './LabelButton'
+import ContributeModal from './ContributeModal'
+import useLaunchpadClaim from '../../hooks/useLaunchpadClaim'
 
 export interface Props {
   launchpad: DeserializedLaunchpad
@@ -19,8 +19,8 @@ export interface Props {
 
 const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus }) => {
   const [pendingTx, setPendingTx] = useState(false)
-  const { address, minPerTx, maxPerUser, totalRaised, currency } = launchpad
-  const { contributedAmount, claimed } = launchpad.userData
+  const { address, minPerTx, maxPerUser, totalRaised, currency, isPrivatesale } = launchpad
+  const { contributedAmount, claimed, whitelisted } = launchpad.userData
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
   const launchpadContractAddress = getAddress(address)
@@ -83,6 +83,10 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
           }
           onClick={handleApprove}
         />
+          
+          {// eslint-disable-next-line react/no-unescaped-entities
+            isPrivatesale && !whitelisted ? (<Text fontSize="14px" color="failure">You're not whitelisted</Text>):''
+          }
         <Text fontSize="14px" color="textSubtle">
           {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>

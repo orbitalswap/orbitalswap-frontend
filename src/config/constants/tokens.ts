@@ -63,6 +63,15 @@ export const mainnetTokens = defineTokens({
     'Tether USD',
     'https://tether.to/',
   ),
+  usdc: new Token(
+    MAINNET,
+    '0xc21223249CA28397B4B6541dfFaEcC539BfF0c59',
+    6,
+    'USDC',
+    'USD Coin',
+    'https://www.circle.com/en/usdc',
+  ),
+  vvs: new Token(MAINNET, '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03', 18, 'VVS', 'VVS', 'https://vvs.finance/'),
   wbtc: new Token(
     MAINNET,
     '0x062E66477Faf219F25D27dCED647BF57C3107d52',

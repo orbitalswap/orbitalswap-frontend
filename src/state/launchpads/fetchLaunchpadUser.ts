@@ -85,3 +85,23 @@ export const fetchLaunchpadUserContributedAmounts = async (
   )
   return parsedStakedBalances
 }
+
+export const fetchLaunchpadUserWhitelisted = async (
+  account: string,
+  launchpadsToFetch: SerializedLaunchpadConfig[],
+) => {
+  const calls = launchpadsToFetch.map((launchpad) => {
+    return {
+      address: getAddress(launchpad.address),
+      name: 'whitelisted',
+      params: [account],
+    }
+  })
+
+  const rawWhitelisted = await multicall(launchpadABI, calls)
+  const parsedWhitelisted = launchpadsToFetch.reduce(
+    (acc, launchpad, index) => ({ ...acc, [launchpad.id]:  rawWhitelisted[index][0]}),
+    {},
+  )
+  return parsedWhitelisted
+}
