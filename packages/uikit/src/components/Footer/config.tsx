@@ -80,12 +80,12 @@ export const socials = [
   {
     label: "Twitter",
     icon: TwitterIcon,
-    href: "https://twitter.com/TYTANFI",
+    href: "https://bit.ly/39MaAIQ",
   },
   {
     label: "Telegram",
     icon: TelegramIcon,
-    href: "https://bit.ly/39MaAIQ"
+    href: "https://t.me/tytanfi"
     // items: [
     //   {
     //     label: "English",
