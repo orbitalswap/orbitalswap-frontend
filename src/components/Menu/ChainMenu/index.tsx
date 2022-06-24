@@ -63,7 +63,7 @@ const ChainMenu = () => {
   const UserMenuItems = () => {
     return (
       <>
-        <UserMenuItem as="a" disabled={isWrongNetwork} href="https://orbitalswap.com.finance">
+        <UserMenuItem as="a" disabled={isWrongNetwork} href="https://orbitalswap.com">
           {t('Binance Smart Chain')}
         </UserMenuItem>
       </>
