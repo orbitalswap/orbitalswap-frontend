@@ -80,31 +80,31 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
   //     },
   //   ],
   // },
-  {
-    label: '',
-    href: '/info',
-    icon: MoreIcon,
-    hideSubNav: true,
-    items: [
-      {
-        label: t('Info'),
-        href: '/info',
-      },
-      {
-        type: DropdownMenuItemType.DIVIDER,
-      },
-      // {
-      //   label: t('Blog'),
-      //   href: 'https://medium.com/orbitalswap',
-      //   type: DropdownMenuItemType.EXTERNAL_LINK,
-      // },
-      {
-        label: t('Docs'),
-        href: 'https://docs.tytan.finance',
-        type: DropdownMenuItemType.EXTERNAL_LINK,
-      },
-    ],
-  },
+  // {
+  //   label: '',
+  //   href: '/info',
+  //   icon: MoreIcon,
+  //   hideSubNav: true,
+  //   items: [
+  //     {
+  //       label: t('Info'),
+  //       href: '/info',
+  //     },
+  //     {
+  //       type: DropdownMenuItemType.DIVIDER,
+  //     },
+  //     // {
+  //     //   label: t('Blog'),
+  //     //   href: 'https://medium.com/orbitalswap',
+  //     //   type: DropdownMenuItemType.EXTERNAL_LINK,
+  //     // },
+  //     {
+  //       label: t('Docs'),
+  //       href: 'https://docs.tytan.finance',
+  //       type: DropdownMenuItemType.EXTERNAL_LINK,
+  //     },
+  //   ],
+  // },
 ]
 
 export default config
