@@ -112,7 +112,7 @@ const ChainMenu: React.FC<UserMenuProps> = ({
         }}
       >
         <MenuIcon avatarSrc={avatarSrc} variant={variant} />
-        <LabelText title={text || account}>{text || accountEllipsis}</LabelText>
+        <LabelText title={account}>{accountEllipsis}</LabelText>
         {/* <ChevronDownIcon color="text" width="24px" /> */}
       </StyledUserMenu>
       <Menu style={styles.popper} ref={setTooltipRef} {...attributes.popper} isOpen={isOpen}>

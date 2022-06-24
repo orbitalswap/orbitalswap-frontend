@@ -55,23 +55,7 @@ export const DangerMenuIcon: React.FC = () => (
 );
 
 const MenuIcon: React.FC<{ avatarSrc?: string; variant: Variant }> = ({ avatarSrc, variant }) => {
-  if (variant === variants.DANGER) {
-    return <DangerMenuIcon />;
-  }
-
-  if (variant === variants.WARNING) {
-    return <WarningMenuIcon />;
-  }
-
-  if (variant === variants.PENDING) {
-    return <PendingMenuIcon />;
-  }
-
-  if (!avatarSrc) {
-    return <NoProfileMenuIcon />;
-  }
-
-  return <ProfileIcon src={avatarSrc} height={40} width={40} />;
+  return <NoProfileMenuIcon />;
 };
 
 export default MenuIcon;
