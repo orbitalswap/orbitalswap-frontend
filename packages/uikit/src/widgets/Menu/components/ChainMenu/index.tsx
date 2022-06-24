@@ -44,7 +44,7 @@ const Menu = styled.div<{ isOpen: boolean }>`
   padding-bottom: 4px;
   padding-top: 4px;
   pointer-events: auto;
-  width: 280px;
+  width: 180px;
   visibility: visible;
   z-index: 1001;
 

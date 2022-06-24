@@ -10,6 +10,7 @@ import {
   UserMenuItem,
   UserMenuVariant,
   Box,
+  BinanceChainIcon,
 } from '@pancakeswap/uikit'
 import Trans from 'components/Trans'
 import useAuth from 'hooks/useAuth'
@@ -63,7 +64,8 @@ const ChainMenu = () => {
     return (
       <>
         <UserMenuItem as="a" disabled={isWrongNetwork} href="https://orbitalswap.com">
-          {t('Binance Smart Chain')}
+          <BinanceChainIcon />
+          {t('Binance Chain')}
         </UserMenuItem>
       </>
     )
