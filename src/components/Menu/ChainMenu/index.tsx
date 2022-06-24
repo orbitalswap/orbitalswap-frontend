@@ -29,7 +29,6 @@ const ChainMenu = () => {
   const { t } = useTranslation()
   const { account, error, chainId } = useWeb3React()
 
-  console.log(error, chainId, '56456546546464564645645')
   const { logout } = useAuth()
   const { hasPendingTransactions, pendingNumber } = usePendingTransactions()
   const { balance, fetchStatus } = useGetBnbBalance()

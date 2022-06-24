@@ -19,16 +19,16 @@ const priceHelperLps: SerializedFarmConfig[] = [
   //   token: tokens.ankr,
   //   quoteToken: tokens.wbnb,
   // },
-  {
-    pid: null,
-    lpSymbol: 'USDibs-BUSD LP',
-    lpAddresses: {
-      97: '',
-      56: '0xADB3C33d435cEFd6A43e802cae917D9f9EE15A0b',
-    },
-    token: tokens.usdibs,
-    quoteToken: tokens.busd,
-  },
+  // {
+  //   pid: null,
+  //   lpSymbol: 'USDibs-BUSD LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0xADB3C33d435cEFd6A43e802cae917D9f9EE15A0b',
+  //   },
+  //   token: tokens.usdibs,
+  //   quoteToken: tokens.busd,
+  // },
   // {
   //   pid: null,
   //   lpSymbol: 'ETH-BNB LP',
