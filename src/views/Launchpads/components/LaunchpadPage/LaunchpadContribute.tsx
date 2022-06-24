@@ -70,7 +70,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   const isFinished = status === 'upcoming'
   const percentOfUserContribution = contributedAmount.div(totalRaised).times(100)
 
-  if(allowance.lt(minPerTx)) {
+  if(status === 'live' && allowance.lt(minPerTx)) {
     return (
       <>
         <LabelButton
@@ -115,11 +115,12 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   }
 
   if (status === 'filled') {
+    const claimable = contributedAmount.toNumber() > 0 && !claimed
     return (
       <>
         <LabelButton
-          disabled
-          buttonLabel={claimed ? 'Claimed' : 'Claim'}
+          disabled={!claimable}
+          buttonLabel={claimable ? 'Claimed' : 'Claim'}
           label={`Your contribution (${buyTokenSymbol})`}
           value={
             // eslint-disable-next-line no-nested-ternary
@@ -136,12 +137,12 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
 
   if (status === 'ended') {
     const claimable = contributedAmount.toNumber() > 0 && !claimed
-    const noContribute = contributedAmount.toNumber() === 0 && !claimed
+    const noContribute = contributedAmount.toNumber() === 0
     return (
       <>
         <LabelButton
-          disabled={!claimable}
-          buttonLabel={!noContribute ? (claimable ? 'Claim' : 'Claimed') : `Buy with ${buyTokenSymbol}`}
+          disabled={!claimable || noContribute}
+          buttonLabel={claimable ? 'Claim' : 'Claimed'}
           label={`Your contribution (${buyTokenSymbol})`}
           value={
             // eslint-disable-next-line no-nested-ternary

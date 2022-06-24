@@ -34,6 +34,6 @@ export const getStatus = (
     }
     return 'live'
   }
-  return 'upcoming'
+  return 'ended'
 }
 export default null
