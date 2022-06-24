@@ -157,6 +157,28 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
     )
   }
 
+  if (status === 'cancelled') {
+    const claimable = contributedAmount.toNumber() > 0 && !claimed
+    const noContribute = contributedAmount.toNumber() === 0
+    return (
+      <>
+        <LabelButton
+          disabled={!claimable || noContribute}
+          buttonLabel={claimable ? 'Withdraw' : 'Refunded'}
+          label={`Your contribution (${buyTokenSymbol})`}
+          value={
+            // eslint-disable-next-line no-nested-ternary
+            contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
+          }
+          onClick={claim}
+        />
+        <Text fontSize="14px" color="textSubtle">
+          {claimable ? `You'll get your investment` : ``}
+        </Text>
+      </>
+    )
+  }
+
   return (
     <>
       <LabelButton
