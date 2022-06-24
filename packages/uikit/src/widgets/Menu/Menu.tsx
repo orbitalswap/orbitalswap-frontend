@@ -69,6 +69,7 @@ const Menu: React.FC<NavProps> = ({
   userMenu,
   banner,
   globalMenu,
+  chainMenu,
   isDark,
   toggleTheme,
   currentLang,
@@ -142,9 +143,11 @@ const Menu: React.FC<NavProps> = ({
                   <CakePrice showSkeleton={false} cakePriceUsd={cakePriceUsd} />
                 </Box>
               )}
-              <Box mr="12px">
-                <Audit showSkeleton={false} cakePriceUsd={cakePriceUsd} />
-              </Box>
+              {!isMobile && !isMd && (
+                <Box mr="12px">
+                  <Audit showSkeleton={false} cakePriceUsd={cakePriceUsd} />
+                </Box>
+              )}
               <Box mt="4px">
                 <LangSelector
                   currentLang={currentLang}
@@ -156,7 +159,7 @@ const Menu: React.FC<NavProps> = ({
                 />
               </Box>
               {/* {globalMenu} {userMenu} */}
-              {userMenu}
+              {chainMenu} {userMenu}
             </Flex>
           </StyledNav>
         </FixedContainer>

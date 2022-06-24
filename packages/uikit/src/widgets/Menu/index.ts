@@ -6,6 +6,7 @@ export { status as menuStatus, links as menuConfig } from "./config";
 export type { NavProps, Language } from "./types";
 
 export { default as UserMenu } from "./components/UserMenu";
+export { default as ChainMenu } from "./components/ChainMenu";
 export * from "./components/UserMenu/styles";
 export type {
   UserMenuProps,

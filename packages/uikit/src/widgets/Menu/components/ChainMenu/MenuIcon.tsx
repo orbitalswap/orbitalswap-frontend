@@ -2,23 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import { Variant, variants } from "./types";
 import { Image } from "../../../../components/Image";
-import { RefreshIcon, WalletFilledIcon, WarningIcon } from "../../../../components/Svg";
+import { BinanceChainIcon, CronosIcon, RefreshIcon, WalletFilledIcon, WarningIcon } from "../../../../components/Svg";
 import { Colors } from "../../../../theme/types";
 
 const MenuIconWrapper = styled.div<{ borderColor: keyof Colors }>`
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.background};
-  border-color: ${({ theme, borderColor }) => theme.colors[borderColor]};
-  border-radius: 50%;
   border-style: solid;
-  border-width: 2px;
+  // border-width: 2px;
   display: flex;
-  height: 30px;
+  height: 40px;
   justify-content: center;
   left: 0;
   position: absolute;
-  top: 1px;
-  width: 30px;
+  top: -4px;
+  width: 40px;
   z-index: 102;
 `;
 
@@ -35,7 +32,7 @@ const ProfileIcon = styled(Image)`
 
 export const NoProfileMenuIcon: React.FC = () => (
   <MenuIconWrapper borderColor="primary">
-    <WalletFilledIcon color="primary" width="24px" />
+    <BinanceChainIcon color="primary" width="24px" />
   </MenuIconWrapper>
 );
 

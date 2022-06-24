@@ -9,6 +9,7 @@ import useTheme from 'hooks/useTheme'
 import { usePriceCakeBusd } from 'state/farms/hooks'
 import { usePhishingBannerManager } from 'state/user/hooks'
 import UserMenu from './UserMenu'
+import ChainMenu from './ChainMenu'
 import { useMenuItems } from './hooks/useMenuItems'
 import GlobalSettings from './GlobalSettings'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
@@ -36,6 +37,7 @@ const Menu = (props) => {
         return <NextLinkFromReactRouter to={linkProps.href} {...linkProps} prefetch={false} />
       }}
       userMenu={<UserMenu />}
+      chainMenu={<ChainMenu />}
       globalMenu={<GlobalSettings />}
       banner={showPhishingWarningBanner && typeof window !== 'undefined' && <PhishingWarningBanner />}
       isDark={isDark}
