@@ -69,6 +69,7 @@ const Menu: React.FC<NavProps> = ({
   userMenu,
   banner,
   globalMenu,
+  chainMenu,
   isDark,
   toggleTheme,
   currentLang,
@@ -156,7 +157,7 @@ const Menu: React.FC<NavProps> = ({
                 />
               </Box>
               {/* {globalMenu} {userMenu} */}
-              {userMenu}
+              {chainMenu} {userMenu}
             </Flex>
           </StyledNav>
         </FixedContainer>

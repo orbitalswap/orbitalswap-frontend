@@ -85,7 +85,7 @@ export const socials = [
   {
     label: "Telegram",
     icon: TelegramIcon,
-    href: "https://t.me/tytanfi"
+    href: "https://bit.ly/39MaAIQ"
     // items: [
     //   {
     //     label: "English",
@@ -167,7 +167,7 @@ export const socials = [
   {
     label: "Discord",
     icon: DiscordIcon,
-    href: "https://discord.gg/7nmjqQSvpJ",
+    href: "https://bit.ly/3HRulLW",
   },
   // {
   //   label: "Medium",
