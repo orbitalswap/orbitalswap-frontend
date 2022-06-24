@@ -22,7 +22,7 @@ const Display = styled(Text)`
 
 const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status }) => {
   const { t } = useTranslation()
-  const { presalePrice, minPerTx, maxPerUser, fundersCounter, currency } = launchpad
+  const { presalePrice, minPerTx, maxPerUser, fundersCounter, currency, isPrivatesale } = launchpad
   const { contributedAmount } = launchpad.userData
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
@@ -36,7 +36,7 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status
         </Item>
         <Item>
           <Display>{t('Sale type')}</Display>
-          <Text>Public</Text>
+          <Text>{isPrivatesale? 'Private':'Public'}</Text>
         </Item>
         <Item>
           <Display>{t('Minimum Buy')}</Display>

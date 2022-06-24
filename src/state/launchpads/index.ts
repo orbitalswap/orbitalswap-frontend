@@ -9,6 +9,7 @@ import {
   fetchLaunchpadUserContributedAmounts,
   fetchLaunchpadUserTokenAllowances,
   fetchLaunchpadUserTokenBalances,
+  fetchLaunchpadUserWhitelisted
 } from './fetchLaunchpadUser'
 
 const noAccountLaunchpadConfig = launchpadsConfig.map((launchpad) => ({
@@ -19,6 +20,7 @@ const noAccountLaunchpadConfig = launchpadsConfig.map((launchpad) => ({
     contributedAmount: '0',
     earnings: '0',
     claimed: false,
+    whitelisted: false,
   },
 }))
 
@@ -45,6 +47,7 @@ export const fetchLaunchpadUserDataAsync = (account: string, pids) => async (dis
   const userLaunchpadAllowances = await fetchLaunchpadUserTokenAllowances(account, launchpadsToFetch)
   const userLaunchpadTokenBalances = await fetchLaunchpadUserTokenBalances(account, launchpadsToFetch)
   const userLaunchpadContributedAmounts = await fetchLaunchpadUserContributedAmounts(account, launchpadsToFetch)
+  const userLaunchpadWhitelisted = await fetchLaunchpadUserWhitelisted(account, launchpadsToFetch)
 
   const data = launchpadsToFetch.map((launchpadConfig) => ({
     id: launchpadConfig.id,
@@ -53,6 +56,7 @@ export const fetchLaunchpadUserDataAsync = (account: string, pids) => async (dis
       tokenBalance: userLaunchpadTokenBalances[launchpadConfig.id],
       contributedAmount: userLaunchpadContributedAmounts[launchpadConfig.id].amount,
       claimed: userLaunchpadContributedAmounts[launchpadConfig.id].claimed,
+      whitelisted: userLaunchpadWhitelisted[launchpadConfig.id],
     },
   }))
 
@@ -93,6 +97,7 @@ export const launchpadsSlice = createSlice({
             contributedAmount: '0',
             earnings: '0',
             claimed: false,
+            whitelisted: false,
           },
         }
       })

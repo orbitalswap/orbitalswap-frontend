@@ -90,7 +90,7 @@ const ContributeModal: React.FC<Props> = ({
           onClick={async () => {
             try {
               setPendingTx(true)
-              await onContribute(getDecimalAmount(new BigNumber(value)).toString(), !!currency)
+              await onContribute(getDecimalAmount(new BigNumber(value), currency?.decimals).toString(), !!currency)
 
               dispatch(fetchLaunchpadsPublicDataAsync([launchpadId]))
               dispatch(fetchLaunchpadUserDataAsync(account, [launchpadId]))
@@ -99,6 +99,7 @@ const ContributeModal: React.FC<Props> = ({
             } finally {
               toggleStatus()
               setPendingTx(false)
+              onDismiss()
             }
           }}
         >

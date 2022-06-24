@@ -21,7 +21,7 @@ const fetchLaunchpads = async (launchpadsToFetch: SerializedLaunchpadConfig[]): 
       hardcap: getBalanceAmount(new BigNumber(hardcap), launchpad.currency ? launchpad.currency.decimals : 18).toJSON(),
       presalePrice: getBalanceAmount(
         new BigNumber(presalePrice),
-        launchpad.currency ? launchpad.currency.decimals : 18,
+        launchpad.token ? launchpad.token.decimals : 18,
       ).toJSON(),
       minPerTx: getBalanceAmount(
         new BigNumber(minPerTx),

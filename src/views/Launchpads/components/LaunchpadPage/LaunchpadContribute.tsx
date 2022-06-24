@@ -3,13 +3,13 @@ import { useModal, Text } from '@pancakeswap/uikit'
 import { LaunchpadStatus } from 'config/constants/types'
 import { useLaunchpadContract } from 'hooks/useContract'
 import { getAddress } from 'utils/addressHelpers'
-import LabelButton from './LabelButton'
-import ContributeModal from './ContributeModal'
-import useLaunchpadClaim from '../../hooks/useLaunchpadClaim'
 import { DeserializedLaunchpad } from 'state/types'
 import useLaunchpadAllowance from 'views/Launchpads/hooks/useLaunchpadAllowance'
 import useApproveLaunchpad from 'views/Launchpads/hooks/useApproveLaunchpad'
 import unserializedTokens from 'config/constants/tokens'
+import LabelButton from './LabelButton'
+import ContributeModal from './ContributeModal'
+import useLaunchpadClaim from '../../hooks/useLaunchpadClaim'
 
 export interface Props {
   launchpad: DeserializedLaunchpad
@@ -19,8 +19,8 @@ export interface Props {
 
 const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus }) => {
   const [pendingTx, setPendingTx] = useState(false)
-  const { address, minPerTx, maxPerUser, totalRaised, currency } = launchpad
-  const { contributedAmount, claimed } = launchpad.userData
+  const { address, minPerTx, maxPerUser, totalRaised, currency, isPrivatesale } = launchpad
+  const { contributedAmount, claimed, whitelisted } = launchpad.userData
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
   const launchpadContractAddress = getAddress(address)
@@ -70,7 +70,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   const isFinished = status === 'upcoming'
   const percentOfUserContribution = contributedAmount.div(totalRaised).times(100)
 
-  if(allowance.lt(minPerTx)) {
+  if(status === 'live' && allowance.lt(minPerTx)) {
     return (
       <>
         <LabelButton
@@ -83,6 +83,10 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
           }
           onClick={handleApprove}
         />
+          
+          {// eslint-disable-next-line react/no-unescaped-entities
+            isPrivatesale && !whitelisted ? (<Text fontSize="14px" color="failure">You're not whitelisted</Text>):''
+          }
         <Text fontSize="14px" color="textSubtle">
           {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
@@ -111,11 +115,12 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   }
 
   if (status === 'filled') {
+    const claimable = contributedAmount.toNumber() > 0 && !claimed
     return (
       <>
         <LabelButton
-          disabled
-          buttonLabel={claimed ? 'Claimed' : 'Claim'}
+          disabled={!claimable}
+          buttonLabel={claimable ? 'Claimed' : 'Claim'}
           label={`Your contribution (${buyTokenSymbol})`}
           value={
             // eslint-disable-next-line no-nested-ternary
@@ -132,12 +137,12 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
 
   if (status === 'ended') {
     const claimable = contributedAmount.toNumber() > 0 && !claimed
-    const noContribute = contributedAmount.toNumber() === 0 && !claimed
+    const noContribute = contributedAmount.toNumber() === 0
     return (
       <>
         <LabelButton
-          disabled={!claimable}
-          buttonLabel={!noContribute ? (claimable ? 'Claim' : 'Claimed') : `Buy with ${buyTokenSymbol}`}
+          disabled={!claimable || noContribute}
+          buttonLabel={claimable ? 'Claim' : 'Claimed'}
           label={`Your contribution (${buyTokenSymbol})`}
           value={
             // eslint-disable-next-line no-nested-ternary

@@ -187,6 +187,7 @@ interface SerializedLaunchpadUserData {
   contributedAmount: string
   earnings: string
   claimed: boolean
+  whitelisted: boolean
 }
 
 export interface DeserializedLaunchpadUserData {
@@ -195,6 +196,7 @@ export interface DeserializedLaunchpadUserData {
   contributedAmount: BigNumber
   earnings: BigNumber
   claimed: boolean
+  whitelisted: boolean
 }
 
 export interface SerializedLaunchpad extends SerializedLaunchpadConfig {
