@@ -6,6 +6,7 @@ import TokenPocket from "../../components/Svg/Icons/TokenPocket";
 import BinanceChain from "../../components/Svg/Icons/BinanceChain";
 import SafePal from "../../components/Svg/Icons/SafePal";
 import Coin98 from "../../components/Svg/Icons/Coin98";
+import CryptoCom from "../../components/Svg/Icons/CryptoCom";
 import Blocto from "../../components/Svg/Icons/Blocto";
 import CoinbaseWallet from "../../components/Svg/Icons/CoinbaseWallet";
 
@@ -17,12 +18,12 @@ const connectors: Config[] = [
     icon: Metamask,
     connectorId: ConnectorNames.Injected,
     priority: 1,
-    href: "https://metamask.app.link/dapp/orbitalswap.com/",
+    href: "https://metamask.app.link/dapp/cro.orbitalswap.com/",
   },
   {
-    title: "Binance Wallet",
-    icon: BinanceChain,
-    connectorId: ConnectorNames.BSC,
+    title: "Crypto.com Defi Wallet",
+    icon: CryptoCom,
+    connectorId: ConnectorNames.CDCDefiWallet,
     priority: 2,
   },
   {
@@ -50,31 +51,31 @@ const connectors: Config[] = [
     connectorId: ConnectorNames.Injected,
     priority: 999,
   },
-  {
-    title: "TokenPocket",
-    icon: TokenPocket,
-    connectorId: ConnectorNames.Injected,
-    priority: 999,
-  },
-  {
-    title: "SafePal",
-    icon: SafePal,
-    connectorId: ConnectorNames.Injected,
-    priority: 999,
-    mobileOnly: true,
-  },
-  {
-    title: "Coin98",
-    icon: Coin98,
-    connectorId: ConnectorNames.Injected,
-    priority: 999,
-  },
-  {
-    title: "Blocto",
-    icon: Blocto,
-    connectorId: ConnectorNames.Blocto,
-    priority: 999,
-  },
+  // {
+  //   title: "TokenPocket",
+  //   icon: TokenPocket,
+  //   connectorId: ConnectorNames.Injected,
+  //   priority: 999,
+  // },
+  // {
+  //   title: "SafePal",
+  //   icon: SafePal,
+  //   connectorId: ConnectorNames.Injected,
+  //   priority: 999,
+  //   mobileOnly: true,
+  // },
+  // {
+  //   title: "Coin98",
+  //   icon: Coin98,
+  //   connectorId: ConnectorNames.Injected,
+  //   priority: 999,
+  // },
+  // {
+  //   title: "Blocto",
+  //   icon: Blocto,
+  //   connectorId: ConnectorNames.Blocto,
+  //   priority: 999,
+  // },
 ];
 
 export default connectors;

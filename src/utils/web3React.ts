@@ -2,6 +2,7 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { ChainId } from '@orbitalswap/sdk'
+import { DeFiWeb3Connector } from 'deficonnect'
 import { BscConnector } from '@binance-chain/bsc-connector'
 import { ConnectorNames } from '@pancakeswap/uikit'
 import { hexlify } from '@ethersproject/bytes'
@@ -22,12 +23,22 @@ const walletconnect = new WalletConnectConnector({
   pollingInterval: POLLING_INTERVAL,
 })
 
-const bscConnector = new BscConnector({ supportedChainIds: [chainId] })
+// const defiWalletConnect = new DeFiWeb3Connector({
+//   supportedChainIds: [chainId],
+//   rpc: { [chainId]: rpcUrl },
+//   pollingInterval: 15000,
+// })
+
+// const defiWalletConnect = new DeFiWeb3Connector({
+//   supportedChainIds: [chainId],
+//   rpc: { [chainId]: rpcUrl },
+//   pollingInterval: POLLING_INTERVAL,
+// })
 
 export const connectorsByName = {
   [ConnectorNames.Injected]: injected,
   [ConnectorNames.WalletConnect]: walletconnect,
-  [ConnectorNames.BSC]: bscConnector,
+  // [ConnectorNames.CDCDefiWallet]: defiWalletConnect,
   [ConnectorNames.Blocto]: async () => {
     const { BloctoConnector } = await import('@blocto/blocto-connector')
     return new BloctoConnector({ chainId, rpc: rpcUrl })

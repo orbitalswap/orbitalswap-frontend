@@ -8,11 +8,11 @@ import { nodes } from './getRpcUrl'
 
 const NETWORK_CONFIG = {
   [ChainId.MAINNET]: {
-    name: 'BNB Smart Chain Mainnet',
+    name: 'Cronos Mainnet',
     scanURL: BASE_BSC_SCAN_URLS[ChainId.MAINNET],
   },
   [ChainId.TESTNET]: {
-    name: 'BNB Smart Chain Testnet',
+    name: 'Cronos Testnet',
     scanURL: BASE_BSC_SCAN_URLS[ChainId.TESTNET],
   },
 }
@@ -45,8 +45,8 @@ export const setupNetwork = async (externalProvider?: ExternalProvider) => {
                 chainId: `0x${chainId.toString(16)}`,
                 chainName: NETWORK_CONFIG[chainId].name,
                 nativeCurrency: {
-                  name: 'BNB',
-                  symbol: 'bnb',
+                  name: 'CRO',
+                  symbol: 'cro',
                   decimals: 18,
                 },
                 rpcUrls: nodes,
@@ -63,7 +63,7 @@ export const setupNetwork = async (externalProvider?: ExternalProvider) => {
       return false
     }
   } else {
-    console.error("Can't setup the BSC network on metamask because window.ethereum is undefined")
+    console.error("Can't setup the Cronos network on metamask because window.ethereum is undefined")
     return false
   }
 }
