@@ -23,11 +23,11 @@ const walletconnect = new WalletConnectConnector({
   pollingInterval: POLLING_INTERVAL,
 })
 
-const defiWalletConnect = new DeFiWeb3Connector({
-  supportedChainIds: [chainId],
-  rpc: { [chainId]: rpcUrl },
-  pollingInterval: 15000,
-})
+// const defiWalletConnect = new DeFiWeb3Connector({
+//   supportedChainIds: [chainId],
+//   rpc: { [chainId]: rpcUrl },
+//   pollingInterval: 15000,
+// })
 
 // const defiWalletConnect = new DeFiWeb3Connector({
 //   supportedChainIds: [chainId],
@@ -38,7 +38,7 @@ const defiWalletConnect = new DeFiWeb3Connector({
 export const connectorsByName = {
   [ConnectorNames.Injected]: injected,
   [ConnectorNames.WalletConnect]: walletconnect,
-  [ConnectorNames.CDCDefiWallet]: defiWalletConnect,
+  // [ConnectorNames.CDCDefiWallet]: defiWalletConnect,
   [ConnectorNames.Blocto]: async () => {
     const { BloctoConnector } = await import('@blocto/blocto-connector')
     return new BloctoConnector({ chainId, rpc: rpcUrl })

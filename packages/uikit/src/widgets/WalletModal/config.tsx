@@ -20,12 +20,12 @@ const connectors: Config[] = [
     priority: 1,
     href: "https://metamask.app.link/dapp/cro.orbitalswap.com/",
   },
-  {
-    title: "Crypto.com Defi Wallet",
-    icon: CryptoCom,
-    connectorId: ConnectorNames.CDCDefiWallet,
-    priority: 2,
-  },
+  // {
+  //   title: "Crypto.com Defi Wallet",
+  //   icon: CryptoCom,
+  //   connectorId: ConnectorNames.CDCDefiWallet,
+  //   priority: 2,
+  // },
   {
     title: "Coinbase Wallet",
     icon: CoinbaseWallet,
