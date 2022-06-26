@@ -85,7 +85,7 @@ export const socials = [
   {
     label: "Telegram",
     icon: TelegramIcon,
-    href: "https://t.me/tytanfi"
+    href: "https://t.me/OrbitalSS"
     // items: [
     //   {
     //     label: "English",
