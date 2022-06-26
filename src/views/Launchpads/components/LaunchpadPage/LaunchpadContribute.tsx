@@ -169,6 +169,9 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
         }
         onClick={isFinished ? claim : onPresentContributeModal}
       />
+      {// eslint-disable-next-line react/no-unescaped-entities
+        isPrivatesale && !whitelisted ? (<Text fontSize="14px" color="failure">You're not whitelisted</Text>):''
+      }
       <Text fontSize="14px" color="textSubtle">
         {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
       </Text>
