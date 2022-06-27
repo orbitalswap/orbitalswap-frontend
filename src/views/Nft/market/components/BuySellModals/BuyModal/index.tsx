@@ -36,7 +36,7 @@ interface BuyModalProps extends InjectedModalProps {
   nftToBuy: NftToken
 }
 
-// NFT WBNB in testnet contract is different
+// NFT WCRO in testnet contract is different
 const wbnbAddress =
   CHAIN_ID === String(ChainId.MAINNET) ? tokens.wcro.address : '0x094616f0bdfb0b526bd735bf66eca0ad254ca81f'
 
@@ -62,7 +62,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   // CRO - returns ethers.BigNumber
   const { balance: bnbBalance, fetchStatus: bnbFetchStatus } = useGetBnbBalance()
   const formattedBnbBalance = parseFloat(formatEther(bnbBalance))
-  // WBNB - returns BigNumber
+  // WCRO - returns BigNumber
   const { balance: wbnbBalance, fetchStatus: wbnbFetchStatus } = useTokenBalance(wbnbAddress)
   const formattedWbnbBalance = getBalanceNumber(wbnbBalance)
 
@@ -76,7 +76,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
 
   useEffect(() => {
     if (bnbBalance.lt(nftPriceWei) && wbnbBalance.gte(ethersToBigNumber(nftPriceWei)) && !isPaymentCurrentInitialized) {
-      setPaymentCurrency(PaymentCurrency.WBNB)
+      setPaymentCurrency(PaymentCurrency.WCRO)
       setIsPaymentCurrentInitialized(true)
     }
   }, [bnbBalance, wbnbBalance, nftPriceWei, isPaymentCurrentInitialized])
@@ -90,18 +90,18 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
     },
     onApproveSuccess: async ({ receipt }) => {
       toastSuccess(
-        t('Contract approved - you can now buy NFT with WBNB!'),
+        t('Contract approved - you can now buy NFT with WCRO!'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
       )
     },
     onConfirm: () => {
       const payAmount = Number.isNaN(nftPrice) ? Zero : parseUnits(nftToBuy?.marketData?.currentAskPrice)
       if (paymentCurrency === PaymentCurrency.CRO) {
-        return callWithGasPrice(nftMarketContract, 'buyTokenUsingBNB', [nftToBuy.collectionAddress, nftToBuy.tokenId], {
+        return callWithGasPrice(nftMarketContract, 'buyTokenUsingCRO', [nftToBuy.collectionAddress, nftToBuy.tokenId], {
           value: payAmount,
         })
       }
-      return callWithGasPrice(nftMarketContract, 'buyTokenUsingWBNB', [
+      return callWithGasPrice(nftMarketContract, 'buyTokenUsingWCRO', [
         nftToBuy.collectionAddress,
         nftToBuy.tokenId,
         payAmount,
@@ -118,7 +118,7 @@ const BuyModal: React.FC<BuyModalProps> = ({ nftToBuy, onDismiss }) => {
   })
 
   const continueToNextStage = () => {
-    if (paymentCurrency === PaymentCurrency.WBNB && !isApproved) {
+    if (paymentCurrency === PaymentCurrency.WCRO && !isApproved) {
       setStage(BuyingStage.APPROVE_AND_CONFIRM)
     } else {
       setStage(BuyingStage.CONFIRM)
