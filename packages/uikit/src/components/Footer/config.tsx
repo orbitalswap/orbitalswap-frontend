@@ -80,12 +80,12 @@ export const socials = [
   {
     label: "Twitter",
     icon: TwitterIcon,
-    href: "https://bit.ly/39MaAIQ",
+    href: "https://orbitalss.link/WbTw",
   },
   {
     label: "Telegram",
     icon: TelegramIcon,
-    href: "https://t.me/OrbitalSS"
+    href: "https://orbitalss.link/WbTG"
     // items: [
     //   {
     //     label: "English",
@@ -167,7 +167,7 @@ export const socials = [
   {
     label: "Discord",
     icon: DiscordIcon,
-    href: "https://bit.ly/3HRulLW",
+    href: "https://orbitalss.link/WbDc",
   },
   // {
   //   label: "Medium",
