@@ -64,6 +64,7 @@ export const mainnetTokens = defineTokens({
     'https://tether.to/',
   ),
   vvs: new Token(MAINNET, '0x2D03bECE6747ADC00E1a131BBA1469C15fD11e03', 18, 'VVS', 'VVS', 'https://vvs.finance/'),
+  smg: new Token(MAINNET, '0x24E4f771B22547f0D3D7679e2D393647D986b98f', 18, 'SMG', 'Smokin Gorillas', 'http://smokingorilla.finance/'),
   wbtc: new Token(
     MAINNET,
     '0x062E66477Faf219F25D27dCED647BF57C3107d52',

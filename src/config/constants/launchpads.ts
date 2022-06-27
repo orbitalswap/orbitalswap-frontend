@@ -20,7 +20,25 @@ const launchpads: SerializedLaunchpadConfig[] = [
     projectSiteUrl: 'https://smokingorilla.finance/',
     releaseAt: 1652986800,
     currency: serializedTokens.usdc,
-    token: serializedTokens.vvs,
+    token: serializedTokens.smg,
+  },
+  {
+    id: 2,
+    address: {
+      338: '0x3e70a810a40119abeF47F885CD6739f9C0eF4D3D',
+      25: '0x3e4BdABF4a9dAbB4438C00A61558D9AC8a965FbB',
+    },
+    isActive: true,
+    isTomFork: true,
+    isPrivatesale: false,
+    name: 'Smoking Gorilla',
+    subTitle: 'Auto-Staking & Compounding From the Future',
+    description:
+      "Smoking Gorilla Token is an Auto Rebasing Token with a Auto Decaying APY model which reduces the APY automatically within 6 months and then slowly keeps decaying to find a realistic high APY that is sustainable.",
+    projectSiteUrl: 'https://smokingorilla.finance/',
+    releaseAt: 1652986800,
+    currency: serializedTokens.usdc,
+    token: serializedTokens.smg,
   },
 ]
 
