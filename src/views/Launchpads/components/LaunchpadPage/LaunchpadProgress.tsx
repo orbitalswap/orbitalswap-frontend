@@ -17,7 +17,7 @@ const StyledProgress = styled.div`
 const LaunchpadProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised, currency }) => {
   const progress1 = raised / hardcap * 100
   // const progress2 = softcap / hardcap * 100
-  const buyTokenSymbol = currency?.symbol ?? 'BNB'
+  const buyTokenSymbol = currency?.symbol ?? 'CRO'
 
   return (
     <StyledProgress>

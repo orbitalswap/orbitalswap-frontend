@@ -40,7 +40,7 @@ const ContributeModal: React.FC<Props> = ({
   const tokenBalance = useCurrencyBalance(account ?? undefined, currency ?? Currency.ETHER)
   const onContribute = useLaunchpadContribute(launchpadContract)
 
-  const buyTokenSymbol = currency?.symbol ?? 'BNB'
+  const buyTokenSymbol = currency?.symbol ?? 'CRO'
 
   useEffect(() => {
     if (new BigNumber(value).isGreaterThan(contributeLimit)) {

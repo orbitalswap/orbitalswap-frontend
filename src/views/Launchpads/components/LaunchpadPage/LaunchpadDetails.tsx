@@ -33,7 +33,7 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ launchpad }) => {
     token,
   } = launchpad
 
-  const buyTokenSymbol = currency?.symbol ?? 'BNB'
+  const buyTokenSymbol = currency?.symbol ?? 'CRO'
   const presaleTokenSymbol = token.symbol
 
   return (

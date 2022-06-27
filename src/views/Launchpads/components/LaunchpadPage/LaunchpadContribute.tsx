@@ -21,7 +21,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   const [pendingTx, setPendingTx] = useState(false)
   const { address, minPerTx, maxPerUser, totalRaised, currency, isPrivatesale } = launchpad
   const { contributedAmount, claimed, whitelisted } = launchpad.userData
-  const buyTokenSymbol = currency?.symbol ?? 'BNB'
+  const buyTokenSymbol = currency?.symbol ?? 'CRO'
 
   const launchpadContractAddress = getAddress(address)
   const launchpadContract = useLaunchpadContract(launchpadContractAddress)

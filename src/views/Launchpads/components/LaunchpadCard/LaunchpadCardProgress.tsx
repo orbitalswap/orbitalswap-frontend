@@ -34,7 +34,7 @@ const ProgressBar = styled.div`
 `
 const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised, liquidityPercent, currency, isTombFork, liquidityLockupTime }) => {
   const progress1 = raised / (hardcap ?? 1) * 100
-  const buyTokenSymbol = currency?.symbol ?? 'BNB'
+  const buyTokenSymbol = currency?.symbol ?? 'CRO'
   
 
   const lockupDays = liquidityLockupTime / 86400

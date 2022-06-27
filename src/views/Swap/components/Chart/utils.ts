@@ -1,4 +1,4 @@
-import { BNB_ADDRESS } from './constants'
+import { CRO_ADDRESS } from './constants'
 
 const MIN_VALUE_DISPLAYED = 0.001
 
@@ -26,8 +26,8 @@ export const getTokenAddress = (tokenAddress: undefined | string) => {
     return ''
   }
   const lowerCaseAddress = tokenAddress.toLowerCase()
-  if (lowerCaseAddress === 'bnb') {
-    return BNB_ADDRESS
+  if (lowerCaseAddress === 'cro') {
+    return CRO_ADDRESS
   }
 
   return lowerCaseAddress

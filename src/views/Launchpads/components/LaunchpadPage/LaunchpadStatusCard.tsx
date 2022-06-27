@@ -24,7 +24,7 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status
   const { t } = useTranslation()
   const { presalePrice, minPerTx, maxPerUser, fundersCounter, currency, isPrivatesale } = launchpad
   const { contributedAmount } = launchpad.userData
-  const buyTokenSymbol = currency?.symbol ?? 'BNB'
+  const buyTokenSymbol = currency?.symbol ?? 'CRO'
 
   const purchaseTokenAmount = presalePrice.toNumber() * contributedAmount?.toNumber() || 0
   return (
