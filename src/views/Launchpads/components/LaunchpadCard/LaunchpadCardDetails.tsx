@@ -69,6 +69,31 @@ const LaunchpadCardDetails: React.FC<LaunchpadCardDetailsProps> = ({
     )
   }
 
+  if (status === 'cancelled') {
+    return (
+      <>
+        <StyledLaunchpadCardDetails>
+          <Item>
+            <Display>
+              <Text>Presale:</Text>
+              <Text>Cancelled</Text>
+            </Display>
+            <div>
+              <Button variant="primary">
+                <Link href={`/launchpads/${getAddress(launchpad.address)}`} passHref>
+                  {t('View Pool')}
+                </Link>
+              </Button>
+            </div>
+          </Item>
+        </StyledLaunchpadCardDetails>
+        <LinkExternal href={projectSiteUrl} style={{ margin: 'auto' }}>
+          {t('View project site')}
+        </LinkExternal>
+      </>
+    )
+  }
+
   return (
     <>
       <StyledLaunchpadCardDetails>
