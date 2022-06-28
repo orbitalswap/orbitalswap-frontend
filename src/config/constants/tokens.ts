@@ -78,6 +78,14 @@ export const mainnetTokens = defineTokens({
     'DSHARE',
     'https://dibs.money/',
   ),
+  avion: new Token(
+    MAINNET,
+    '0xC3695f9D7dC86877dBBEce44eE6c89b66b34D8cC',
+    18,
+    'AVION',
+    'Avion Finance',
+    'https://dibs.money/',
+  ),
   unc: new Token(
     MAINNET,
     '0x81d5791E65e0dB42687e2cAF205F14A5E550C2aF',

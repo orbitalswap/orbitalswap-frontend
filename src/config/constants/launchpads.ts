@@ -5,20 +5,35 @@ const serializedTokens = serializeTokens()
 
 const launchpads: SerializedLaunchpadConfig[] = [
   {
-    id: 3,
+    id: 4,
     address: {
       97: '',
-      56: '0x76445a732b0ae2D27DA2D9416138c84C6c54a22D',
+      56: '0x7d386A0786fC0300d6A5B2F5aB9081AA3CA1f97E',
     },
     isActive: true,
-    name: 'RIPTIDE FINANCE',
+    name: 'AVION FINANCE',
     subTitle: 'Auto-Staking & Compounding From the Future',
     description:
-      "An innovative DeFi Protocol on Binance Smart Chain",
-    projectSiteUrl: 'https://www.riptidefi.com/',
+      "Avion Finance is the next logical step for the rebase token. With multiple revenue streams, deflationary mechanisms, an improved anti-dump lock and a stable trading range right from launch, your investment will soar the skies with us.",
+    projectSiteUrl: 'https://avion.finance/',
     releaseAt: 1652986800,
     currency: serializedTokens.busd,
-    token: serializedTokens.surf,
+    token: serializedTokens.avion,
+  },
+  {
+    id: 1,
+    address: {
+      97: '0x3e70a810a40119abeF47F885CD6739f9C0eF4D3D',
+      56: '0xBa809c35E9314E89a82de6d7Ccf9DC3f4C0CA28E',
+    },
+    isActive: true,
+    name: 'Tytan',
+    subTitle: 'Auto-Staking & Compounding From the Future',
+    description:
+      "We've travelled the wormholes of the rebase galaxy far & wide. Only to find the future is TYTAN. With immediate utility on launch. Strap in and feel the G-force of rebase at its finest.",
+    projectSiteUrl: 'https://tytan.finance/',
+    releaseAt: 1652986800,
+    token: serializedTokens.tytan,
   },
   {
     id: 2,
@@ -38,19 +53,20 @@ const launchpads: SerializedLaunchpadConfig[] = [
     token: serializedTokens.usdibs,
   },
   {
-    id: 1,
+    id: 3,
     address: {
-      97: '0x3e70a810a40119abeF47F885CD6739f9C0eF4D3D',
-      56: '0xBa809c35E9314E89a82de6d7Ccf9DC3f4C0CA28E',
+      97: '',
+      56: '0x76445a732b0ae2D27DA2D9416138c84C6c54a22D',
     },
     isActive: true,
-    name: 'Tytan',
+    name: 'RIPTIDE FINANCE',
     subTitle: 'Auto-Staking & Compounding From the Future',
     description:
-      "We've travelled the wormholes of the rebase galaxy far & wide. Only to find the future is TYTAN. With immediate utility on launch. Strap in and feel the G-force of rebase at its finest.",
-    projectSiteUrl: 'https://tytan.finance/',
+      "An innovative DeFi Protocol on Binance Smart Chain",
+    projectSiteUrl: 'https://www.riptidefi.com/',
     releaseAt: 1652986800,
-    token: serializedTokens.tytan,
+    currency: serializedTokens.busd,
+    token: serializedTokens.surf,
   },
 ]
 
