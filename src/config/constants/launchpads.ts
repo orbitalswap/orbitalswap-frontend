@@ -4,22 +4,22 @@ import { SerializedLaunchpadConfig } from './types'
 const serializedTokens = serializeTokens()
 
 const launchpads: SerializedLaunchpadConfig[] = [
-  {
-    id: 5,
-    address: {
-      97: '',
-      56: '0xa6B1Ec117372EB8D6FC794C301fc5c0Cbb4dA7b0',
-    },
-    isActive: true,
-    name: 'DualMiner',
-    subTitle: 'Auto-Staking & Compounding From the Future',
-    description:
-      " $DualMiner is a new Multi-Chain token created to general Dual Passive Income for High 12% APR Daily Rewards, 4380% APR – All done for you Automatically by contract ! Simply Buy $DUALMINER tokens in your wallet and earn passive income in $DUALMINER.",
-    projectSiteUrl: 'https://dualminer.money/',
-    releaseAt: 1652986800,
-    // currency: serializedTokens.busd,
-    token: serializedTokens.dual,
-  },
+  // {
+  //   id: 5,
+  //   address: {
+  //     97: '',
+  //     56: '0xa6B1Ec117372EB8D6FC794C301fc5c0Cbb4dA7b0',
+  //   },
+  //   isActive: true,
+  //   name: 'DualMiner',
+  //   subTitle: 'Auto-Staking & Compounding From the Future',
+  //   description:
+  //     " $DualMiner is a new Multi-Chain token created to general Dual Passive Income for High 12% APR Daily Rewards, 4380% APR – All done for you Automatically by contract ! Simply Buy $DUALMINER tokens in your wallet and earn passive income in $DUALMINER.",
+  //   projectSiteUrl: 'https://dualminer.money/',
+  //   releaseAt: 1652986800,
+  //   // currency: serializedTokens.busd,
+  //   token: serializedTokens.dual,
+  // },
   {
     id: 4,
     address: {
