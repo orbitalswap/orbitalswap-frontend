@@ -70,6 +70,14 @@ export const mainnetTokens = defineTokens({
     'Dibs USD',
     'https://dibs.money/',
   ),
+  dual: new Token(
+    MAINNET,
+    '0xE52FfDb70EB0c84d186CfAad461B65ce635a8A08',
+    18,
+    'DUAL',
+    'Dual Miner',
+    'https://dualminer.money/',
+  ),
   dshare: new Token(
     MAINNET,
     '0x26d3163b165BE95137CEe97241E716b2791a7572',
