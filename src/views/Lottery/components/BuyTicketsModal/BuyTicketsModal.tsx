@@ -312,7 +312,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
           <Text mr="4px" bold>
             {t('Tickets')}
           </Text>
-          <Ticket />
+          {/* <Ticket /> */}
         </Flex>
       </Flex>
       <BalanceInput
