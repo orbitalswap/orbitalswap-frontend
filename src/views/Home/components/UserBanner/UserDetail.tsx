@@ -41,9 +41,9 @@ const UserDetail = () => {
   const truncatedAddress = truncateHash(account)
 
   const getDesktopHeading = () => {
-    if (profile) {
-      return <Heading scale="xl">{t('Hi, %userName%!', { userName: profile.username })}</Heading>
-    }
+    // if (profile) {
+    //   return <Heading scale="xl">{t('Hi, %userName%!', { userName: profile.username })}</Heading>
+    // }
     if (isLoading && !profile) {
       return <Skeleton width={200} height={40} my="4px" />
     }
@@ -51,13 +51,13 @@ const UserDetail = () => {
   }
 
   const getMobileHeading = () => {
-    if (profile) {
-      return (
-        <Heading mb="18px" textAlign="center">
-          {t('Hi, %userName%!', { userName: profile.username })}
-        </Heading>
-      )
-    }
+    // if (profile) {
+    //   return (
+    //     <Heading mb="18px" textAlign="center">
+    //       {t('Hi, %userName%!', { userName: profile.username })}
+    //     </Heading>
+    //   )
+    // }
     if (isLoading && !profile) {
       return <Skeleton width={120} height={20} mt="2px" mb="18px" />
     }
@@ -68,7 +68,8 @@ const UserDetail = () => {
     <>
       <Desktop>
         <Box mr="24px">
-          <Sticker>{profile ? <ProfileAvatarWithTeam profile={profile} /> : <StyledNoProfileAvatarIcon />}</Sticker>
+          {/* <Sticker>{profile ? <ProfileAvatarWithTeam profile={profile} /> : <StyledNoProfileAvatarIcon />}</Sticker> */}
+          <Sticker><StyledNoProfileAvatarIcon /></Sticker>
         </Box>
         <Flex flexDirection="column">
           {getDesktopHeading()}

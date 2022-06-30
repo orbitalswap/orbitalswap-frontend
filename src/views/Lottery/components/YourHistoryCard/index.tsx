@@ -153,7 +153,7 @@ const YourHistoryCard: React.FC<YourHistoryCardProps> = ({ handleShowMoreClick, 
       <CardFooter>
         <Flex flexDirection="column" justifyContent="center" alignItems="center">
           <Text fontSize="12px" color="textSubtle">
-            {t('Only showing data for Lottery V2')}
+            {/* {t('Only showing data for Lottery V2')} */}
           </Text>
         </Flex>
       </CardFooter>

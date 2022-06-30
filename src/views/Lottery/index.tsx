@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Box, Flex, Heading, Skeleton } from '@pancakeswap/uikit'
+import { Box, Flex, Heading, Skeleton, Text, Link } from '@pancakeswap/uikit'
 import { LotteryStatus } from 'config/constants/types'
 import PageSection from 'components/PageSection'
 import { useTranslation } from 'contexts/Localization'
@@ -107,14 +107,14 @@ const Lottery = () => {
             )}
           </Flex>
         </PageSection>
-        <PageSection
+        {/* <PageSection
           dividerPosition="top"
           dividerFill={{ light: theme.colors.background }}
           clipFill={{ light: '#9A9FD0', dark: '#66578D' }}
           index={2}
         >
           <HowToPlay />
-        </PageSection>
+        </PageSection> */}
       </LotteryPage>
     </>
   )
