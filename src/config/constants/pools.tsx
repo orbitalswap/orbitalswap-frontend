@@ -56,7 +56,6 @@ const pools: SerializedPoolConfig[] = [
     sortOrder: 1,
     isFinished: false,
   },
-
   {
     sousId: 5,
     stakingToken: serializedTokens.wtytan,
@@ -69,6 +68,20 @@ const pools: SerializedPoolConfig[] = [
     harvest: true,
     tokenPerBlock: '0.0001215',
     sortOrder: 2,
+    isFinished: false,
+  },
+  {
+    sousId: 6,
+    stakingToken: serializedTokens.wtytan,
+    earningToken: serializedTokens.orb,
+    contractAddress: {
+      97: '',
+      56: '0x9fB686A2c7a3cF743Fd079Bf45CEb93493e2b41b',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    tokenPerBlock: '0.015625',
+    sortOrder: 3,
     isFinished: false,
   },
 ].filter((p) => !!p.contractAddress[CHAIN_ID])
