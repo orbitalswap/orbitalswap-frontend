@@ -87,7 +87,7 @@ const pools: SerializedPoolConfig[] = [
 ].filter((p) => !!p.contractAddress[CHAIN_ID])
 
 // known finished pools
-const finishedPools = [
+const finishedPools: SerializedPoolConfig[] = [
   {
     sousId: 1,
     stakingToken: serializedTokens.wtytan,
