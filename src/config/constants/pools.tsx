@@ -56,6 +56,25 @@ const pools: SerializedPoolConfig[] = [
     sortOrder: 1,
     isFinished: false,
   },
+
+  {
+    sousId: 5,
+    stakingToken: serializedTokens.wtytan,
+    earningToken: serializedTokens.wbnb,
+    contractAddress: {
+      97: '',
+      56: '0xe9f0cF95A2Cb0b3801c19FfB6cC7EcBd98d67d98',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    tokenPerBlock: '0.0001215',
+    sortOrder: 2,
+    isFinished: false,
+  },
+].filter((p) => !!p.contractAddress[CHAIN_ID])
+
+// known finished pools
+const finishedPools = [
   {
     sousId: 1,
     stakingToken: serializedTokens.wtytan,
@@ -71,20 +90,6 @@ const pools: SerializedPoolConfig[] = [
     isFinished: true,
   },
   {
-    sousId: 5,
-    stakingToken: serializedTokens.wtytan,
-    earningToken: serializedTokens.wbnb,
-    contractAddress: {
-      97: '',
-      56: '0xe9f0cF95A2Cb0b3801c19FfB6cC7EcBd98d67d98',
-    },
-    poolCategory: PoolCategory.CORE,
-    harvest: true,
-    tokenPerBlock: '0.0001215',
-    sortOrder: 2,
-    isFinished: false,
-  },
-  {
     sousId: 2,
     stakingToken: serializedTokens.wtytan,
     earningToken: serializedTokens.busd,
@@ -96,7 +101,7 @@ const pools: SerializedPoolConfig[] = [
     harvest: true,
     tokenPerBlock: '0.01215',
     sortOrder: 3,
-    isFinished: false,
+    isFinished: true,
   },
   {
     sousId: 3,
@@ -110,7 +115,7 @@ const pools: SerializedPoolConfig[] = [
     harvest: true,
     tokenPerBlock: '0.01215',
     sortOrder: 4,
-    isFinished: false,
+    isFinished: true,
   },
   {
     sousId: 4,
@@ -124,8 +129,9 @@ const pools: SerializedPoolConfig[] = [
     harvest: true,
     tokenPerBlock: '0.03125',
     sortOrder: 5,
-    isFinished: false,
+    isFinished: true,
   },
-].filter((p) => !!p.contractAddress[CHAIN_ID])
-
-export default pools
+]
+  .filter((p) => !!p.contractAddress[CHAIN_ID])
+  .map((p) => ({ ...p, isFinished: true }))
+export default [...pools, ...finishedPools]
