@@ -31,7 +31,7 @@ const Results = () => {
 
   return (
     <Box>
-      <Container mb="16px">
+      {/* <Container mb="16px">
         <Grid
           gridGap={['16px', null, null, null, null, '24px']}
           gridTemplateColumns={['1fr', null, null, null, null, 'repeat(3, 1fr)']}
@@ -40,7 +40,7 @@ const Results = () => {
           <RankingCard rank={2} user={second} />
           <RankingCard rank={3} user={third} />
         </Grid>
-      </Container>
+      </Container> */}
       {isDesktop ? <DesktopResults results={rest} /> : <MobileResults results={rest} />}
       <Flex mb="40px" justifyContent="center">
         {hasMoreResults && (

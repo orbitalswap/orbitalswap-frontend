@@ -51,11 +51,11 @@ const ClaimCheck = () => {
   return (
     <StyledClaimCheck onClick={account ? handleClick : undefined}>
       <Box style={{ flex: 1 }}>
-        <Text>{t('Showing history for Prediction v0.2')}</Text>
-        <Flex alignItems="center">
+        <Text>{t('Showing history for Prediction')}</Text>
+        {/* <Flex alignItems="center">
           <Text color="primary">{t('Check for unclaimed v0.1 winnings')}</Text>
           <ChevronRightIcon color="primary" width="24px" />
-        </Flex>
+        </Flex> */}
       </Box>
       {isFetching && (
         <Box px="16px">

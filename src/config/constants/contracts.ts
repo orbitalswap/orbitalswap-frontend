@@ -63,8 +63,13 @@ export default {
     56: '0xE4C7Ef82824Dc78c3f1Fe542E2eC171C6cf9bC2f',
     97: '',
   },
+  cakeFlexibleSideVault: {
+    56: '0x615e896A8C2CA8470A2e9dc2E9552998f8658Ea0',
+    97: '',
+  },
+    
   predictions: {
-    56: '0x18B2A687610328590Bc8F2e5fEdDe3b582A49cdA',
+    56: '0x33dfbA298925fDA7717275491529256AACb6370e',
     97: '',
   },
   chainlinkOracle: {

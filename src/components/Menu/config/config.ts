@@ -98,6 +98,10 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
       //   href: 'https://medium.com/orbitalswap',
       //   type: DropdownMenuItemType.EXTERNAL_LINK,
       // },
+      // {
+      //   label: t('Voting'),
+      //   href: '/voting',
+      // },
       {
         label: t('Docs'),
         href: 'https://docs.tytan.finance',
