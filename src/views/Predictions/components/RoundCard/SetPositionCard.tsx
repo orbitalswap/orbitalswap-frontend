@@ -9,8 +9,10 @@ import {
   IconButton,
   Button,
   BinanceIcon,
+  LogoIcon,
   Text,
   BalanceInput,
+  Slider,
   Box,
   AutoRenewIcon,
 } from '@pancakeswap/uikit'
@@ -21,15 +23,23 @@ import { useWeb3React } from '@web3-react/core'
 import { useGetMinBetAmount } from 'state/predictions/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { usePredictionsContract } from 'hooks/useContract'
-import { useGetBnbBalance } from 'hooks/useTokenBalance'
+import { useGetBnbBalance, useGetCakeBalance } from 'hooks/useTokenBalance'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { BetPosition } from 'state/types'
 import { formatBigNumber, formatFixedNumber } from 'utils/formatBalance'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { Slider } from 'components/Slider'
+import { useConfig } from 'views/Predictions/context/ConfigProvider'
+import useCakeApprovalStatus from 'hooks/useCakeApprovalStatus'
+import useCakeApprove from 'hooks/useCakeApprove'
+
 import PositionTag from '../PositionTag'
 import FlexRow from '../FlexRow'
+
+const LOGOS = {
+  BNB: BinanceIcon,
+  CAKE: LogoIcon,
+}
 
 interface SetPositionCardProps {
   position: BetPosition
@@ -66,18 +76,38 @@ const getValueAsEthersBn = (value: string) => {
   return Number.isNaN(valueAsFloat) ? Zero : parseUnits(value)
 }
 
+const TOKEN_BALANCE_CONFIG = {
+  BNB: useGetBnbBalance,
+  CAKE: useGetCakeBalance,
+}
+
 const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosition, epoch, onBack, onSuccess }) => {
   const [value, setValue] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [percent, setPercent] = useState(0)
 
   const { account } = useWeb3React()
-  const { balance: bnbBalance } = useGetBnbBalance()
   const minBetAmount = useGetMinBetAmount()
   const { t } = useTranslation()
   const { fetchWithCatchTxError, loading: isTxPending } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const predictionsContract = usePredictionsContract()
+  const { address: predictionsAddress, token } = useConfig()
+  const predictionsContract = usePredictionsContract(predictionsAddress, token.symbol)
+  const useTokenBalance = useMemo(() => {
+    return TOKEN_BALANCE_CONFIG[token.symbol]
+  }, [token.symbol])
+
+  const { isVaultApproved, setLastUpdated } = useCakeApprovalStatus(token.symbol === 'CAKE' ? predictionsAddress : null)
+  const { handleApprove, pendingTx } = useCakeApprove(
+    setLastUpdated,
+    predictionsAddress,
+    t('You can now start prediction'),
+  )
+
+  // BNB prediction doesn't need approval
+  const doesCakeApprovePrediction = token.symbol === 'BNB' || isVaultApproved
+
+  const { balance: bnbBalance } = useTokenBalance()
 
   const maxBalance = useMemo(() => {
     return bnbBalance.gt(dust) ? bnbBalance.sub(dust) : Zero
@@ -128,9 +158,18 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
 
   const handleEnterPosition = async () => {
     const betMethod = position === BetPosition.BULL ? 'betBull' : 'betBear'
+    const callOptions =
+      token.symbol === 'CAKE'
+        ? {
+            gasLimit: 300000,
+            value: 0,
+          }
+        : { value: valueAsBn.toString() }
+
+    const args = token.symbol === 'CAKE' ? [epoch, valueAsBn.toString()] : [epoch]
 
     const receipt = await fetchWithCatchTxError(() => {
-      return callWithGasPrice(predictionsContract, betMethod, [epoch], { value: valueAsBn.toString() })
+      return callWithGasPrice(predictionsContract, betMethod, args, callOptions)
     })
     if (receipt?.status) {
       onSuccess(receipt.transactionHash)
@@ -143,15 +182,19 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
     const hasSufficientBalance = inputAmount.gt(0) && inputAmount.lte(maxBalance)
 
     if (!hasSufficientBalance) {
-      setErrorMessage(t('Insufficient BNB balance'))
+      setErrorMessage(t('Insufficient %symbol% balance', { symbol: token.symbol }))
     } else if (inputAmount.gt(0) && inputAmount.lt(minBetAmount)) {
       setErrorMessage(
-        t('A minimum amount of %num% %token% is required', { num: formatBigNumber(minBetAmount), token: 'BNB' }),
+        t('A minimum amount of %num% %token% is required', { num: formatBigNumber(minBetAmount), token: token.symbol }),
       )
     } else {
       setErrorMessage(null)
     }
-  }, [value, maxBalance, minBetAmount, setErrorMessage, t])
+  }, [value, maxBalance, minBetAmount, setErrorMessage, t, token.symbol])
+
+  const Logo = useMemo(() => {
+    return LOGOS[token.symbol]
+  }, [token.symbol])
 
   return (
     <Card>
@@ -174,9 +217,9 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
             {t('Commit')}:
           </Text>
           <Flex alignItems="center">
-            <BinanceIcon mr="4px  " />
+            <Logo mr="4px" />
             <Text bold textTransform="uppercase">
-              BNB
+              {token.symbol}
             </Text>
           </Flex>
         </Flex>
@@ -239,16 +282,28 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
         </Flex>
         <Box mb="8px">
           {account ? (
-            <Button
-              width="100%"
-              disabled={disabled}
-              className={disabled ? '' : 'swiper-no-swiping'}
-              onClick={handleEnterPosition}
-              isLoading={isTxPending}
-              endIcon={isTxPending ? <AutoRenewIcon color="currentColor" spin /> : null}
-            >
-              {t(key)}
-            </Button>
+            doesCakeApprovePrediction ? (
+              <Button
+                width="100%"
+                disabled={disabled}
+                className={disabled ? '' : 'swiper-no-swiping'}
+                onClick={handleEnterPosition}
+                isLoading={isTxPending}
+                endIcon={isTxPending ? <AutoRenewIcon color="currentColor" spin /> : null}
+              >
+                {t(key)}
+              </Button>
+            ) : (
+              <Button
+                width="100%"
+                className="swiper-no-swiping"
+                onClick={handleApprove}
+                isLoading={pendingTx}
+                endIcon={pendingTx ? <AutoRenewIcon color="currentColor" spin /> : null}
+              >
+                {t('Enable')}
+              </Button>
+            )
           ) : (
             <ConnectWalletButton className="swiper-no-swiping" width="100%" />
           )}

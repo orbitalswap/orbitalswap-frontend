@@ -1622,7 +1622,7 @@
   "CAKE to lock": "CAKE to lock",
   "%amount% Burned": "%amount% Burned",
   "Convert to Lock": "Convert to Lock",
-  "Lock staking offers higher APY while providing other benefits.": "Lock staking offers higher APY while providing other benefits.",
+  "Lock staking users are earning an average of %amount%% APY. More benefits are coming soon.": "Lock staking users are earning an average of %amount%% APY. More benefits are coming soon.",
   "Add": "Add",
   "Week": "Week",
   "Total lock duration exceeds 52 weeks": "Total lock duration exceeds 52 weeks",
@@ -1668,7 +1668,9 @@
   "Calculated based on current rates and subject to change based on pool conditions. It is an estimate provided for your convenience only, and by no means represents guaranteed returns.": "Calculated based on current rates and subject to change based on pool conditions. It is an estimate provided for your convenience only, and by no means represents guaranteed returns.",
   "You will be able to withdraw the staked CAKE and profit only when the staking position is unlocked, i.e. when the staking period ends.": "You will be able to withdraw the staked CAKE and profit only when the staking position is unlocked, i.e. when the staking period ends.",
   "View Tutorial": "View Tutorial",
-  "CAKE Pool": "CAKE Pool",
+  "ORB Pool": "ORB Pool",
   "Average lock duration": "Average lock duration",
-  "The average lock duration of all the locked staking positions of other users": "The average lock duration of all the locked staking positions of other users"
+  "The average lock duration of all the locked staking positions of other users": "The average lock duration of all the locked staking positions of other users",
+  "Flexible ORB": "Flexible ORB",
+  "Flexible staking on the side.": "Flexible staking on the side."
 }

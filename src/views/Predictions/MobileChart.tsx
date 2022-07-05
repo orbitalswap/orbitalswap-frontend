@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Flex } from '@pancakeswap/uikit'
 import { useChartView } from 'state/predictions/hooks'
 import { setChartView } from 'state/predictions'
-import { useAppDispatch } from 'state'
+import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
 import dynamic from 'next/dynamic'
 import { PredictionsChartView } from 'state/types'
 import { TabToggleGroup, TabToggle } from 'components/TabToggle'
@@ -22,30 +22,40 @@ const ChartWrapper = styled.div`
   background-color: ${({ theme }) => theme.card.background};
 `
 
+const MobileChartWrapper = styled(Flex)`
+  flex-direction: column;
+  height: 100%;
+  @media only screen and (max-width: 575px) and (max-height: 739px) {
+    height: 100vh;
+  }
+`
+
 const MobileChart = () => {
   const chartView = useChartView()
-  const dispatch = useAppDispatch()
+  const dispatch = useLocalDispatch()
   const { t } = useTranslation()
 
   return (
-    <Flex flexDirection="column" height="100%">
+    <MobileChartWrapper>
       <MenuWrapper>
         <Menu />
       </MenuWrapper>
-      <TabToggleGroup>
-        <TabToggle
-          isActive={chartView === PredictionsChartView.TradingView}
-          onClick={() => dispatch(setChartView(PredictionsChartView.TradingView))}
-        >
-          TradingView {t('Chart')}
-        </TabToggle>
-        <TabToggle
-          isActive={chartView === PredictionsChartView.Chainlink}
-          onClick={() => dispatch(setChartView(PredictionsChartView.Chainlink))}
-        >
-          Chainlink {t('Chart')}
-        </TabToggle>
-      </TabToggleGroup>
+      <div style={{ height: 'min-content' }}>
+        <TabToggleGroup>
+          <TabToggle
+            isActive={chartView === PredictionsChartView.TradingView}
+            onClick={() => dispatch(setChartView(PredictionsChartView.TradingView))}
+          >
+            TradingView {t('Chart')}
+          </TabToggle>
+          <TabToggle
+            isActive={chartView === PredictionsChartView.Chainlink}
+            onClick={() => dispatch(setChartView(PredictionsChartView.Chainlink))}
+          >
+            Chainlink {t('Chart')}
+          </TabToggle>
+        </TabToggleGroup>
+      </div>
       <ChartWrapper>
         {chartView === PredictionsChartView.TradingView ? (
           <TradingView />
@@ -53,7 +63,7 @@ const MobileChart = () => {
           <ChainlinkChart pt="8px" background="background" isMobile />
         )}
       </ChartWrapper>
-    </Flex>
+    </MobileChartWrapper>
   )
 }
 

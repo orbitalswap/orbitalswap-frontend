@@ -9,14 +9,16 @@ import {
   getProfileContract,
   getIfoV1Contract,
   getIfoV2Contract,
+  getIfoV3Contract,
   getMasterchefContract,
   getMasterchefV1Contract,
   getPointCenterIfoContract,
   getSouschefContract,
   getClaimRefundContract,
-  getTradingCompetitionContract,
-  getTradingCompetitionContractV2,
+  getTradingCompetitionContractEaster,
+  getTradingCompetitionContractFanToken,
   getTradingCompetitionContractMobox,
+  getTradingCompetitionContractMoD,
   getEasterNftContract,
   getErc721Contract,
   getCakeVaultV2Contract,
@@ -34,9 +36,22 @@ import {
   getPancakeSquadContract,
   getErc721CollectionContract,
   getBunnySpecialXmasContract,
+  getGalaxyNTFClaimingContract,
+  getZapContract,
+  getCakeFlexibleSideVaultV2Contract,
+  getCakePredictionsContract,
 } from 'utils/contractHelpers'
 import { getMulticallAddress } from 'utils/addressHelpers'
-import { Erc20, Erc20Bytes32, Multicall, Weth, Cake, Erc721collection, CakeVaultV2 } from 'config/abi/types'
+import {
+  Erc20,
+  Erc20Bytes32,
+  Multicall,
+  Weth,
+  Cake,
+  Erc721collection,
+  CakeVaultV2,
+  CakeFlexibleSideVaultV2,
+} from 'config/abi/types'
 
 // Imports below migrated from Exchange useContract.ts
 import { Contract } from '@ethersproject/contracts'
@@ -49,6 +64,7 @@ import multiCallAbi from '../config/abi/Multicall.json'
 import { getContract, getProviderOrSigner } from '../utils'
 
 import { IPancakePair } from '../config/abi/types/IPancakePair'
+import { VaultKey } from '../state/types'
 
 /**
  * Helper hooks to get specific contracts (by ABI)
@@ -63,26 +79,34 @@ export const useIfoV2Contract = (address: string) => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getIfoV2Contract(address, library.getSigner()), [address, library])
 }
-
 export const useLaunchpadContract = (address: string) => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getLaunchpadContract(address, library.getSigner()), [address, library])
 }
+export const useIfoV3Contract = (address: string) => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getIfoV3Contract(address, library.getSigner()), [address, library])
+}
 
 export const useERC20 = (address: string, withSignerIfPossible = true) => {
   const { library, account } = useActiveWeb3React()
-  return useMemo(
-    () => getBep20Contract(address, withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [account, address, library, withSignerIfPossible],
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
   )
+  return useMemo(() => getBep20Contract(address, signer), [address, signer])
 }
 
 /**
  * @see https://docs.openzeppelin.com/contracts/3.x/api/token/erc721
  */
-export const useERC721 = (address: string) => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getErc721Contract(address, library.getSigner()), [address, library])
+export const useERC721 = (address: string, withSignerIfPossible = true) => {
+  const { account, library } = useActiveWeb3React()
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
+  )
+  return useMemo(() => getErc721Contract(address, signer), [address, signer])
 }
 
 export const useCake = (): { reader: Cake; signer: Cake } => {
@@ -108,10 +132,11 @@ export const usePancakeBunnies = () => {
 
 export const useProfileContract = (withSignerIfPossible = true) => {
   const { library, account } = useActiveWeb3React()
-  return useMemo(
-    () => getProfileContract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [withSignerIfPossible, account, library],
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
   )
+  return useMemo(() => getProfileContract(signer), [signer])
 }
 
 export const useLotteryV2Contract = () => {
@@ -121,10 +146,11 @@ export const useLotteryV2Contract = () => {
 
 export const useMasterchef = (withSignerIfPossible = true) => {
   const { library, account } = useActiveWeb3React()
-  return useMemo(
-    () => getMasterchefContract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [library, withSignerIfPossible, account],
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
   )
+  return useMemo(() => getMasterchefContract(signer), [signer])
 }
 
 export const useMasterchefV1 = () => {
@@ -152,25 +178,40 @@ export const useClaimRefundContract = () => {
   return useMemo(() => getClaimRefundContract(library.getSigner()), [library])
 }
 
-export const useTradingCompetitionContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getTradingCompetitionContract(library.getSigner()), [library])
+export const useTradingCompetitionContractEaster = (withSignerIfPossible = true) => {
+  const { library, account } = useActiveWeb3React()
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
+  )
+  return useMemo(() => getTradingCompetitionContractEaster(signer), [signer])
 }
 
-export const useTradingCompetitionContractV2 = (withSignerIfPossible = true) => {
+export const useTradingCompetitionContractFanToken = (withSignerIfPossible = true) => {
   const { library, account } = useActiveWeb3React()
-  return useMemo(
-    () => getTradingCompetitionContractV2(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [library, withSignerIfPossible, account],
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
   )
+  return useMemo(() => getTradingCompetitionContractFanToken(signer), [signer])
 }
 
 export const useTradingCompetitionContractMobox = (withSignerIfPossible = true) => {
   const { library, account } = useActiveWeb3React()
-  return useMemo(
-    () => getTradingCompetitionContractMobox(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [library, withSignerIfPossible, account],
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
   )
+  return useMemo(() => getTradingCompetitionContractMobox(signer), [signer])
+}
+
+export const useTradingCompetitionContractMoD = (withSignerIfPossible = true) => {
+  const { library, account } = useActiveWeb3React()
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
+  )
+  return useMemo(() => getTradingCompetitionContractMoD(signer), [signer])
 }
 
 export const useEasterNftContract = () => {
@@ -178,30 +219,44 @@ export const useEasterNftContract = () => {
   return useMemo(() => getEasterNftContract(library.getSigner()), [library])
 }
 
-export const useVaultPoolContract = (): CakeVaultV2 => {
+export const useVaultPoolContract = (vaultKey: VaultKey): CakeVaultV2 | CakeFlexibleSideVaultV2 => {
   const { library } = useActiveWeb3React()
-  return useMemo(() => getCakeVaultV2Contract(library.getSigner()), [library])
+  return useMemo(() => {
+    if (vaultKey === VaultKey.CakeVault) {
+      return getCakeVaultV2Contract(library.getSigner())
+    }
+    if (vaultKey === VaultKey.CakeFlexibleSideVault) {
+      return getCakeFlexibleSideVaultV2Contract(library.getSigner())
+    }
+    return null
+  }, [library, vaultKey])
 }
 
 export const useCakeVaultContract = (withSignerIfPossible = true) => {
   const { library, account } = useActiveWeb3React()
-  return useMemo(
-    () => getCakeVaultV2Contract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
     [withSignerIfPossible, library, account],
   )
+  return useMemo(() => getCakeVaultV2Contract(signer), [signer])
 }
 
-export const usePredictionsContract = () => {
+export const usePredictionsContract = (address: string, tokenSymbol: string) => {
   const { library } = useActiveWeb3React()
-  return useMemo(() => getPredictionsContract(library.getSigner()), [library])
+  return useMemo(() => {
+    const getPredContract = tokenSymbol === 'CAKE' ? getCakePredictionsContract : getPredictionsContract
+
+    return getPredContract(address, library.getSigner())
+  }, [library, address, tokenSymbol])
 }
 
-export const useChainlinkOracleContract = (withSignerIfPossible = true) => {
+export const useChainlinkOracleContract = (address, withSignerIfPossible = true) => {
   const { library, account } = useActiveWeb3React()
-  return useMemo(
-    () => getChainlinkOracleContract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [account, library, withSignerIfPossible],
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
   )
+  return useMemo(() => getChainlinkOracleContract(address, signer), [signer, address])
 }
 
 export const useSpecialBunnyCakeVaultContract = () => {
@@ -229,6 +284,11 @@ export const useAnniversaryAchievementContract = () => {
   return useMemo(() => getAnniversaryAchievementContract(library.getSigner()), [library])
 }
 
+export const useGalaxyNFTClaimingContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getGalaxyNTFClaimingContract(library.getSigner()), [library])
+}
+
 export const useNftSaleContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getNftSaleContract(library.getSigner()), [library])
@@ -241,10 +301,11 @@ export const usePancakeSquadContract = () => {
 
 export const useFarmAuctionContract = (withSignerIfPossible = true) => {
   const { account, library } = useActiveWeb3React()
-  return useMemo(
-    () => getFarmAuctionContract(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-    [library, account, withSignerIfPossible],
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
   )
+  return useMemo(() => getFarmAuctionContract(signer), [signer])
 }
 
 export const useNftMarketContract = () => {
@@ -274,16 +335,25 @@ function useContract<T extends Contract = Contract>(
   withSignerIfPossible = true,
 ): T | null {
   const { library, account } = useActiveWeb3React()
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
+  )
+
+  const canReturnContract = useMemo(
+    () => address && ABI && (withSignerIfPossible ? library : true),
+    [address, ABI, library, withSignerIfPossible],
+  )
 
   return useMemo(() => {
-    if (!address || !ABI || !library) return null
+    if (!canReturnContract) return null
     try {
-      return getContract(address, ABI, withSignerIfPossible ? getProviderOrSigner(library, account) : null)
+      return getContract(address, ABI, signer)
     } catch (error) {
       console.error('Failed to get contract', error)
       return null
     }
-  }, [address, ABI, library, withSignerIfPossible, account]) as T
+  }, [address, ABI, signer, canReturnContract]) as T
 }
 
 export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: boolean) {
@@ -305,4 +375,13 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 
 export function useMulticallContract() {
   return useContract<Multicall>(getMulticallAddress(), multiCallAbi, false)
+}
+
+export function useZapContract(withSignerIfPossible = true) {
+  const { library, account } = useActiveWeb3React()
+  const signer = useMemo(
+    () => (withSignerIfPossible ? getProviderOrSigner(library, account) : null),
+    [withSignerIfPossible, library, account],
+  )
+  return useMemo(() => getZapContract(signer), [signer])
 }

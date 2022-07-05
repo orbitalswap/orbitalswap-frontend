@@ -48,12 +48,12 @@ const DefaultSlice = styled.circle<SliceProps>`
 `
 
 export const LostSlice = styled(DefaultSlice)`
-  stroke: #F92A68;
+  stroke: #ed4b9e;
   animation: ${DrawAnimation} 1s ease;
 `
 
 export const WonSlice = styled(DefaultSlice)`
-  stroke: #00FFA3;
+  stroke: #31d0aa;
   stroke-dashoffset: ${(props) => -props.offset};
   animation: ${DrawAnimation} 1s ease, ${OffsetAnimation} 1s ease;
 `

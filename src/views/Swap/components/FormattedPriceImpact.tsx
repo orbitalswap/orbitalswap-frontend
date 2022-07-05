@@ -1,6 +1,6 @@
 import { Percent } from '@orbitalswap/sdk'
-import { warningSeverity } from 'utils/prices'
-import { ONE_BIPS } from '../../../config/constants'
+import { warningSeverity } from 'utils/exchange'
+import { ONE_BIPS } from 'config/constants/exchange'
 import { ErrorText } from './styleds'
 
 /**

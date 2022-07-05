@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { CurrencyAmount, JSBI, Token, Trade } from '@orbitalswap/sdk'
+import { CurrencyAmount, Token, Trade } from '@orbitalswap/sdk'
+import { computeTradePriceBreakdown, warningSeverity } from 'utils/exchange'
+import BigNumber from 'bignumber.js'
 import {
   Button,
   Text,
@@ -10,21 +12,22 @@ import {
   Flex,
   IconButton,
   BottomDrawer,
-  useMatchBreakpoints,
   ArrowUpDownIcon,
   Skeleton,
+  useMatchBreakpointsContext,
 } from '@pancakeswap/uikit'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
+import PercentageButton from 'views/Pools/components/PoolCard/Modals/PercentageButton'
 import Footer from 'components/Menu/Footer'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'contexts/Localization'
 import { EXCHANGE_DOCS_URLS } from 'config/constants'
+import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
-import { computeTradePriceBreakdown, warningSeverity } from 'utils/prices'
 import shouldShowSwapWarning from 'utils/shouldShowSwapWarning'
-import PercentageButton from 'views/Pools/components/PoolCard/Modals/PercentageButton'
-import BigNumber from 'bignumber.js'
+import { useWeb3React } from '@web3-react/core'
+import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import useRefreshBlockNumberID from './hooks/useRefreshBlockNumber'
 import AddressInputPanel from './components/AddressInputPanel'
 import { GreyCard } from '../../components/Card'
@@ -36,12 +39,10 @@ import AdvancedSwapDetailsDropdown from './components/AdvancedSwapDetailsDropdow
 import confirmPriceImpactWithoutFee from './components/confirmPriceImpactWithoutFee'
 import { ArrowWrapper, SwapCallbackError, Wrapper } from './components/styleds'
 import TradePrice from './components/TradePrice'
-import ImportTokenWarningModal from './components/ImportTokenWarningModal'
 import ProgressSteps from './components/ProgressSteps'
 import { AppBody } from '../../components/App'
 import ConnectWalletButton from '../../components/ConnectWalletButton'
 
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useCurrency, useAllTokens } from '../../hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../hooks/useApproveCallback'
 import { useSwapCallback } from '../../hooks/useSwapCallback'
@@ -50,7 +51,6 @@ import { Field } from '../../state/swap/actions'
 import {
   useDefaultsFromURLSearch,
   useDerivedSwapInfo,
-  useSwapActionHandlers,
   useSwapState,
   useSingleTokenSwapInfo,
 } from '../../state/swap/hooks'
@@ -66,6 +66,7 @@ import SwapWarningModal from './components/SwapWarningModal'
 import PriceChartContainer from './components/Chart/PriceChartContainer'
 import { StyledInputCurrencyWrapper, StyledSwapContainer } from './styles'
 import CurrencyInputHeader from './components/CurrencyInputHeader'
+import ImportTokenWarningModal from '../../components/ImportTokenWarningModal'
 
 const Label = styled(Text)`
   font-size: 12px;
@@ -95,7 +96,7 @@ export default function Swap() {
   const router = useRouter()
   const loadedUrlParams = useDefaultsFromURLSearch()
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile } = useMatchBreakpointsContext()
   const [isChartExpanded, setIsChartExpanded] = useState(false)
   const [userChartPreference, setUserChartPreference] = useExchangeChartManager(isMobile)
   const [isChartDisplayed, setIsChartDisplayed] = useState(userChartPreference)
@@ -123,7 +124,7 @@ export default function Swap() {
       return !(token.address in defaultTokens)
     })
 
-  const { account } = useActiveWeb3React()
+  const { account } = useWeb3React()
 
   // for expert mode
   const [isExpertMode] = useExpertModeManager()
@@ -208,7 +209,7 @@ export default function Swap() {
 
   const route = trade?.route
   const userHasSpecifiedInputOutput = Boolean(
-    currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0)),
+    currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(BIG_INT_ZERO),
   )
   const noRoute = !route
 
@@ -286,7 +287,7 @@ export default function Swap() {
 
   // swap warning state
   const [swapWarningCurrency, setSwapWarningCurrency] = useState(null)
-  const [onPresentSwapWarningModal] = useModal(<SwapWarningModal swapCurrency={swapWarningCurrency} />)
+  const [onPresentSwapWarningModal] = useModal(<SwapWarningModal swapCurrency={swapWarningCurrency} />, false)
 
   useEffect(() => {
     if (swapWarningCurrency) {

@@ -8,7 +8,7 @@ import {
   BunnyPlaceholderIcon,
   Skeleton,
   Button,
-  useMatchBreakpoints,
+  useMatchBreakpointsContext,
   useModal,
   SubMenu,
   SubMenuItem,
@@ -114,7 +114,7 @@ const AuctionLeaderboardTable: React.FC<{ bidders: Bidder[]; noBidsText: string 
   const cakePriceBusd = usePriceCakeBusd()
   const { t } = useTranslation()
 
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile } = useMatchBreakpointsContext()
   const [onShowWhitelistedBidders] = useModal(<WhitelistedBiddersModal />)
 
   const totalBidders = bidders.length
@@ -146,7 +146,7 @@ const AuctionLeaderboardTable: React.FC<{ bidders: Bidder[]; noBidsText: string 
           pr={[null, null, '24px']}
           py="16px"
         >
-          {t('CAKE bid')}
+          {t('ORB bid')}
         </Text>
         <Box />
         {/* Rows */}

@@ -43,16 +43,20 @@ export default {
     56: '0xFee8A195570a18461146F401d6033f5ab3380849',
     97: '0x7b7b1583De1DeB32Ce6605F6deEbF24A0671c17C',
   },
-  tradingCompetition: {
+  tradingCompetitionEaster: {
     56: '0xd718baa0B1F4f70dcC8458154042120FFE0DEFFA',
     97: '0xC787F45B833721ED3aC46E99b703B3E1E01abb97',
   },
-  tradingCompetitionV2: {
+  tradingCompetitionFanToken: {
     56: '0xA8FECf847e28aa1Df39E995a45b7FCfb91b676d4',
     97: '',
   },
   tradingCompetitionMobox: {
     56: '0x1C5161CdB145dE35a8961F82b065fd1F75C3BaDf',
+    97: '',
+  },
+  tradingCompetitionMoD: {
+    56: '0xbDd9a61c67ee16c10f5E37b1D0c907a9EC959f33',
     97: '',
   },
   easterNft: {
@@ -64,16 +68,23 @@ export default {
     97: '',
   },
   cakeFlexibleSideVault: {
-    56: '0x615e896A8C2CA8470A2e9dc2E9552998f8658Ea0',
+    56: '0xEF1deb94DB6298a893b294FDfFe505C256E2B6b7',
     97: '',
   },
-    
-  predictions: {
+  predictionsBNB: {
     56: '0x33dfbA298925fDA7717275491529256AACb6370e',
     97: '',
   },
-  chainlinkOracle: {
+  predictionsCAKE: {
+    56: '0x0E3A8078EDD2021dadcdE733C6b4a86E51EE8f07',
+    97: '',
+  },
+  chainlinkOracleBNB: {
     56: '0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE',
+    97: '',
+  },
+  chainlinkOracleCAKE: {
+    56: '0xB6064eD41d4f67e353768aA239cA86f4F73665a1',
     97: '',
   },
   bunnySpecialCakeVault: {
@@ -100,6 +111,10 @@ export default {
     56: '0x787980da5491118C3cB33B21aB50c8c379D2C552',
     97: '0x981aE96378e770DE44F89cD9175E708f9EDB70a9',
   },
+  galaxyNftClaiming: {
+    56: '0x2D18f2d27D50C9b4013DEBA3D54f60996bD8847E',
+    97: '',
+  },
   nftMarket: {
     56: '0x17539cCa21C7933Df5c980172d22659B8C345C5A',
     97: '0x7f9f37ddcaa33893f9beb3d8748c8d6bfbde6ab2',
@@ -111,5 +126,13 @@ export default {
   pancakeSquad: {
     56: '0x0a8901b0E25DEb55A87524f0cC164E9644020EBA',
     97: '0xfC0c3F11fDA72Cb9A56F28Ec8D44C0ae4B3ABF86',
+  },
+  zap: {
+    56: '0xD4c4a7C55c9f7B3c48bafb6E8643Ba79F42418dF',
+    97: '0xD85835207054F25620109bdc745EC1D1f84F04e1',
+  },
+  iCake: {
+    56: '0x3C458828D1622F5f4d526eb0d24Da8C4Eb8F07b1',
+    97: '',
   },
 }

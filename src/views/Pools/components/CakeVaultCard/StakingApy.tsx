@@ -2,11 +2,10 @@ import { Flex, Text, Skeleton, useModal, Button, CalculateIcon } from '@pancakes
 import { LightGreyCard } from 'components/Card'
 import { useTranslation } from 'contexts/Localization'
 import { useVaultApy } from 'hooks/useVaultApy'
-import { useVaultMaxDuration } from 'hooks/useVaultMaxDuration'
 import Balance from 'components/Balance'
 import { memo } from 'react'
 import { FlexGap } from 'components/Layout/Flex'
-import { DeserializedPool } from 'state/types'
+import { DeserializedPool, VaultKey } from 'state/types'
 import styled from 'styled-components'
 import { VaultRoiCalculatorModal } from '../Vault/VaultRoiCalculatorModal'
 
@@ -19,8 +18,7 @@ const AprLabelContainer = styled(Flex)`
 export const StakingApy = memo(({ pool }: { pool: DeserializedPool }) => {
   const { t } = useTranslation()
 
-  const maxLockDuration = useVaultMaxDuration()
-  const { flexibleApy, lockedApy } = useVaultApy({ duration: maxLockDuration?.toNumber() })
+  const { flexibleApy, lockedApy } = useVaultApy()
 
   const [onPresentFlexibleApyModal] = useModal(<VaultRoiCalculatorModal pool={pool} />)
 
@@ -53,16 +51,16 @@ export const StakingApy = memo(({ pool }: { pool: DeserializedPool }) => {
           <Skeleton width="80px" height="16px" />
         )}
       </Flex>
-      <Flex alignItems="center" justifyContent="space-between">
-        <Text color="textSubtle" textTransform="uppercase" bold fontSize="12px">
-          {t('Locked')} APY:
-        </Text>
-        {lockedApy && maxLockDuration ? (
-          <FlexGap gap="4px" flexWrap="wrap" justifyContent="flex-end">
-            <Text style={{ whiteSpace: 'nowrap' }} bold>
-              {maxLockDuration.gt(0) ? t('Up to') : '-'}
-            </Text>
-            {maxLockDuration.gt(0) && (
+      {pool.vaultKey === VaultKey.CakeVault && (
+        <Flex alignItems="center" justifyContent="space-between">
+          <Text color="textSubtle" textTransform="uppercase" bold fontSize="12px">
+            {t('Locked')} APY:
+          </Text>
+          {lockedApy ? (
+            <FlexGap gap="4px" flexWrap="wrap" justifyContent="flex-end">
+              <Text style={{ whiteSpace: 'nowrap' }} bold>
+                {t('Up to')}
+              </Text>
               <AprLabelContainer alignItems="center">
                 <Balance fontSize="16px" value={parseFloat(lockedApy)} decimals={2} unit="%" bold />
                 <Button
@@ -79,12 +77,12 @@ export const StakingApy = memo(({ pool }: { pool: DeserializedPool }) => {
                   <CalculateIcon color="textSubtle" width="20px" />
                 </Button>
               </AprLabelContainer>
-            )}
-          </FlexGap>
-        ) : (
-          <Skeleton width="80px" height="16px" />
-        )}
-      </Flex>
+            </FlexGap>
+          ) : (
+            <Skeleton width="80px" height="16px" />
+          )}
+        </Flex>
+      )}
     </LightGreyCard>
   )
 })

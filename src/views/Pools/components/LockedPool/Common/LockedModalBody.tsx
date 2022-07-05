@@ -2,9 +2,9 @@ import { useMemo } from 'react'
 import { Button, AutoRenewIcon, Box, Flex } from '@pancakeswap/uikit'
 import _noop from 'lodash/noop'
 import { useTranslation } from 'contexts/Localization'
-import { DEFAULT_MAX_DURATION } from 'hooks/useVaultApy'
+import { MAX_LOCK_DURATION } from 'config/constants/pools'
 import { getBalanceAmount } from 'utils/formatBalance'
-
+import { useIfoCeiling } from 'state/pools/hooks'
 import { LockedModalBodyPropsType, ModalValidator } from '../types'
 
 import Overview from './Overview'
@@ -22,6 +22,7 @@ const LockedModalBody: React.FC<LockedModalBodyPropsType> = ({
   customOverview,
 }) => {
   const { t } = useTranslation()
+  const ceiling = useIfoCeiling()
   const { usdValueStaked, duration, setDuration, pendingTx, handleConfirmClick } = useLockedPool({
     stakingToken,
     onDismiss,
@@ -36,8 +37,8 @@ const LockedModalBody: React.FC<LockedModalBodyPropsType> = ({
         })
       : {
           isValidAmount: lockedAmount?.toNumber() > 0 && getBalanceAmount(currentBalance).gte(lockedAmount),
-          isValidDuration: duration > 0 && duration <= DEFAULT_MAX_DURATION,
-          isOverMax: duration > DEFAULT_MAX_DURATION,
+          isValidDuration: duration > 0 && duration <= MAX_LOCK_DURATION,
+          isOverMax: duration > MAX_LOCK_DURATION,
         }
   }, [validator, currentBalance, lockedAmount, duration])
 
@@ -58,8 +59,11 @@ const LockedModalBody: React.FC<LockedModalBodyPropsType> = ({
           duration={duration}
           lockedAmount={lockedAmount?.toNumber()}
           usdValueStaked={usdValueStaked}
+          showLockWarning
+          ceiling={ceiling}
         />
       )}
+
       <Flex mt="24px">
         <Button
           width="100%"

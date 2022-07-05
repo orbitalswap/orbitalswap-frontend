@@ -7,7 +7,6 @@ import { laggyMiddleware, useSWRContract, useSWRMulticall } from 'hooks/useSWRCo
 import useSWRImmutable from 'swr/immutable'
 import { useSWRConfig } from 'swr'
 import { useChainlinkOracleContract } from 'hooks/useContract'
-import { getChainlinkOracleAddress } from 'utils/addressHelpers'
 import { ChainlinkOracle } from 'config/abi/types'
 import chainlinkOracleAbi from 'config/abi/chainlinkOracle.json'
 import { FlexGap } from 'components/Layout/Flex'
@@ -20,9 +19,11 @@ import { NodeRound } from 'state/types'
 import useSwiper from '../hooks/useSwiper'
 import usePollOraclePrice from '../hooks/usePollOraclePrice'
 import { CHART_DOT_CLICK_EVENT } from '../helpers'
+import { useConfig } from '../context/ConfigProvider'
 
 function useChainlinkLatestRound() {
-  const chainlinkOracleContract = useChainlinkOracleContract(false)
+  const { chainlinkOracleAddress } = useConfig()
+  const chainlinkOracleContract = useChainlinkOracleContract(chainlinkOracleAddress, false)
   // Can refactor to subscription later
   const lastRound = useSWRContract([chainlinkOracleContract, 'latestRound'], {
     dedupingInterval: 10 * 1000,
@@ -37,19 +38,19 @@ function useChainlinkLatestRound() {
   return lastRound
 }
 
-const chainlinkAddress = getChainlinkOracleAddress()
 function useChainlinkRoundDataSet() {
   const lastRound = useChainlinkLatestRound()
+  const { chainlinkOracleAddress } = useConfig()
 
   const calls = useMemo(() => {
     return lastRound.data
       ? Array.from({ length: 50 }).map((_, i) => ({
-          address: chainlinkAddress,
+          address: chainlinkOracleAddress,
           name: 'getRoundData',
           params: [lastRound.data.sub(i)],
         }))
       : null
-  }, [lastRound.data])
+  }, [lastRound.data, chainlinkOracleAddress])
 
   const { data, error } = useSWRMulticall<Awaited<ReturnType<ChainlinkOracle['getRoundData']>>[]>(
     chainlinkOracleAbi,
@@ -65,7 +66,7 @@ function useChainlinkRoundDataSet() {
         ?.filter((d) => !!d && d.answer.gt(0))
         .map(({ answer, roundId, startedAt }) => {
           return {
-            answer: formatBigNumberToFixed(answer, 3, 8),
+            answer: formatBigNumberToFixed(answer, 4, 8),
             roundId: roundId.toString(),
             startedAt: startedAt.toNumber(),
           }
@@ -109,7 +110,7 @@ function useChartHoverMutate() {
   return updateHover
 }
 
-const chartColor = { gradient1: '#00E7B0', gradient2: '#0C8B6C', stroke: '#00FFA3' }
+const chartColor = { gradient1: '#00E7B0', gradient2: '#0C8B6C', stroke: '#31D0AA' }
 
 const ChainlinkChartWrapper = styled(Flex)<{ isMobile?: boolean }>`
   flex-direction: column;
@@ -125,12 +126,13 @@ const HoverData = ({ rounds }: { rounds: { [key: string]: NodeRound } }) => {
     t,
     currentLanguage: { locale },
   } = useTranslation()
+  const { token } = useConfig()
 
   return (
     <PairPriceDisplay
       width="100%"
-      value={hoverData ? hoverData.answer : formatBigNumberToFixed(answerAsBigNumber, 3, 8)}
-      inputSymbol="BNB"
+      value={hoverData ? hoverData.answer : formatBigNumberToFixed(answerAsBigNumber, 4, 8)}
+      inputSymbol={token.symbol}
       outputSymbol="USD"
       format={false}
       flexWrap="wrap"

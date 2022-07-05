@@ -38,15 +38,19 @@ export const getPointCenterIfoAddress = () => {
 export const getBunnySpecialAddress = () => {
   return getAddress(addresses.bunnySpecial)
 }
-export const getTradingCompetitionAddress = () => {
-  return getAddress(addresses.tradingCompetition)
+export const getTradingCompetitionAddressEaster = () => {
+  return getAddress(addresses.tradingCompetitionEaster)
 }
-export const getTradingCompetitionAddressV2 = () => {
-  return getAddress(addresses.tradingCompetitionV2)
+export const getTradingCompetitionAddressFanToken = () => {
+  return getAddress(addresses.tradingCompetitionFanToken)
 }
 
 export const getTradingCompetitionAddressMobox = () => {
   return getAddress(addresses.tradingCompetitionMobox)
+}
+
+export const getTradingCompetitionAddressMoD = () => {
+  return getAddress(addresses.tradingCompetitionMoD)
 }
 
 export const getEasterNftAddress = () => {
@@ -63,12 +67,11 @@ export const getVaultPoolAddress = (vaultKey: VaultKey) => {
 export const getCakeVaultAddress = () => {
   return getAddress(addresses.cakeVault)
 }
-export const getPredictionsAddress = () => {
-  return getAddress(addresses.predictions)
+
+export const getCakeFlexibleSideVaultAddress = () => {
+  return getAddress(addresses.cakeFlexibleSideVault)
 }
-export const getChainlinkOracleAddress = () => {
-  return getAddress(addresses.chainlinkOracle)
-}
+
 export const getBunnySpecialCakeVaultAddress = () => {
   return getAddress(addresses.bunnySpecialCakeVault)
 }
@@ -87,6 +90,9 @@ export const getFarmAuctionAddress = () => {
 export const getAnniversaryAchievement = () => {
   return getAddress(addresses.AnniversaryAchievement)
 }
+export const getGalaxyNFTClaimingAddress = () => {
+  return getAddress(addresses.galaxyNftClaiming)
+}
 export const getNftMarketAddress = () => {
   return getAddress(addresses.nftMarket)
 }
@@ -95,4 +101,11 @@ export const getNftSaleAddress = () => {
 }
 export const getPancakeSquadAddress = () => {
   return getAddress(addresses.pancakeSquad)
+}
+
+export const getZapAddress = () => {
+  return getAddress(addresses.zap)
+}
+export const getICakeAddress = () => {
+  return getAddress(addresses.iCake)
 }

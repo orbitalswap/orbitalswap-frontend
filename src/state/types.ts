@@ -1,5 +1,3 @@
-import { ThunkAction } from 'redux-thunk'
-import { AnyAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js'
 import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
 import {
@@ -71,9 +69,8 @@ export const GAS_PRICE_GWEI = {
   testnet: parseUnits(GAS_PRICE.testnet, 'gwei').toString(),
 }
 
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, AnyAction>
-
 export type DeserializedPoolVault = DeserializedPool & DeserializedCakeVault
+export type DeserializedPoolLockedVault = DeserializedPool & DeserializedLockedCakeVault
 
 export interface BigNumberToJson {
   type: 'BigNumber'
@@ -123,6 +120,7 @@ export interface DeserializedFarm extends DeserializedFarmConfig {
 export enum VaultKey {
   CakeVaultV1 = 'cakeVaultV1',
   CakeVault = 'cakeVault',
+  CakeFlexibleSideVault = 'cakeFlexibleSideVault',
   IfoPool = 'ifoPool',
 }
 
@@ -144,6 +142,7 @@ export interface DeserializedPool extends DeserializedPoolConfig, CorePoolProps 
     required: boolean
     thresholdPoints: BigNumber
   }
+  userDataLoaded?: boolean
   userData?: {
     allowance: BigNumber
     stakingTokenBalance: BigNumber
@@ -274,7 +273,7 @@ export interface DeserializedVaultFees extends SerializedVaultFees {
   performanceFeeAsDecimal: number
 }
 
-interface SerializedVaultUser {
+export interface SerializedVaultUser {
   isLoading: boolean
   userShares: SerializedBigNumber
   cakeAtLastUserAction: SerializedBigNumber
@@ -298,6 +297,11 @@ export interface DeserializedVaultUser {
   cakeAtLastUserAction: BigNumber
   lastDepositedTime: string
   lastUserActionTime: string
+  balance: {
+    cakeAsNumberBalance: number
+    cakeAsBigNumber: BigNumber
+    cakeAsDisplayBalance: string
+  }
 }
 
 export interface DeserializedLockedVaultUser extends DeserializedVaultUser {
@@ -308,17 +312,8 @@ export interface DeserializedLockedVaultUser extends DeserializedVaultUser {
   userBoostedShare: BigNumber
   locked: boolean
   lockedAmount: BigNumber
-  balance: {
-    cakeAsNumberBalance: number
-    cakeAsBigNumber: BigNumber
-    cakeAsDisplayBalance: string
-  }
   currentPerformanceFee: BigNumber
   currentOverdueFee: BigNumber
-}
-
-export interface DeserializedIfoVaultUser extends DeserializedVaultUser {
-  credit: string
 }
 
 export interface DeserializedCakeVault {
@@ -327,21 +322,41 @@ export interface DeserializedCakeVault {
   pricePerFullShare?: BigNumber
   totalCakeInVault?: BigNumber
   fees?: DeserializedVaultFees
+  userData?: DeserializedVaultUser
+}
+
+export interface DeserializedLockedCakeVault extends Omit<DeserializedCakeVault, 'userData'> {
+  totalLockedAmount?: BigNumber
   userData?: DeserializedLockedVaultUser
+}
+
+export interface SerializedLockedCakeVault extends Omit<SerializedCakeVault, 'userData'> {
+  totalLockedAmount?: SerializedBigNumber
+  userData?: SerializedLockedVaultUser
 }
 
 export interface SerializedCakeVault {
   totalShares?: SerializedBigNumber
-  totalLockedAmount?: SerializedBigNumber
   pricePerFullShare?: SerializedBigNumber
   totalCakeInVault?: SerializedBigNumber
   fees?: SerializedVaultFees
-  userData?: SerializedLockedVaultUser
+  userData?: SerializedVaultUser
+}
+
+// Ifo
+export interface IfoState extends PublicIfoData {
+  credit: string
+}
+
+export interface PublicIfoData {
+  ceiling: string
 }
 
 export interface PoolsState {
   data: SerializedPool[]
-  cakeVault: SerializedCakeVault
+  ifo: IfoState
+  cakeVault: SerializedLockedCakeVault
+  cakeFlexibleSideVault: SerializedCakeVault
   userDataLoaded: boolean
 }
 
@@ -376,6 +391,11 @@ export enum PredictionStatus {
   LIVE = 'live',
   PAUSED = 'paused',
   ERROR = 'error',
+}
+
+export enum PredictionSupportedSymbol {
+  BNB = 'BNB',
+  CAKE = 'CAKE',
 }
 
 export enum PredictionsChartView {
@@ -691,6 +711,14 @@ export interface UserRound {
   endTime: string
   totalTickets: string
   tickets?: LotteryTicket[]
+}
+
+export interface PredictionConfig {
+  address: string
+  api: string
+  chainlinkOracleAddress: string
+  minPriceUsdDisplayed: EthersBigNumber
+  token: Token
 }
 
 // Global state

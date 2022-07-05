@@ -6,7 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 import { formatLocalisedCompactNumber } from 'utils/formatBalance'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { getTotalWon } from 'state/predictions/helpers'
-import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
+import { useBNBBusdPrice, useCakeBusdPrice } from 'hooks/useBUSDPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
 import useSWR from 'swr'
 import { SLOW_INTERVAL } from 'config/constants'
@@ -15,18 +15,36 @@ const StyledLink = styled(NextLinkFromReactRouter)`
   width: 100%;
 `
 
+const PredictionCardHeader: React.FC<{ preText: string; bnbWon: number }> = ({ preText, bnbWon }) => {
+  const bnbBusdPrice = useBNBBusdPrice()
+  const bnbWonInUsd = multiplyPriceByAmount(bnbBusdPrice, bnbWon)
+
+  const localisedBnbUsdString = formatLocalisedCompactNumber(bnbWonInUsd)
+
+  return (
+    <Heading color="#280D5F" my="8px" scale="xl" bold>
+      {preText}
+      {localisedBnbUsdString}
+    </Heading>
+  )
+}
+
 const PredictionCardContent = () => {
   const { t } = useTranslation()
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const [loadData, setLoadData] = useState(false)
   const bnbBusdPrice = useBNBBusdPrice()
-  const { data: bnbWon = 0 } = useSWR(loadData ? ['prediction', 'bnbWon'] : null, getTotalWon, {
+  const cakePriceBusd = useCakeBusdPrice()
+
+  const { data } = useSWR(loadData ? ['prediction', 'tokenWon'] : null, getTotalWon, {
     refreshInterval: SLOW_INTERVAL,
   })
-  const bnbWonInUsd = multiplyPriceByAmount(bnbBusdPrice, bnbWon)
 
-  const localisedBnbUsdString = formatLocalisedCompactNumber(bnbWonInUsd)
-  const bnbWonText = t('$%bnbWonInUsd% in BNB won so far', { bnbWonInUsd: localisedBnbUsdString })
+  const bnbWonInUsd = multiplyPriceByAmount(bnbBusdPrice, data?.totalWonBNB || 0)
+  const cakeWonInUsd = multiplyPriceByAmount(cakePriceBusd, data?.totalWonCAKE || 0)
+
+  const localisedBnbUsdString = formatLocalisedCompactNumber(bnbWonInUsd + cakeWonInUsd)
+  const bnbWonText = t('$%wonInUsd% in BNB + CAKE won so far', { wonInUsd: localisedBnbUsdString })
   const [pretext, wonSoFar] = bnbWonText.split(localisedBnbUsdString)
 
   useEffect(() => {
@@ -42,10 +60,7 @@ const PredictionCardContent = () => {
           {t('Prediction')}
         </Text>
         {bnbWonInUsd ? (
-          <Heading color="#280D5F" my="8px" scale="xl" bold>
-            {pretext}
-            {localisedBnbUsdString}
-          </Heading>
+          <PredictionCardHeader preText={pretext} bnbWon={bnbWonInUsd} />
         ) : (
           <>
             <Skeleton width={230} height={40} my="8px" />
@@ -56,7 +71,7 @@ const PredictionCardContent = () => {
           {wonSoFar}
         </Text>
         <Text color="#280D5F" mb="40px">
-          {t('Will BNB price rise or fall? guess correctly to win!')}
+          {t('Predict the price trend of BNB or CAKE to win')}
         </Text>
       </Flex>
       <Flex alignItems="center" justifyContent="center">

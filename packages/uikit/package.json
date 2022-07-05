@@ -2,12 +2,7 @@
   "name": "@pancakeswap/uikit",
   "version": "0.63.1",
   "description": "Set of UI components for pancake projects",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "src/index.ts",
   "sideEffects": false,
   "repository": "https://github.com/pancakeswap/pancake-toolkit/tree/master/packages/pancake-uikit",
   "license": "MIT",
@@ -60,7 +55,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
-    "@types/styled-system": "^5.1.10",
+    "@types/styled-system": "^5.1.15",
     "framer-motion": "4.1.17",
     "lodash": "^4.17.20",
     "react-popper": "^2.2.5",

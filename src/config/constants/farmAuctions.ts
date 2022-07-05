@@ -7,6 +7,32 @@ import { FarmAuctionBidderConfig } from './types'
 export const whitelistedBidders: FarmAuctionBidderConfig[] =
   Number(CHAIN_ID) === ChainId.MAINNET
     ? [
+        // Those farms changed their project wallet address.
+        {
+          account: '0xA6D19C2A2EA13e9eF02d795155F6c335af764955', // Auction #19
+          farmName: 'HAPPY-BNB',
+          tokenAddress: '0xF5d8A096CcCb31b9D7bcE5afE812BE23e3D4690d',
+          quoteToken: tokens.wbnb,
+          tokenName: 'HappyFans',
+          projectSite: 'https://happyfans.club/',
+        },
+        {
+          account: '0xB8614FABf4bbA416b9dB620e12272AD63b14387E', // Auction #20
+          farmName: '8PAY-BUSD',
+          tokenAddress: '0xfeea0bdd3d07eb6fe305938878c0cadbfa169042',
+          quoteToken: tokens.busd,
+          tokenName: '8PAY',
+          projectSite: 'https://8pay.network/',
+        },
+        {
+          account: '0x6a2d41c87c3F28C2C0b466424DE8e08FC2E23eDc',
+          farmName: 'BBT-BNB',
+          tokenAddress: '0xD48474E7444727bF500a32D5AbE01943f3A59A64',
+          quoteToken: tokens.wbnb,
+          tokenName: 'BitBook',
+          projectSite: 'https://www.bitbook.network/',
+        },
+        // Below farms was the latest.
         {
           account: '0x9Ed5a62535A5Dd2dB2d9bB21bAc42035Af47F630',
           farmName: 'NAV-BNB',
@@ -48,7 +74,7 @@ export const whitelistedBidders: FarmAuctionBidderConfig[] =
           projectSite: 'https://www.feeder.finance/',
         },
         {
-          account: '0x6a2d41c87c3F28C2C0b466424DE8e08FC2E23eDc',
+          account: '0xfCcA771Dc22359E4D6e9e9daC743EAb38f51EECe',
           farmName: 'BBT-BNB',
           tokenAddress: '0xD48474E7444727bF500a32D5AbE01943f3A59A64',
           quoteToken: tokens.wbnb,
@@ -520,7 +546,7 @@ export const whitelistedBidders: FarmAuctionBidderConfig[] =
           projectSite: 'https://app.singularitydao.ai/',
         },
         {
-          account: '0xB8614FABf4bbA416b9dB620e12272AD63b14387E',
+          account: '0x304dDD664C961141B9C11F0ab597244306e021F4',
           farmName: '8PAY-BUSD',
           tokenAddress: '0xfeea0bdd3d07eb6fe305938878c0cadbfa169042',
           quoteToken: tokens.busd,
@@ -671,24 +697,6 @@ export const whitelistedBidders: FarmAuctionBidderConfig[] =
           tokenName: 'DeFiato',
           projectSite: 'https://defiato.com/',
         },
-        // Happy used different bidding address in Auction #19, this will only used in Farm Auction #19.
-        {
-          account: '0xA6D19C2A2EA13e9eF02d795155F6c335af764955',
-          farmName: 'HAPPY-BNB',
-          tokenAddress: '0xF5d8A096CcCb31b9D7bcE5afE812BE23e3D4690d',
-          quoteToken: tokens.wbnb,
-          tokenName: 'HappyFans',
-          projectSite: 'https://happyfans.club/',
-        },
-        // The latest will use this to bid.
-        {
-          account: '0xA6D19C2A2EA13e9eF02d795155F6c335af764955',
-          farmName: 'HAPPY-BNB',
-          tokenAddress: '0xF5d8A096CcCb31b9D7bcE5afE812BE23e3D4690d',
-          quoteToken: tokens.wbnb,
-          tokenName: 'HappyFans',
-          projectSite: 'https://happyfans.club/',
-        },
         {
           account: '0x4eeD6e51544Ef967A24A86F318A6779ed85cF0e6',
           farmName: 'HAPPY-BNB',
@@ -736,6 +744,30 @@ export const whitelistedBidders: FarmAuctionBidderConfig[] =
           quoteToken: tokens.usdt,
           tokenName: 'NanoByte',
           projectSite: 'https://www.nanobyte.finance/',
+        },
+        {
+          account: '0xf2110Fb93F8Ed4528A5849C9fDEDC589349a07dc',
+          farmName: 'SB-USDT',
+          tokenAddress: '0xB7258450681f4aAd0ab24E336648d44A6696B30f',
+          quoteToken: tokens.usdt,
+          tokenName: 'DragonSB',
+          projectSite: 'https://dragonsb.finance/',
+        },
+        {
+          account: '0x3846e7A1A5dEA3F43104ed89ff0E6FfD1Cc74b6E',
+          farmName: 'PEAK-BNB',
+          tokenAddress: '0x630d98424eFe0Ea27fB1b3Ab7741907DFFEaAd78',
+          quoteToken: tokens.wbnb,
+          tokenName: 'PEAKDEFI',
+          projectSite: 'https://peakdefi.com/',
+        },
+        {
+          account: '0x6587515802FF7f9cD7442EAE8dfAE20f9d71306F',
+          farmName: 'SHELL-BUSD',
+          tokenAddress: '0x208cfEc94d2BA8B8537da7A9BB361c6baAD77272',
+          quoteToken: tokens.busd,
+          tokenName: 'SHELL',
+          projectSite: 'https://metaapesgame.com/',
         },
       ].map((bidderConfig) => ({
         ...bidderConfig,

@@ -3,6 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Box, Flex, FlexProps, Skeleton, Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BetPosition, NodeRound, Round } from 'state/types'
+import { useConfig } from 'views/Predictions/context/ConfigProvider'
 import { formatUsdv2, formatBnbv2, getRoundPosition, getPriceDifference } from '../../helpers'
 import { formatBnb, formatUsd } from '../History/helpers'
 import PositionTag from '../PositionTag'
@@ -30,11 +31,12 @@ const Row = ({ children, ...props }) => {
 
 export const PrizePoolRow: React.FC<PrizePoolRowProps> = ({ totalAmount, ...props }) => {
   const { t } = useTranslation()
+  const { token } = useConfig()
 
   return (
     <Row {...props}>
       <Text bold>{t('Prize Pool')}:</Text>
-      <Text bold>{`${getPrizePoolAmount(totalAmount)} BNB`}</Text>
+      <Text bold>{`${getPrizePoolAmount(totalAmount)} ${token.symbol}`}</Text>
     </Row>
   )
 }
@@ -49,6 +51,7 @@ interface PayoutRowProps extends FlexProps {
 export const PayoutRow: React.FC<PayoutRowProps> = ({ positionLabel, multiplier, amount, ...props }) => {
   const { t } = useTranslation()
   const formattedMultiplier = `${multiplier.toLocaleString(undefined, { maximumFractionDigits: 2 })}x`
+  const { token } = useConfig()
 
   return (
     <Row height="18px" {...props}>
@@ -60,7 +63,7 @@ export const PayoutRow: React.FC<PayoutRowProps> = ({ positionLabel, multiplier,
           {t('%multiplier% Payout', { multiplier: formattedMultiplier })}
         </Text>
         <Text mx="4px">|</Text>
-        <Text fontSize="12px" lineHeight="18px">{`${formatBnb(amount)} BNB`}</Text>
+        <Text fontSize="12px" lineHeight="18px">{`${formatBnb(amount)} ${token.symbol}`}</Text>
       </Flex>
     </Row>
   )
@@ -72,11 +75,12 @@ interface LockPriceRowProps extends FlexProps {
 
 export const LockPriceRow: React.FC<LockPriceRowProps> = ({ lockPrice, ...props }) => {
   const { t } = useTranslation()
+  const { minPriceUsdDisplayed } = useConfig()
 
   return (
     <Row {...props}>
       <Text fontSize="14px">{t('Locked Price')}:</Text>
-      <Text fontSize="14px">{formatUsdv2(lockPrice)}</Text>
+      <Text fontSize="14px">{formatUsdv2(lockPrice, minPriceUsdDisplayed)}</Text>
     </Row>
   )
 }
@@ -97,7 +101,7 @@ const getBackgroundColor = ({
   hasEntered,
 }: RoundResultBoxProps & { theme: DefaultTheme }) => {
   if (isNext) {
-    return 'linear-gradient(180deg, #53DEE9 0%, #9439EC 100%)'
+    return 'linear-gradient(180deg, #53DEE9 0%, #7645D9 100%)'
   }
 
   if (hasEntered || isLive) {
@@ -148,6 +152,7 @@ interface RoundPriceProps {
 }
 
 export const RoundPrice: React.FC<RoundPriceProps> = ({ lockPrice, closePrice }) => {
+  const { minPriceUsdDisplayed } = useConfig()
   const betPosition = getRoundPosition(lockPrice, closePrice)
   const priceDifference = getPriceDifference(closePrice, lockPrice)
 
@@ -167,12 +172,12 @@ export const RoundPrice: React.FC<RoundPriceProps> = ({ lockPrice, closePrice })
     <Flex alignItems="center" justifyContent="space-between" mb="16px">
       {closePrice ? (
         <Text color={getTextColor()} bold fontSize="24px">
-          {formatUsdv2(closePrice)}
+          {formatUsdv2(closePrice, minPriceUsdDisplayed)}
         </Text>
       ) : (
         <Skeleton height="34px" my="1px" />
       )}
-      <PositionTag betPosition={betPosition}>{formatUsdv2(priceDifference)}</PositionTag>
+      <PositionTag betPosition={betPosition}>{formatUsdv2(priceDifference, minPriceUsdDisplayed)}</PositionTag>
     </Flex>
   )
 }
@@ -196,11 +201,12 @@ const getPrizePoolAmountHistory = (totalAmount: PrizePoolHistoryRowProps['totalA
 
 export const PrizePoolHistoryRow: React.FC<PrizePoolHistoryRowProps> = ({ totalAmount, ...props }) => {
   const { t } = useTranslation()
+  const { token } = useConfig()
 
   return (
     <Row {...props}>
       <Text bold>{t('Prize Pool')}:</Text>
-      <Text bold>{`${getPrizePoolAmountHistory(totalAmount)} BNB`}</Text>
+      <Text bold>{`${getPrizePoolAmountHistory(totalAmount)} ${token.symbol}`}</Text>
     </Row>
   )
 }

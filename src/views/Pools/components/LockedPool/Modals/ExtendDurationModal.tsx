@@ -3,10 +3,10 @@ import { Modal, Box } from '@pancakeswap/uikit'
 import _noop from 'lodash/noop'
 import useTheme from 'hooks/useTheme'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
-import { DEFAULT_MAX_DURATION } from 'hooks/useVaultApy'
+import { MAX_LOCK_DURATION } from 'config/constants/pools'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
-
+import { useIfoCeiling } from 'state/pools/hooks'
 import StaticAmount from '../Common/StaticAmount'
 import LockedBodyModal from '../Common/LockedModalBody'
 import Overview from '../Common/Overview'
@@ -22,6 +22,7 @@ const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
   lockStartTime,
 }) => {
   const { theme } = useTheme()
+  const ceiling = useIfoCeiling()
   const { t } = useTranslation()
 
   const usdValueStaked = useBUSDCakeAmount(currentLockedAmount)
@@ -31,12 +32,12 @@ const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
       const isValidAmount = currentLockedAmount && currentLockedAmount > 0
       const totalDuration = currentDuration + duration
 
-      const isValidDuration = duration > 0 && totalDuration > 0 && totalDuration <= DEFAULT_MAX_DURATION
+      const isValidDuration = duration > 0 && totalDuration > 0 && totalDuration <= MAX_LOCK_DURATION
 
       return {
         isValidAmount,
         isValidDuration,
-        isOverMax: totalDuration > DEFAULT_MAX_DURATION,
+        isOverMax: totalDuration > MAX_LOCK_DURATION,
       }
     },
     [currentLockedAmount, currentDuration],
@@ -54,9 +55,11 @@ const ExtendDurationModal: React.FC<ExtendDurationModal> = ({
         newDuration={currentDuration + duration}
         lockedAmount={currentLockedAmount}
         usdValueStaked={usdValueStaked}
+        showLockWarning={!+lockStartTime}
+        ceiling={ceiling}
       />
     ),
-    [lockStartTime, currentDuration, currentLockedAmount, usdValueStaked],
+    [lockStartTime, currentDuration, currentLockedAmount, usdValueStaked, ceiling],
   )
 
   return (

@@ -1,13 +1,16 @@
 import { useState, useCallback } from 'react'
+import { differenceInSeconds } from 'date-fns'
+import { convertTimeToSeconds } from 'utils/timeHelper'
 import { Modal, Box, MessageText, Message, Checkbox, Flex, Text } from '@pancakeswap/uikit'
 import _noop from 'lodash/noop'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
-import _toNumber from 'lodash/toNumber'
-
+import { useIfoCeiling } from 'state/pools/hooks'
 import useTheme from 'hooks/useTheme'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { getBalanceNumber, getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
+import { ONE_WEEK_DEFAULT } from 'config/constants/pools'
+import { BIG_ZERO } from 'utils/bigNumber'
 
 import RoiCalculatorModalProvider from './RoiCalculatorModalProvider'
 
@@ -39,22 +42,26 @@ const RenewDuration = ({ setCheckedState, checkedState }) => {
     </>
   )
 }
+// add 60s buffer in order to make sure minium duration by pass on renew extension
+const MIN_DURATION_BUFFER = 60
 
 const AddAmountModal: React.FC<AddAmountModalProps> = ({
   onDismiss,
   currentBalance,
   currentLockedAmount,
   stakingToken,
-  passedDuration,
-  remainingDuration,
+  lockStartTime,
   lockEndTime,
   stakingTokenBalance,
 }) => {
   const { theme } = useTheme()
-  const [lockedAmount, setLockedAmount] = useState('0')
+  const ceiling = useIfoCeiling()
+  const [lockedAmount, setLockedAmount] = useState('')
   const [checkedState, setCheckedState] = useState(false)
   const { t } = useTranslation()
-  const lockedAmountAsBigNumber = new BigNumber(lockedAmount)
+  const lockedAmountAsBigNumber = !Number.isNaN(new BigNumber(lockedAmount).toNumber())
+    ? new BigNumber(lockedAmount)
+    : BIG_ZERO
   const totalLockedAmount: number = getBalanceNumber(
     currentLockedAmount.plus(getDecimalAmount(lockedAmountAsBigNumber)),
   )
@@ -63,12 +70,22 @@ const AddAmountModal: React.FC<AddAmountModalProps> = ({
   const usdValueStaked = useBUSDCakeAmount(lockedAmountAsBigNumber.toNumber())
   const usdValueNewStaked = useBUSDCakeAmount(totalLockedAmount)
 
-  const prepConfirmArg = useCallback(
-    () => ({
-      finalDuration: checkedState ? passedDuration : 0,
-    }),
-    [checkedState, passedDuration],
-  )
+  const remainingDuration = differenceInSeconds(new Date(convertTimeToSeconds(lockEndTime)), new Date(), {
+    roundingMethod: 'ceil',
+  })
+  const passedDuration = differenceInSeconds(new Date(), new Date(convertTimeToSeconds(lockStartTime)), {
+    roundingMethod: 'ceil',
+  })
+
+  // if you locked for 1 week, then add cake without renew the extension, it's possible that remainingDuration + passedDuration less than 1 week.
+  const atLeastOneWeekNewDuration = Math.max(ONE_WEEK_DEFAULT + MIN_DURATION_BUFFER, remainingDuration + passedDuration)
+
+  const prepConfirmArg = useCallback(() => {
+    const extendDuration = atLeastOneWeekNewDuration - remainingDuration
+    return {
+      finalDuration: checkedState ? extendDuration : 0,
+    }
+  }, [atLeastOneWeekNewDuration, checkedState, remainingDuration])
 
   const customOverview = useCallback(
     () => (
@@ -76,21 +93,23 @@ const AddAmountModal: React.FC<AddAmountModalProps> = ({
         isValidDuration
         openCalculator={_noop}
         duration={remainingDuration}
-        newDuration={checkedState ? passedDuration + remainingDuration : null}
+        newDuration={checkedState ? atLeastOneWeekNewDuration : null}
         lockedAmount={currentLockedAmountAsBalance.toNumber()}
         newLockedAmount={totalLockedAmount}
         usdValueStaked={usdValueNewStaked}
         lockEndTime={lockEndTime}
+        ceiling={ceiling}
       />
     ),
     [
       remainingDuration,
       checkedState,
       currentLockedAmountAsBalance,
-      passedDuration,
+      atLeastOneWeekNewDuration,
       totalLockedAmount,
       usdValueNewStaked,
       lockEndTime,
+      ceiling,
     ],
   )
 

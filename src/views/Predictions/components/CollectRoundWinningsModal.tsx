@@ -16,25 +16,31 @@ import {
   ModalCloseButton,
   Skeleton,
 } from '@pancakeswap/uikit'
+import { AnyAction, AsyncThunkAction } from '@reduxjs/toolkit'
+import { Token } from '@orbitalswap/sdk'
+
 import { useWeb3React } from '@web3-react/core'
-import { useAppDispatch } from 'state'
 import { REWARD_RATE } from 'state/predictions/config'
 import { fetchNodeHistory, markAsCollected } from 'state/predictions'
 import { Bet } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
-import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
+import useBUSDPrice from 'hooks/useBUSDPrice'
 import useToast from 'hooks/useToast'
 import { usePredictionsContract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { useGetHistory, useGetIsFetchingHistory } from 'state/predictions/hooks'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { formatNumber } from 'utils/formatBalance'
 import { getPayout } from './History/helpers'
 
 interface CollectRoundWinningsModalProps extends InjectedModalProps {
   onSuccess?: () => Promise<void>
+  dispatch: (action: AnyAction | AsyncThunkAction<any, { account: string }, any>) => void
+  history: Bet[]
+  isLoadingHistory: boolean
+  predictionsAddress: string
+  token: Token
 }
 
 const Modal = styled(ModalContainer)`
@@ -76,20 +82,27 @@ const calculateClaimableRounds = (history): ClaimableRounds => {
   )
 }
 
-const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({ onDismiss, onSuccess }) => {
+const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({
+  onDismiss,
+  onSuccess,
+  history,
+  isLoadingHistory,
+  dispatch,
+  predictionsAddress,
+  token,
+}) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: isPendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const predictionsContract = usePredictionsContract()
-  const bnbBusdPrice = useBNBBusdPrice()
-  const dispatch = useAppDispatch()
-  const isLoadingHistory = useGetIsFetchingHistory()
-  const history = useGetHistory()
+  const predictionsContract = usePredictionsContract(predictionsAddress, token.symbol)
+  const bnbBusdPrice = useBUSDPrice(token)
 
   const { epochs, total } = calculateClaimableRounds(history)
   const totalBnb = multiplyPriceByAmount(bnbBusdPrice, total)
+
+  const isLoading = isLoadingHistory || !epochs?.length
 
   useEffect(() => {
     // Fetch history if they have not opened the history pane yet
@@ -142,14 +155,14 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({ o
         <Flex alignItems="start" justifyContent="space-between" mb="8px">
           <Text>{t('Collecting')}</Text>
           <Box style={{ textAlign: 'right' }}>
-            <Text>{`${formatNumber(total, 0, 4)} BNB`}</Text>
+            <Text>{`${formatNumber(total, 0, 4)} ${token.symbol}`}</Text>
             <Text fontSize="12px" color="textSubtle">
               {`~$${totalBnb.toFixed(2)}`}
             </Text>
           </Box>
         </Flex>
         <Flex alignItems="start" justifyContent="center" mb="24px">
-          {isLoadingHistory ? (
+          {isLoading ? (
             <Skeleton height="21" width="140px" />
           ) : (
             <Text color="textSubtle" fontSize="14px">
@@ -163,7 +176,7 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({ o
           width="100%"
           mb="8px"
           onClick={handleClick}
-          isLoading={isPendingTx || isLoadingHistory}
+          isLoading={isPendingTx || isLoading}
           endIcon={isPendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
         >
           {t('Confirm')}

@@ -21,6 +21,7 @@ import { cakeBnbLpToken } from 'config/constants/ifo'
 import { PublicIfoData, WalletIfoData } from 'views/Ifos/types'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { useIfoCredit } from 'state/pools/hooks'
 import { TokenImage, TokenPairImage } from 'components/TokenImage'
 import { EnableStatus } from '../types'
 import PercentageOfTotal from './PercentageOfTotal'
@@ -28,6 +29,7 @@ import { SkeletonCardTokens } from './Skeletons'
 import IFORequirements from './IFORequirements'
 import { MessageTextLink } from '../../IfoCardStyles'
 import StakeVaultButton from '../StakeVaultButton'
+import VestingAvailableToClaim from './VestingAvailableToClaim'
 
 interface TokenSectionProps extends FlexProps {
   primaryToken?: Token
@@ -127,9 +129,10 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
   const publicPoolCharacteristics = publicIfoData[poolId]
   const userPoolCharacteristics = walletIfoData[poolId]
 
-  const { currency, token } = ifo
+  const { currency, token, version } = ifo
   const { hasClaimed } = userPoolCharacteristics
   const distributionRatio = ifo[poolId].distributionRatio * 100
+  const credit = useIfoCredit()
 
   const renderTokenSection = () => {
     if (isLoading) {
@@ -147,8 +150,8 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
           <Box>
             <MessageText display="inline">
               {publicIfoData.status === 'finished'
-                ? t('Activate OrbitalSwap Profile to take part in next IFO‘s!')
-                : t('You need an active OrbitalSwap Profile to take part in an IFO!')}
+                ? t('Activate PancakeSwap Profile to take part in next IFO‘s!')
+                : t('You need an active PancakeSwap Profile to take part in an IFO!')}
             </MessageText>{' '}
             <MessageTextLink href="/ifo#ifo-how-to" color="#D67E0A" display="inline">
               {t('How does it work?')} »
@@ -159,7 +162,7 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
     }
 
     const ifov31Msg =
-      ifo.version === 3.1 && poolId === PoolIds.poolBasic && criterias?.length > 0 ? (
+      ifo.version >= 3.1 && poolId === PoolIds.poolBasic && criterias?.length > 0 ? (
         <Box mt="16px">
           {!isEligible && (
             <Message mb="24px" p="8px" variant="warning" icon={<ErrorIcon color="warning" width="24px" />}>
@@ -183,15 +186,14 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
         </Box>
       ) : null
 
-    // TODO: Need checking in the future
-    // (ifo.version === 3 || (ifo.version === 3.1 && poolId === PoolIds.poolUnlimited)) && getBalanceNumber(credit) === 0)
-    if (ifo.version === 3 || (ifo.version === 3.1 && poolId === PoolIds.poolUnlimited)) {
+    if (
+      (ifo.version === 3 || (ifo.version >= 3.1 && poolId === PoolIds.poolUnlimited)) &&
+      getBalanceNumber(credit) === 0
+    ) {
       message = (
         <Message my="24px" p="8px" variant="danger">
           <Box>
-            <MessageText display="inline">
-              {t('You don’t have any average CAKE balance available to commit in the IFO CAKE pool.')}
-            </MessageText>{' '}
+            <MessageText display="inline">{t('You don’t have any iCAKE available for IFO public sale.')}</MessageText>{' '}
             <MessageTextLink display="inline" fontWeight={700} href="/ifo#ifo-how-to" color="failure">
               {t('How does it work?')} »
             </MessageTextLink>
@@ -250,11 +252,19 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
           <TokenSection primaryToken={ifo.token}>
             <Label>{t('%symbol% to receive', { symbol: token.symbol })}</Label>
             <Value>{getBalanceNumber(userPoolCharacteristics.offeringAmountInToken, token.decimals)}</Value>
+            {version >= 3.2 && publicPoolCharacteristics.vestingInfomation.percentage > 0 && (
+              <VestingAvailableToClaim
+                amountToReceive={userPoolCharacteristics.offeringAmountInToken}
+                percentage={publicPoolCharacteristics.vestingInfomation.percentage}
+                decimals={token.decimals}
+              />
+            )}
           </TokenSection>
-          {ifov31Msg}
+          {message}
         </>
       )
     }
+
     if (publicIfoData.status === 'finished') {
       return userPoolCharacteristics.amountTokenCommittedInLP.isEqualTo(0) ? (
         <Flex flexDirection="column" alignItems="center">
@@ -263,7 +273,7 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
           {ifov31Msg || (
             <>
               <Text textAlign="center" fontSize="14px">
-                {t('To participate in the next IFO, stake some CAKE in the IFO CAKE pool!')}
+                {t('To participate in the next IFO, lock some CAKE in the fixed-term staking CAKE pool!')}
               </Text>
               <MessageTextLink href="/ifo#ifo-how-to" textAlign="center">
                 {t('How does it work?')} »

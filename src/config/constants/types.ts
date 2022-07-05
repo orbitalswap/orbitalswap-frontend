@@ -1,5 +1,10 @@
 import BigNumber from 'bignumber.js'
-import { Token } from '@orbitalswap/sdk'
+import { Token, ChainId } from '@orbitalswap/sdk'
+
+// a list of tokens by chain
+export type ChainTokenList = {
+  readonly [chainId in ChainId]: Token[]
+}
 
 export type TranslatableText =
   | string
@@ -54,6 +59,7 @@ export interface Ifo {
   twitterUrl?: string
   telegramUrl?: string
   version: number
+  vestingTitle?: string
   [PoolIds.poolBasic]?: IfoPoolInfo
   [PoolIds.poolUnlimited]: IfoPoolInfo
 }
@@ -72,6 +78,8 @@ interface FarmConfigBaseProps {
   lpAddresses: Address
   multiplier?: string
   isCommunity?: boolean
+  auctionHostingStartSeconds?: number
+  auctionHostingEndDate?: string
   dual?: {
     rewardPerBlock: number
     earnLabel: string
@@ -94,8 +102,6 @@ interface PoolConfigBaseProps {
   contractAddress: Address
   poolCategory: PoolCategory
   tokenPerBlock: string
-  sortOrder?: number
-  harvest?: boolean
   isFinished?: boolean
   enableEmergencyWithdraw?: boolean
   version?: number
@@ -207,7 +213,7 @@ export interface FarmAuctionBidderConfig {
   lpAddress?: string
 }
 
-// Note: this status is slightly different compared to 'status' comfing
+// Note: this status is slightly different compared to 'status' config
 // from Farm Auction smart contract
 export enum AuctionStatus {
   ToBeAnnounced, // No specific dates/blocks to display

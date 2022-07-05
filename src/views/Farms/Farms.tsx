@@ -308,6 +308,7 @@ const Farms: React.FC = ({ children }) => {
       multiplier: {
         multiplier: farm.multiplier,
       },
+      type: farm.isCommunity ? 'community' : 'core',
       details: farm,
     }
 
@@ -316,9 +317,7 @@ const Farms: React.FC = ({ children }) => {
 
   const renderContent = (): JSX.Element => {
     if (viewMode === ViewMode.TABLE && rowData.length) {
-      const columnSchema = DesktopColumnSchema
-
-      const columns = columnSchema.map((column) => ({
+      const columns = DesktopColumnSchema.map((column) => ({
         id: column.id,
         name: column.name,
         label: column.label,
@@ -360,7 +359,7 @@ const Farms: React.FC = ({ children }) => {
         <Heading scale="lg" color="text">
           {t('Stake LP tokens to earn.')}
         </Heading>
-        {/* <NextLinkFromReactRouter to="/farms/auction" id="lottery-pot-banner">
+        {/* <NextLinkFromReactRouter to="/farms/auction" prefetch={false}>
           <Button p="0" variant="text">
             <Text color="primary" bold fontSize="16px" mr="4px">
               {t('Community Auctions')}
@@ -372,7 +371,7 @@ const Farms: React.FC = ({ children }) => {
       <Page>
         <ControlContainer>
           <ViewControls>
-            <ToggleView idPrefix="clickFarm" viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
+            <ToggleView idPrefix="clickFarm" viewMode={viewMode} onToggle={setViewMode} />
             <ToggleWrapper>
               <Toggle
                 id="staked-only-farms"

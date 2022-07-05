@@ -4,12 +4,11 @@ import { gql } from 'graphql-request'
 import { GetStaticProps } from 'next'
 import { SWRConfig } from 'swr'
 import { bitQueryServerClient, infoServerClient } from 'utils/graphql'
-import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { getCakeVaultAddress } from 'utils/addressHelpers'
 import { getCakeContract } from 'utils/contractHelpers'
-import { CHAIN_ID } from 'config/constants/networks'
+import { getBlocksFromTimestamps } from 'utils/getBlocksFromTimestamps'
 import { formatEther } from '@ethersproject/units'
-
+import { CHAIN_ID } from 'config/constants/networks'
 import Home from '../views/Home'
 
 const IndexPage = ({ totalTx30Days, addressCount30Days, tvl }) => {

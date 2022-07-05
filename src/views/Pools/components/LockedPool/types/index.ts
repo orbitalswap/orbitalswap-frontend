@@ -52,6 +52,8 @@ export interface OverviewPropsType {
   newLockedAmount?: number
   lockStartTime?: string
   lockEndTime?: string
+  showLockWarning?: boolean
+  ceiling?: BigNumber
 }
 
 export interface AddAmountModalProps {
@@ -59,8 +61,7 @@ export interface AddAmountModalProps {
   stakingToken: Token
   currentBalance: BigNumber
   currentLockedAmount: BigNumber
-  passedDuration: number
-  remainingDuration: number
+  lockStartTime?: string
   lockEndTime?: string
   stakingTokenBalance: BigNumber
 }

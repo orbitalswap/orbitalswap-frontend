@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { Contract } from '@ethersproject/contracts'
 import { Modal, Button, Flex, Text } from '@pancakeswap/uikit'
 import { Currency, Token } from '@orbitalswap/sdk'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useWeb3React } from '@web3-react/core'
+import { useAppDispatch } from 'state'
 import { fetchLaunchpadsPublicDataAsync, fetchLaunchpadUserDataAsync } from 'state/launchpads'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { getDecimalAmount } from 'utils/formatBalance'
@@ -30,13 +30,12 @@ const ContributeModal: React.FC<Props> = ({
   onDismiss,
   toggleStatus,
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [value, setValue] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const [isLimit, reachedLimit] = useState(false)
   const [tooSmall, setTooSmall] = useState(false)
-  const { account } = useActiveWeb3React()
-
+  const { account } = useWeb3React()
   const tokenBalance = useCurrencyBalance(account ?? undefined, currency ?? Currency.ETHER)
   const onContribute = useLaunchpadContribute(launchpadContract)
 
@@ -107,7 +106,7 @@ const ContributeModal: React.FC<Props> = ({
         </Button>
       </Flex>
       {/* <LinkExternal
-        href="https://exchange.pancakeswap.finance/#/add/ETH/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82"
+        href="https://exchange.pancakeswap.finance/#/add/ETH/0x42b98A2f73a282D731b0B8F4ACfB6cAF3565496B"
         style={{ margin: 'auto' }}
       >
         {`Get ${currency}`}

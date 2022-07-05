@@ -11,12 +11,12 @@ import {
   CalculateIcon,
   IconButton,
   Skeleton,
+  Box,
 } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
 
-import { BIG_TEN } from 'utils/bigNumber'
 import { usePriceCakeBusd } from 'state/farms/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { useVaultApy } from 'hooks/useVaultApy'
@@ -29,14 +29,15 @@ import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/for
 import useToast from 'hooks/useToast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { fetchCakeVaultUserData } from 'state/pools'
-import { DeserializedPool } from 'state/types'
+import { DeserializedPool, VaultKey } from 'state/types'
 import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { Slider } from 'components/Slider'
 import { vaultPoolConfig } from 'config/constants/pools'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { getFullDecimalMultiplier } from 'utils/getFullDecimalMultiplier'
 import { VaultRoiCalculatorModal } from '../Vault/VaultRoiCalculatorModal'
-
+import ConvertToLock from '../LockedPool/Common/ConvertToLock'
 import FeeSummary from './FeeSummary'
 
 // min deposit and withdraw amount
@@ -77,13 +78,13 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   const { stakingToken, earningTokenPrice, vaultKey } = pool
   const { account } = useWeb3React()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const vaultPoolContract = useVaultPoolContract()
+  const vaultPoolContract = useVaultPoolContract(pool.vaultKey)
   const { callWithGasPrice } = useCallWithGasPrice()
   const {
     userData: {
       lastDepositedTime,
       userShares,
-      balance: { cakeAsBigNumber },
+      balance: { cakeAsBigNumber, cakeAsNumberBalance },
     },
   } = useVaultPoolByKey(pool.vaultKey)
   const { t } = useTranslation()
@@ -119,7 +120,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
 
   const handleStakeInputChange = (input: string) => {
     if (input) {
-      const convertedInput = new BigNumber(input).multipliedBy(BIG_TEN.pow(stakingToken.decimals))
+      const convertedInput = new BigNumber(input).multipliedBy(getFullDecimalMultiplier(stakingToken.decimals))
       const percentage = Math.floor(convertedInput.dividedBy(stakingMax).multipliedBy(100).toNumber())
       setPercent(percentage > 100 ? 100 : percentage)
     } else {
@@ -167,7 +168,8 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     const receipt = await fetchWithCatchTxError(() => {
       // .toString() being called to fix a BigNumber error in prod
       // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
-      const methodArgs = [convertedStakeAmount.toString(), lockDuration.toString()]
+      const extraArgs = pool.vaultKey === VaultKey.CakeVault ? [lockDuration.toString()] : []
+      const methodArgs = [convertedStakeAmount.toString(), ...extraArgs]
       return callWithGasPrice(vaultPoolContract, 'deposit', methodArgs, callOptions)
     })
 
@@ -279,6 +281,11 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           )}
         </Flex>
       )}
+      {pool.vaultKey === VaultKey.CakeVault && cakeAsNumberBalance ? (
+        <Box mt="8px" maxWidth="370px">
+          <ConvertToLock stakingToken={stakingToken} currentStakedAmount={cakeAsNumberBalance} />
+        </Box>
+      ) : null}
       <Button
         isLoading={pendingTx}
         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}

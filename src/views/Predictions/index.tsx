@@ -1,18 +1,19 @@
-import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
+import { useModal, useMatchBreakpointsContext } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { PageMeta } from 'components/Layout/Page'
-import PageLoader from 'components/Loader/PageLoader'
 import { useEffect, useRef } from 'react'
-import { useAppDispatch } from 'state'
 import { useInitialBlock } from 'state/block/hooks'
 import { initializePredictions } from 'state/predictions'
-import { useChartView, useGetPredictionsStatus, useIsChartPaneOpen } from 'state/predictions/hooks'
-import { PredictionsChartView, PredictionStatus } from 'state/types'
+import { useChartView, useIsChartPaneOpen } from 'state/predictions/hooks'
+import { PredictionsChartView } from 'state/types'
+import { useAccountLocalEventListener } from 'hooks/useAccountLocalEventListener'
 import {
   useUserPredictionAcceptedRisk,
   useUserPredictionChainlinkChartDisclaimerShow,
   useUserPredictionChartDisclaimerShow,
 } from 'state/user/hooks'
+import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
+
 import ChartDisclaimer from './components/ChartDisclaimer'
 import ChainlinkChartDisclaimer from './components/ChainlinkChartDisclaimer'
 import CollectWinningsPopup from './components/CollectWinningsPopup'
@@ -65,11 +66,12 @@ function Warnings() {
 }
 
 const Predictions = () => {
-  const { isDesktop } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpointsContext()
   const { account } = useWeb3React()
-  const status = useGetPredictionsStatus()
-  const dispatch = useAppDispatch()
+  const dispatch = useLocalDispatch()
   const initialBlock = useInitialBlock()
+
+  useAccountLocalEventListener()
 
   useEffect(() => {
     if (initialBlock > 0) {
@@ -79,10 +81,6 @@ const Predictions = () => {
   }, [initialBlock, dispatch, account])
 
   usePollPredictions()
-
-  if (status === PredictionStatus.INITIAL) {
-    return <PageLoader />
-  }
 
   return (
     <>

@@ -2,7 +2,6 @@ import { useState, useCallback, Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'contexts/Localization'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
-import _noop from 'lodash/noop'
 import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import { useVaultPoolContract } from 'hooks/useContract'
 import BigNumber from 'bignumber.js'
@@ -11,14 +10,12 @@ import useToast from 'hooks/useToast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { fetchCakeVaultUserData } from 'state/pools'
 import { Token } from '@orbitalswap/sdk'
-import { vaultPoolConfig } from 'config/constants/pools'
+import { ONE_WEEK_DEFAULT, vaultPoolConfig } from 'config/constants/pools'
 import { VaultKey } from 'state/types'
 
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { PrepConfirmArg } from '../types'
-
-const ONE_WEEK_DEFAULT = 604800
 
 interface HookArgs {
   lockedAmount: BigNumber
@@ -42,7 +39,7 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
 
   const { account } = useWeb3React()
   const { fetchWithCatchTxError, loading: pendingTx } = useCatchTxError()
-  const vaultPoolContract = useVaultPoolContract()
+  const vaultPoolContract = useVaultPoolContract(VaultKey.CakeVault)
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const { t } = useTranslation()

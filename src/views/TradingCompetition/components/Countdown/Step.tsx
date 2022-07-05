@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { LogoIcon, CheckmarkCircleIcon, CircleOutlineIcon, Flex, Text } from '@pancakeswap/uikit'
-import { CountdownProps } from '../../types'
 import useTheme from 'hooks/useTheme'
+import { CountdownProps } from '../../types'
 
 const sharedFlexStyles = `
 flex-direction: column;
@@ -36,16 +36,18 @@ const StyledText = styled(Text)`
 `
 
 const Step: React.FC<CountdownProps> = ({ stepText, index, activeStepIndex }) => {
-  const { theme } = useTheme()
   const isExpired = index < activeStepIndex
   const isActive = index === activeStepIndex
   const isFuture = index > activeStepIndex
+  const { theme } = useTheme()
 
   if (isExpired) {
     return (
       <ExpiredWrapper>
         <CheckmarkCircleIcon />
-        <StyledText color="textSubtle">{stepText}</StyledText>
+        <StyledText color="textSubtle" textTransform="uppercase">
+          {stepText}
+        </StyledText>
       </ExpiredWrapper>
     )
   }
@@ -53,8 +55,10 @@ const Step: React.FC<CountdownProps> = ({ stepText, index, activeStepIndex }) =>
   if (isActive) {
     return (
       <ActiveWrapper>
-        <LogoIcon isDark={theme.isDark}/>
-        <StyledText color="primaryBright">{stepText}</StyledText>
+        <LogoIcon isDark={theme.isDark} />
+        <StyledText color="primaryBright" textTransform="uppercase">
+          {stepText}
+        </StyledText>
       </ActiveWrapper>
     )
   }
@@ -63,7 +67,9 @@ const Step: React.FC<CountdownProps> = ({ stepText, index, activeStepIndex }) =>
     return (
       <FutureWrapper>
         <CircleOutlineIcon />
-        <StyledText color="textDisabled">{stepText}</StyledText>
+        <StyledText color="textDisabled" textTransform="uppercase">
+          {stepText}
+        </StyledText>
       </FutureWrapper>
     )
   }

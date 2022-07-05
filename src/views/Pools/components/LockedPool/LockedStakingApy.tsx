@@ -14,10 +14,20 @@ import BurningCountDown from './Common/BurningCountDown'
 import LockedActions from './Common/LockedActions'
 import YieldBoostRow from './Common/YieldBoostRow'
 import LockDurationRow from './Common/LockDurationRow'
-import useUserDataInVaultPrensenter from './hooks/useUserDataInVaultPrensenter'
+import IfoCakeRow from './Common/IfoCakeRow'
+import useUserDataInVaultPresenter from './hooks/useUserDataInVaultPresenter'
 import { LockedStakingApyPropsType } from './types'
 
-const LockedStakingApy: React.FC<LockedStakingApyPropsType> = ({ stakingToken, stakingTokenBalance, userData }) => {
+interface LockedStakingApyProps extends LockedStakingApyPropsType {
+  showICake?: boolean
+}
+
+const LockedStakingApy: React.FC<LockedStakingApyProps> = ({
+  stakingToken,
+  stakingTokenBalance,
+  userData,
+  showICake,
+}) => {
   const { t } = useTranslation()
   const position = useMemo(
     () =>
@@ -37,7 +47,7 @@ const LockedStakingApy: React.FC<LockedStakingApyPropsType> = ({ stakingToken, s
 
   const usdValueStaked = useBUSDCakeAmount(currentLockedAmount)
 
-  const { weekDuration, lockEndDate, secondDuration, remainingTime } = useUserDataInVaultPrensenter({
+  const { weekDuration, lockEndDate, secondDuration, remainingTime } = useUserDataInVaultPresenter({
     lockStartTime: userData?.lockStartTime,
     lockEndTime: userData?.lockEndTime,
   })
@@ -138,6 +148,7 @@ const LockedStakingApy: React.FC<LockedStakingApyPropsType> = ({ stakingToken, s
           </Text>
         </Flex>
       )}
+      {showICake && <IfoCakeRow />}
     </LightGreyCard>
   )
 }
