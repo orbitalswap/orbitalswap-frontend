@@ -12,7 +12,6 @@ import {
   AddIcon,
   ArrowDownIcon,
   CardBody,
-  Slider,
   Box,
   Flex,
   useModal,
@@ -21,6 +20,7 @@ import {
   useTooltip,
 } from '@pancakeswap/uikit'
 import { BigNumber } from '@ethersproject/bignumber'
+import { Slider } from 'components/Slider'
 import { callWithEstimateGas } from 'utils/calls'
 import { getLPSymbol } from 'utils/getLpSymbol'
 import { getZapAddress } from 'utils/addressHelpers'

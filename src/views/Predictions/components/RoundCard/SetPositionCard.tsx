@@ -12,11 +12,11 @@ import {
   LogoIcon,
   Text,
   BalanceInput,
-  Slider,
   Box,
   AutoRenewIcon,
 } from '@pancakeswap/uikit'
 import { BigNumber, FixedNumber } from '@ethersproject/bignumber'
+import { Slider } from 'components/Slider'
 import { Zero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
 import { useWeb3React } from '@web3-react/core'

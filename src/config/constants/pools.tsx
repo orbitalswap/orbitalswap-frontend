@@ -18,7 +18,7 @@ export const vaultPoolConfig = {
     name: <Trans>Auto ORB</Trans>,
     description: <Trans>Automatic restaking</Trans>,
     autoCompoundFrequency: 5000,
-    gasLimit: 380000,
+    gasLimit: 800000,
     tokenImage: {
       primarySrc: `/images/tokens/${tokens.orb.address}.png`,
       secondarySrc: '/images/tokens/autorenew.svg',
@@ -28,7 +28,7 @@ export const vaultPoolConfig = {
     name: <Trans>Stake ORB</Trans>,
     description: <Trans>Stake, Earn - And more!</Trans>,
     autoCompoundFrequency: 5000,
-    gasLimit: 500000,
+    gasLimit: 800000,
     tokenImage: {
       primarySrc: `/images/tokens/${tokens.orb.address}.png`,
       secondarySrc: '/images/tokens/autorenew.svg',
@@ -38,7 +38,7 @@ export const vaultPoolConfig = {
     name: <Trans>Flexible ORB</Trans>,
     description: <Trans>Flexible staking on the side.</Trans>,
     autoCompoundFrequency: 5000,
-    gasLimit: 500000,
+    gasLimit: 800000,
     tokenImage: {
       primarySrc: `/images/tokens/${tokens.orb.address}.png`,
       secondarySrc: '/images/tokens/autorenew.svg',
@@ -48,7 +48,7 @@ export const vaultPoolConfig = {
     name: 'IFO ORB',
     description: <Trans>Stake ORB to participate in IFOs</Trans>,
     autoCompoundFrequency: 1,
-    gasLimit: 500000,
+    gasLimit: 800000,
     tokenImage: {
       primarySrc: `/images/tokens/${tokens.orb.address}.png`,
       secondarySrc: `/images/tokens/ifo-pool-icon.svg`,

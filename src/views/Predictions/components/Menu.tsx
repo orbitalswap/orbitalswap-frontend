@@ -76,7 +76,7 @@ const Menu = () => {
               <TimerLabelWrapper>
                 <TimerLabel interval="5" unit="m" />
               </TimerLabelWrapper>
-              <HelpButtonWrapper>
+              {/* <HelpButtonWrapper>
                 <Button
                   variant="subtle"
                   as="a"
@@ -87,7 +87,7 @@ const Menu = () => {
                 >
                   <HelpIcon width="24px" color="white" />
                 </Button>
-              </HelpButtonWrapper>
+              </HelpButtonWrapper> */}
               <LeaderboardButtonWrapper>
                 <Link href="/prediction/leaderboard" passHref>
                   <Button as="a" variant="subtle" width="48px">

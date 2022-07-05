@@ -37,13 +37,14 @@ const activeFarms = farmsConfig
     ({ token, pid, quoteToken }) =>
       pid !== 0 &&
       ((token.symbol === 'BUSD' && quoteToken.symbol === 'WBNB') ||
+        (token.symbol === 'wTYTAN') ||
         lPoolAddresses.find((poolAddress) => poolAddress === token.address)),
   )
   .map((farm) => farm.pid)
 
+  
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
-
   useSlowRefreshEffect(
     (currentBlock) => {
       const fetchPoolsDataWithFarms = async () => {

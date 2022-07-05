@@ -7,7 +7,7 @@ import { simpleRpcProvider } from 'utils/providers'
 import BigNumber from 'bignumber.js'
 import uniq from 'lodash/uniq'
 
-// Pool 0, Cake / Cake is a different kind of contract (master chef)
+// Pool 0, Orb / Orb is a different kind of contract (master chef)
 // BNB pools use the native BNB token (wrapping ? unwrapping is done at the contract level)
 const nonBnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol !== 'BNB')
 const bnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol === 'BNB')
