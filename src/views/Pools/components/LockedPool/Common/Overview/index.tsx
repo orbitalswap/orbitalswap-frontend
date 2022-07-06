@@ -76,7 +76,7 @@ const Overview: React.FC<OverviewPropsType> = ({
         </Flex>
         <LightGreyCard>
           <BalanceRow title={t('Orb to be locked')} value={lockedAmount} newValue={newLockedAmount} decimals={2} />
-          <BalanceRow title="iCake" decimals={2} value={formattediCake} newValue={newFormattediCake} />
+          {/* <BalanceRow title="iCake" decimals={2} value={formattediCake} newValue={newFormattediCake} /> */}
           <BalanceRow
             title="apy"
             unit="%"
