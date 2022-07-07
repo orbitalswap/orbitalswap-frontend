@@ -65,7 +65,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
   },
   {
     label: t('Win'),
-    href: '/lottery',
+    href: '/prediction',
     icon: TrophyIcon,
     fillIcon: TrophyFillIcon,
     items: [
