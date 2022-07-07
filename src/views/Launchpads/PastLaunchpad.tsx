@@ -1,22 +1,69 @@
-import React from 'react'
-import { useLaunchpads } from 'state/launchpads/hooks'
 
+import { Flex, Grid, Heading, SubMenuItems} from '@pancakeswap/uikit'
+import { launchpadsConfig } from 'config/constants'
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
+import { PageMeta } from 'components/Layout/Page'
+import { useTranslation } from 'contexts/Localization'
+import useTheme from 'hooks/useTheme'
+import PageHeader from 'components/PageHeader'
+import PageSection from 'components/PageSection'
+import { useLaunchpads, useLaunchpadsPageFetch } from 'state/launchpads/hooks'
+import { FetchStatus } from 'config/constants/types'
+import PageLoader from 'components/Loader/PageLoader'
 import LaunchpadCard from './components/LaunchpadCard'
-import LaunchpadCards from './components/LaunchpadCards'
+
 
 /**
  * Note: currently there should be only 1 active IFO at a time
  */
+const activeLaunchpad = launchpadsConfig.find((launchpad) => launchpad.isActive)
 
-const PastLaunchpad = () => {
-  const {launchpads} = useLaunchpads()
+const Launchpads = () => {  
+  const { t } = useTranslation()
+  const { theme } = useTheme()  
+  const { launchpads } = useLaunchpads()
 
+  useLaunchpadsPageFetch()
+
+  const router = useRouter()
+  const isExact = router.route === '/launchpads/history'
+  
   return (
-    <LaunchpadCards>
-      {launchpads?.filter((launchpad) => !launchpad.isActive).map((launchpad) => (
-        <LaunchpadCard launchpad={launchpad} />
-      ))}
-    </LaunchpadCards>
+    <>
+      <PageMeta />
+      <SubMenuItems
+          items={[
+            {
+              label: t('Finished Presale'),
+              href: '/launchpads',
+            },
+            {
+              label: t('Cancelled Presale'),
+              href: '/launchpads/history',
+            },
+          ]}
+          activeItem={isExact ? '/launchpads/history' : '/launchpads'}
+        />
+        <PageHeader>  
+          <Heading scale="xl">{t('Cancelled Presale')}</Heading>
+        </PageHeader>
+          <PageSection
+          innerProps={{ style: { margin: '0', width: '100%' } }}
+          background={theme.colors.background}
+          index={1}
+          concaveDivider
+          dividerPosition="top"
+        >
+          <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
+            {launchpads.filter((launchpad) => !launchpad.isActive).slice(0,6).map((launchpad)=> {
+              return (
+                <LaunchpadCard key={launchpad.id} launchpad={launchpad}/>
+              )
+            })}
+          </Grid>
+        </PageSection>
+    </>
   )
 }
-export default PastLaunchpad
+export default Launchpads

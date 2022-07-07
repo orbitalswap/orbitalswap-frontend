@@ -32,21 +32,21 @@ const Launchpads = () => {
   return (
     <>
       <PageMeta />
-      {/* <SubMenuItems
+      <SubMenuItems
           items={[
             {
-              label: t('All launchpads'),
+              label: t('Finished Presale'),
               href: '/launchpads',
             },
             {
-              label: t('My Contributions'),
+              label: t('Cancelled Presale'),
               href: '/launchpads/history',
             },
           ]}
           activeItem={isExact ? '/launchpads' : '/launchpads/history'}
-        /> */}
+        />
         <PageHeader>  
-          <Heading scale="xl">{t('Current Presale')}</Heading>
+          <Heading scale="xl">{t('Finished Presale')}</Heading>
         </PageHeader>
           <PageSection
           innerProps={{ style: { margin: '0', width: '100%' } }}
@@ -56,7 +56,7 @@ const Launchpads = () => {
           dividerPosition="top"
         >
           <Grid gridGap="16px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="64px">
-            {launchpads.slice(0,6).map((launchpad)=> {
+            {launchpads.filter((launchpad) => launchpad.isActive).slice(0,6).map((launchpad)=> {
               return (
                 <LaunchpadCard key={launchpad.id} launchpad={launchpad}/>
               )
