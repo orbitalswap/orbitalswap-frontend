@@ -182,7 +182,7 @@ const CollectWinningsPopup = () => {
     <CSSTransition in={isOpen} unmountOnExit nodeRef={ref} timeout={1000} classNames="popup">
       <Wrapper ref={ref}>
         <Popup>
-          <TrophyGoldIcon width="64px" style={{ flex: 'none' }} mr="8px" />
+          {/* <TrophyGoldIcon width="64px" style={{ flex: 'none' }} mr="8px" /> */}
           <Button style={{ flex: 1 }} onClick={handleOpenHistory}>
             {t('Collect Winnings')}
           </Button>

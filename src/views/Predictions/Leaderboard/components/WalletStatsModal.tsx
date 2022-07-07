@@ -77,11 +77,11 @@ const WalletStatsModal: React.FC<WalletStatsModalProps> = ({
             <ProfileAvatar src={profile?.nft?.image?.thumbnail} height={96} width={96} />
           </Box>
           <Box>
-            {profile?.username && (
+            {/* {profile?.username && (
               <Heading scale="lg" mb="8px">
                 {profile?.username}
               </Heading>
-            )}
+            )} */}
             <ExternalLink href={getBscScanLink(address, 'address')}>{truncateHash(address)}</ExternalLink>
           </Box>
         </Flex>

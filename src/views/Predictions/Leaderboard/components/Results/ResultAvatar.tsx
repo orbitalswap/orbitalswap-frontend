@@ -57,14 +57,16 @@ const ResultAvatar: React.FC<ResultAvatarProps> = ({ user, ...props }) => {
         <Flex alignItems="center" {...props}>
           <UsernameWrapper>
             <Text color="primary" fontWeight="bold">
-              {profile?.username || truncateHash(user.id)}
+              {/* {profile?.username || truncateHash(user.id)} */}
+              {truncateHash(user.id)}
             </Text>{' '}
           </UsernameWrapper>
           <AvatarWrapper
             width={['32px', null, null, null, null, '40px']}
             height={['32px', null, null, null, null, '40px']}
           >
-            <ProfileAvatar src={profile?.nft?.image?.thumbnail} height={40} width={40} />
+            {/* <ProfileAvatar src={profile?.nft?.image?.thumbnail} height={40} width={40} /> */}
+            <ProfileAvatar src={null} height={40} width={40} />
           </AvatarWrapper>
         </Flex>
       }

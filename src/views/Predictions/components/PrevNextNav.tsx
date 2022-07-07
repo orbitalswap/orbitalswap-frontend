@@ -52,7 +52,7 @@ const PrevNextNav = () => {
         <ArrowBackIcon color="primary" width="24px" />
       </IconButton>
       <Icon onClick={handleSlideToLive}>
-        <BunnyCardsIcon width="64px" />
+        <img alt="prevNav" src='/images/predictions/prevNav.png' width="64px" />
       </Icon>
       <IconButton variant="text" scale="sm" onClick={handleNextSlide}>
         <ArrowForwardIcon color="primary" width="24px" />
