@@ -27,6 +27,7 @@ import {
   poolsWithVaultSelector,
   ifoCreditSelector,
   ifoCeilingSelector,
+  makeVaultPoolWithKeySelector,
 } from './selectors'
 
 const lPoolAddresses = livePools.filter(({ sousId }) => sousId !== 0).map(({ earningToken }) => earningToken.address)
@@ -42,9 +43,9 @@ const activeFarms = farmsConfig
   )
   .map((farm) => farm.pid)
 
-  
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
+
   useSlowRefreshEffect(
     (currentBlock) => {
       const fetchPoolsDataWithFarms = async () => {
@@ -69,6 +70,12 @@ export const usePool = (sousId: number): { pool: DeserializedPool; userDataLoade
 
 export const usePoolsWithVault = () => {
   return useSelector(poolsWithVaultSelector)
+}
+
+export const useDeserializedPoolByVaultKey = (vaultKey) => {
+  const vaultPoolWithKeySelector = useMemo(() => makeVaultPoolWithKeySelector(vaultKey), [vaultKey])
+
+  return useSelector(vaultPoolWithKeySelector)
 }
 
 export const usePoolsPageFetch = () => {
