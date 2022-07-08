@@ -9,7 +9,6 @@ import useEagerConnect from 'hooks/useEagerConnect'
 import { useAccountEventListener } from 'hooks/useAccountEventListener'
 import useSentryUser from 'hooks/useSentryUser'
 import useUserAgent from 'hooks/useUserAgent'
-import useThemeCookie from 'hooks/useThemeCookie'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Fragment } from 'react'
@@ -41,7 +40,6 @@ function GlobalHooks() {
   useUserAgent()
   useAccountEventListener()
   useSentryUser()
-  useThemeCookie()
   return null
 }
 

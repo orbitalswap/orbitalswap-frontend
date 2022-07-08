@@ -1,6 +1,6 @@
 import { Box, BnbUsdtPairTokenIcon, LogoRoundIcon, CoinSwitcher, Flex, PocketWatchIcon, Text, CloseIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
-import { useCountUp } from 'react-countup'
+import CountUp from 'react-countup'
 import { formatBigNumberToFixed } from 'utils/formatBalance'
 import { useRouter } from 'next/router'
 import { useCallback, useState, useEffect, useRef, useMemo } from 'react'
@@ -164,32 +164,21 @@ export const PricePairLabel: React.FC = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { price } = usePollOraclePrice()
-  const priceAsNumber = parseFloat(formatBigNumberToFixed(price, 4, 8))
+  const priceAsNumber = useMemo(() => parseFloat(formatBigNumberToFixed(price, 4, 8)), [price])
   const [dismissTooltip, setDismissTooltip] = useState(() => {
     if (localStorage?.getItem(PREDICTION_TOOLTIP_DISMISS_KEY)) return true
     return false
-  })
-  const countUpState = useCountUp({
-    start: 0,
-    end: priceAsNumber,
-    duration: 1,
-    decimals: 4,
   })
   
   const logo = useMemo(() => {
     return TOKEN_LOGOS[token.symbol]
   }, [token.symbol])
 
-  const { countUp, update } = countUpState || {}
-  const updateRef = useRef(update)
   const onDismissTooltip = useCallback(() => {
     localStorage?.setItem(PREDICTION_TOOLTIP_DISMISS_KEY, '1')
     setDismissTooltip(true)
   }, [])
 
-  useEffect(() => {
-    updateRef.current(priceAsNumber)
-  }, [priceAsNumber, updateRef])
 
   const onTokenSwitch = useCallback(() => {
     if (router.query.token === PredictionSupportedSymbol.CAKE) {
@@ -214,7 +203,13 @@ export const PricePairLabel: React.FC = () => {
         <Title bold textTransform="uppercase">
           {`${token.symbol}USD`}
         </Title>
-        <Price fontSize="12px">{`$${countUp}`}</Price>
+        <CountUp start={0} preserveValue delay={0} end={priceAsNumber} prefix="$" decimals={4} duration={1}>
+          {({ countUpRef }) => (
+            <Price fontSize="12px">
+              <span ref={countUpRef} />
+            </Price>
+          )}
+        </CountUp>
       </Label>
     </Box>
   )
