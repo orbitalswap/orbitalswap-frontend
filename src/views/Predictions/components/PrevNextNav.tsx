@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {useGetSortedRoundsCurrentEpoch} from 'state/predictions/hooks'
 import Image from "next/image";
 import useSwiper from '../hooks/useSwiper'
-import SpacePlanetArt from '../../../../public/images/space planet art.png'
+import SpacePlanetArt from '../../../../public/images/space_planet_art.png'
 
 const StyledPrevNextNav = styled(Flex)`
   align-items: center;
