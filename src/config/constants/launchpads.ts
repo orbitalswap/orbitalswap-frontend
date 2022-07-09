@@ -10,7 +10,7 @@ const launchpads: SerializedLaunchpadConfig[] = [
       97: '',
       56: '0x1034ae93d9F3f3dC44A243068e43d86da408597b',
     },
-    isActive: true,
+    isActive: false,
     name: 'DualMiner',
     subTitle: 'Auto-Staking & Compounding From the Future',
     description:
@@ -26,7 +26,7 @@ const launchpads: SerializedLaunchpadConfig[] = [
       97: '',
       56: '0x7d386A0786fC0300d6A5B2F5aB9081AA3CA1f97E',
     },
-    isActive: true,
+    isActive: false,
     name: 'AVION FINANCE',
     subTitle: 'Auto-Staking & Compounding From the Future',
     description:
@@ -74,7 +74,7 @@ const launchpads: SerializedLaunchpadConfig[] = [
       97: '',
       56: '0x76445a732b0ae2D27DA2D9416138c84C6c54a22D',
     },
-    isActive: true,
+    isActive: false,
     name: 'RIPTIDE FINANCE',
     subTitle: 'Auto-Staking & Compounding From the Future',
     description:

@@ -1,9 +1,9 @@
-import { useEffect, useRef, useMemo } from 'react'
-import { useCountUp } from 'react-countup'
+import { useMemo, memo } from 'react'
+import CountUp from 'react-countup'
 import { Text } from '@pancakeswap/uikit'
 import { formatBigNumberToFixed } from 'utils/formatBalance'
 import styled from 'styled-components'
-import usePollOraclePrice from '../hooks/usePollOraclePrice'
+import { BigNumber } from '@ethersproject/bignumber'
 
 const Price = styled(Text)`
   height: 18px;
@@ -15,24 +15,22 @@ const Price = styled(Text)`
   }
 `
 
-const LabelPrice = () => {
-  const { price } = usePollOraclePrice()
-  const priceAsNumber = useMemo(() => parseFloat(formatBigNumberToFixed(price, 4, 8)), [price])
-
-  const { countUp, update } = useCountUp({
-    start: 0,
-    end: priceAsNumber,
-    duration: 1,
-    decimals: 4,
-  })
-
-  const updateRef = useRef(update)
-
-  useEffect(() => {
-    updateRef.current(priceAsNumber)
-  }, [priceAsNumber, updateRef])
-
-  return <Price fontSize="12px">{`$${countUp}`}</Price>
+interface LabelPriceProps {
+  price: BigNumber
 }
 
-export default LabelPrice
+const LabelPrice: React.FC<LabelPriceProps> = ({ price }) => {
+  const priceAsNumber = useMemo(() => parseFloat(formatBigNumberToFixed(price, 4, 8)), [price])
+
+  return (
+    <CountUp start={0} preserveValue delay={0} end={priceAsNumber} prefix="$" decimals={4} duration={1}>
+      {({ countUpRef }) => (
+        <Price fontSize="12px">
+          <span ref={countUpRef} />
+        </Price>
+      )}
+    </CountUp>
+  )
+}
+
+export default memo(LabelPrice)

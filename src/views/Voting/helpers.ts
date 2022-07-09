@@ -36,7 +36,7 @@ export interface Message {
   sig: string
 }
 
-const STRATEGIES = [{ name: 'cake', params: { symbol: 'CAKE', address: tokens.cake.address, decimals: 18, max: 300 } }]
+const STRATEGIES = [{ name: 'orbitalswap', params: { symbol: 'ORB', address: tokens.orb.address, decimals: 18, max: 300 } }]
 const NETWORK = '56'
 
 /**
@@ -85,7 +85,7 @@ export const sendSnapshotData = async (message: Message) => {
 
 export const VOTING_POWER_BLOCK = {
   v0: 16300686,
-  v1: 17137653,
+  v1: 19288664,
 }
 
 /**

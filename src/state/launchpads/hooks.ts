@@ -14,7 +14,7 @@ export const usePollLaunchpadPublicData = () => {
   const dispatch = useAppDispatch()
 
   useSlowRefreshEffect(() => {
-    const pids = launchpadsConfig.filter((launchpad) => launchpad.isActive).map((launchpad) => launchpad.id)
+    const pids = launchpadsConfig.map((launchpad) => launchpad.id)
 
     dispatch(fetchLaunchpadsPublicDataAsync(pids))
   }, [dispatch])
@@ -24,7 +24,7 @@ export const useFetchUserLaunchpads = (account) => {
   const dispatch = useAppDispatch()
 
   useFastRefreshEffect(() => {
-    const pids = launchpadsConfig.filter((launchpad) => launchpad.isActive).map((launchpad) => launchpad.id)
+    const pids = launchpadsConfig.map((launchpad) => launchpad.id)
 
     if (account) {
       dispatch(fetchLaunchpadUserDataAsync(account, pids))
@@ -39,7 +39,7 @@ export const useLaunchpadsPageFetch = () => {
   usePollLaunchpadPublicData()
 
   useFastRefreshEffect(() => {
-    const pids = launchpadsConfig.filter((launchpad) => launchpad.isActive).map((launchpad) => launchpad.id)
+    const pids = launchpadsConfig.map((launchpad) => launchpad.id)
     if (account) {
       dispatch(fetchLaunchpadUserDataAsync(account, pids))
     }

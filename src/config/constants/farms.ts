@@ -109,6 +109,16 @@ const farms: SerializedFarmConfig[] = [
     quoteToken: serializedTokens.eth,
   },
   {
+    pid: 19,
+    lpSymbol: 'LINK-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x89A07ce088bbec4338e17A61D5B9d4e2cAB5e63e',
+    },
+    token: serializedTokens.link,
+    quoteToken: serializedTokens.wbnb,
+  },
+  {
     pid: 14,
     lpSymbol: 'ETH-BNB LP',
     lpAddresses: {

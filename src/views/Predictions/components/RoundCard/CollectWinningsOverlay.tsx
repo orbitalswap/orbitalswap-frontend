@@ -38,7 +38,7 @@ const CollectWinningsOverlay: React.FC<CollectWinningsOverlayProps> = ({ epoch, 
 
   return (
     <Wrapper alignItems="center" p="16px" isBottom={isBottom} {...props}>
-      <TrophyGoldIcon width="64px" style={{ flex: 'none' }} mr="8px" />
+      {/* <TrophyGoldIcon width="64px" style={{ flex: 'none' }} mr="8px" /> */}
       <CollectWinningsButton hasClaimed={false} width="100%">
         {t('Collect Winnings')}
       </CollectWinningsButton>

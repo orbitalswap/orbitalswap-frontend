@@ -22,6 +22,7 @@ export const ModalTitle = styled(Flex)`
 export const ModalBody = styled(Flex)`
   flex-direction: column;
   max-height: 90vh;
+  max-height: calc(var(--vh, 1vh) * 90);
   overflow-y: auto;
 `;
 
@@ -41,7 +42,7 @@ export const ModalBackButton: React.FC<{ onBack: ModalProps["onBack"] }> = ({ on
   );
 };
 
-export const ModalContainer = styled(Box)<{ minWidth: string }>`
+export const ModalContainer = styled(Box)`
   overflow: hidden;
   background: ${({ theme }) => theme.modal.background};
   box-shadow: 0px 20px 36px -8px rgba(14, 14, 44, 0.1), 0px 1px 1px rgba(0, 0, 0, 0.05);
@@ -49,11 +50,11 @@ export const ModalContainer = styled(Box)<{ minWidth: string }>`
   border-radius: 32px;
   width: 100%;
   max-height: 100vh;
+  max-height: calc(var(--vh, 1vh) * 100);
   z-index: ${({ theme }) => theme.zIndices.modal};
 
   ${({ theme }) => theme.mediaQueries.xs} {
     width: auto;
-    min-width: ${({ minWidth }) => minWidth};
     max-width: 100%;
   }
 `;

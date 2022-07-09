@@ -77,14 +77,16 @@ const RankingCard: React.FC<RankingCardProps> = ({ rank, user }) => {
             component={
               <>
                 <Flex mb="4px">
-                  <RotatedLaurelLeftIcon color={rankColor} width="32px" />
+                  {/* <RotatedLaurelLeftIcon color={rankColor} width="32px" /> */}
                   <Box width={['40px', null, null, '64px']} height={['40px', null, null, '64px']}>
-                    <ProfileAvatar src={profile?.nft?.image?.thumbnail} height={64} width={64} />
+                    {/* <ProfileAvatar src={profile?.nft?.image?.thumbnail} height={64} width={64} /> */}
+                    <ProfileAvatar src={null} height={64} width={64} />
                   </Box>
-                  <RotatedLaurelRightIcon color={rankColor} width="32px" />
+                  {/* <RotatedLaurelRightIcon color={rankColor} width="32px" /> */}
                 </Flex>
                 <Text color="primary" fontWeight="bold" textAlign="center">
-                  {profile?.username || truncateHash(user.id)}
+                  {/* {profile?.username || truncateHash(user.id)} */}
+                  {truncateHash(user.id)}
                 </Text>
               </>
             }

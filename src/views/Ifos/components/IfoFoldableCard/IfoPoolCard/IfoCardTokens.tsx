@@ -95,7 +95,7 @@ const OnSaleInfo = ({ token, saleAmount, distributionRatio }) => {
   return (
     <TokenSection primaryToken={token}>
       <Flex flexDirection="column">
-        <Label>{t('On sale').toUpperCase()}</Label>
+        <Label textTransform="uppercase">{t('On sale')}</Label>
         <Value>{saleAmount}</Value>
         <Text fontSize="14px" color="textSubtle">
           {t('%ratio%% of total sale', { ratio: distributionRatio })}
@@ -252,10 +252,10 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
           <TokenSection primaryToken={ifo.token}>
             <Label>{t('%symbol% to receive', { symbol: token.symbol })}</Label>
             <Value>{getBalanceNumber(userPoolCharacteristics.offeringAmountInToken, token.decimals)}</Value>
-            {version >= 3.2 && publicPoolCharacteristics.vestingInfomation.percentage > 0 && (
+            {version >= 3.2 && publicPoolCharacteristics.vestingInformation.percentage > 0 && (
               <VestingAvailableToClaim
                 amountToReceive={userPoolCharacteristics.offeringAmountInToken}
-                percentage={publicPoolCharacteristics.vestingInfomation.percentage}
+                percentage={publicPoolCharacteristics.vestingInformation.percentage}
                 decimals={token.decimals}
               />
             )}

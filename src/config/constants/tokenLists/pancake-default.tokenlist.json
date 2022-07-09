@@ -137,6 +137,14 @@
       "chainId": 56,
       "decimals": 18,
       "logoURI": "https://orbitalswap.com/images/tokens/0x26d3163b165BE95137CEe97241E716b2791a7572.png"
+    },
+    {
+      "name": "Binance-Peg Chainlink Token",
+      "symbol": "LINK",
+      "address": "0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": "https://orbitalswap.com/images/tokens/0xF8A0BF9cF54Bb92F17374d9e9A321E6a111a51bD.png"
     }
   ]
 }

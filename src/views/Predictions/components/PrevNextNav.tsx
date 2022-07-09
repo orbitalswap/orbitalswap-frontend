@@ -70,6 +70,7 @@ const PrevNextNav = () => {
             </IconButton>
         </StyledPrevNextNav>
     )
+
 }
 
 export default PrevNextNav

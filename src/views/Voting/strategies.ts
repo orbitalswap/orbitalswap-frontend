@@ -1,6 +1,6 @@
 const votePowerAddress = {
   v0: '0xc0FeBE244cE1ea66d27D23012B3D616432433F42',
-  v1: '0x67Dfbb197602FDB9A9D305cC7A43b95fB63a0A56',
+  v1: '0xE6CCB01cAafc11c21AdCc415BB802FB1cF77d7dE',
 }
 
 export const cakeBalanceStrategy = (version: 'v0' | 'v1') => ({
@@ -16,7 +16,7 @@ export const cakeBalanceStrategy = (version: 'v0' | 'v1') => ({
           type: 'address',
         },
       ],
-      name: 'getCakeBalance',
+      name: 'getOrbBalance',
       outputs: [
         {
           internalType: 'uint256',
@@ -43,7 +43,7 @@ export const cakeVaultBalanceStrategy = {
           type: 'address',
         },
       ],
-      name: 'getCakeVaultBalance',
+      name: 'getOrbVaultBalance',
       outputs: [
         {
           internalType: 'uint256',
@@ -97,7 +97,7 @@ export const cakePoolBalanceStrategy = (version: 'v0' | 'v1') => ({
           type: 'address',
         },
       ],
-      name: 'getCakePoolBalance',
+      name: 'getOrbPoolBalance',
       outputs: [
         {
           internalType: 'uint256',
@@ -124,7 +124,7 @@ export const cakeBnbLpBalanceStrategy = (version: 'v0' | 'v1') => ({
           type: 'address',
         },
       ],
-      name: 'getCakeBnbLpBalance',
+      name: 'getOrbBnbLpBalance',
       outputs: [
         {
           internalType: 'uint256',

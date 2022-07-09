@@ -22,7 +22,11 @@ export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: 
   items?: ConfigMenuDropDownItemsType[]
 }
 
-const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType[] = (t, languageCode) => [
+const config: (t: ContextApi['t'], isDark: boolean, languageCode?: string) => ConfigMenuItemsType[] = (
+  t,
+  isDark,
+  languageCode,
+) => [
   {
     label: 'Launchpads',
     href: '/launchpads',
@@ -65,7 +69,7 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
   },
   {
     label: t('Win'),
-    href: '/lottery',
+    href: '/prediction',
     icon: TrophyIcon,
     fillIcon: TrophyFillIcon,
     items: [
@@ -74,10 +78,10 @@ const config: (t: ContextApi['t'], languageCode?: string) => ConfigMenuItemsType
       //   href: '/competition',
       //   hideSubNav: true,
       // },
-      // {
-      //   label: t('Prediction'),
-      //   href: '/prediction',
-      // },
+      {
+        label: t('Prediction'),
+        href: '/prediction',
+      },
       {
         label: t('Lottery'),
         href: '/lottery',
