@@ -78,10 +78,10 @@ const config: (t: ContextApi['t'], isDark: boolean, languageCode?: string) => Co
       //   href: '/competition',
       //   hideSubNav: true,
       // },
-      {
-        label: t('Prediction'),
-        href: '/prediction',
-      },
+      // {
+      //   label: t('Prediction'),
+      //   href: '/prediction',
+      // },
       {
         label: t('Lottery'),
         href: '/lottery',
