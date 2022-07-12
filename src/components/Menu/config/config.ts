@@ -69,7 +69,7 @@ const config: (t: ContextApi['t'], isDark: boolean, languageCode?: string) => Co
   },
   {
     label: t('Win'),
-    href: '/prediction',
+    href: '/lottery',
     icon: TrophyIcon,
     fillIcon: TrophyFillIcon,
     items: [
