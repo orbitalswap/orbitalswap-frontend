@@ -84,6 +84,22 @@ const launchpads: SerializedLaunchpadConfig[] = [
     currency: serializedTokens.busd,
     token: serializedTokens.surf,
   },
+  {
+    id: 6,
+    address: {
+      97: '0x7529957889C4628E4A582Bf0c4219D35350E618E',
+      56: '0x7529957889C4628E4A582Bf0c4219D35350E618E',
+    },
+    isActive: true,
+    name: 'DFC',
+    subTitle: 'Auto-Staking & Compounding From the Future',
+    description:
+      "An innovative DeFi Protocol on Binance Smart Chain",
+    projectSiteUrl: 'https://www.riptidefi.com/',
+    releaseAt: 1652986800,
+    currency: serializedTokens.busd,
+    token: serializedTokens.surf,
+  },
 ]
 
 export default launchpads
