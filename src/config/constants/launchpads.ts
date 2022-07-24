@@ -90,7 +90,7 @@ const launchpads: SerializedLaunchpadConfig[] = [
       97: '0x7529957889C4628E4A582Bf0c4219D35350E618E',
       56: '',
     },
-    isActive: true,
+    isActive: false,
     name: 'DFC',
     subTitle: 'Auto-Staking & Compounding From the Future',
     description:
