@@ -66,7 +66,7 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ launchpad }) => {
         <Item>
           <Display>{t('TokenPrice')}</Display>
           <Text>
-            {+presalePrice.toLocaleString('en-US', { maximumFractionDigits: 3 })} {presaleTokenSymbol}
+            {+presalePrice.toLocaleString()} {presaleTokenSymbol}
           </Text>
         </Item>
         <Item>
