@@ -1,4 +1,3 @@
-
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { AppState } from 'state'
 import { launchpadsConfig } from 'config/constants'
@@ -37,6 +36,7 @@ export const fetchLaunchpadsPublicDataAsync = createAsyncThunk<
 >('launchpads/fetchLaunchpadsPublicDataAsync', async (pids) => {
   const launchpadsToFetch = launchpadsConfig.filter((launchpadConfig) => pids.includes(launchpadConfig.id))
   const launchpads = await fetchLaunchpads(launchpadsToFetch)
+  
   return launchpads
 })
 
@@ -67,7 +67,7 @@ export const launchpadsSlice = createSlice({
       const userData = action.payload
       state.data = state.data.map((launchpad) => {
         const userLaunchpadData = userData.find((entry) => entry.id === launchpad.id)
-        return { ...launchpad, userData: { ...launchpad.userData, ...userLaunchpadData?.userData} }
+        return { ...launchpad, userData: { ...launchpad.userData, ...userLaunchpadData?.userData } }
       })
       state.userDataLoaded = true
     },
@@ -79,7 +79,7 @@ export const launchpadsSlice = createSlice({
         ...state.data[launchpadIndex]?.userData,
         ...action.payload.userData,
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetUserState, (state) => {

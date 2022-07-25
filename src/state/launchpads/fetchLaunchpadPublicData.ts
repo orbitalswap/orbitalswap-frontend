@@ -15,7 +15,7 @@ const fetchLaunchpadCalls = (launchpad: SerializedLaunchpad) => {
     'TOKEN_PRICE',
     'CONTRIBUTION_MIN',
     'CONTRIBUTION_MAX',
-    'LIQUIDITY_PERCENT',
+    // 'LIQUIDITY_PERCENT',
     'totalSold',
     'totalRaised',
     'status',

@@ -8,8 +8,20 @@ const fetchLaunchpads = async (launchpadsToFetch: SerializedLaunchpadConfig[]): 
   const launchpadResult = await fetchLaunchpadPublicData(launchpadsToFetch)
 
   return launchpadsToFetch.map((launchpad, index) => {
-    const [startDate, endDate, hardcap, softcap, presalePrice, minPerTx, maxPerUser, liquidityPercent, totalSold, totalRaised, status, fundersCounter] =
-      launchpadResult[index]
+    const [
+      startDate,
+      endDate,
+      hardcap,
+      softcap,
+      presalePrice,
+      minPerTx,
+      maxPerUser,
+      liquidityPercent,
+      totalSold,
+      totalRaised,
+      status,
+      fundersCounter,
+    ] = launchpadResult[index]
 
     const startDateNum = parseInt(startDate, 10)
     const endDateNum = parseInt(endDate, 10)

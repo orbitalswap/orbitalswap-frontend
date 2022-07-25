@@ -198,7 +198,7 @@ export interface DeserializedLaunchpadUserData {
 }
 
 export interface SerializedLaunchpad extends SerializedLaunchpadConfig {
-  liquidityPercent?: number
+  // liquidityPercent?: number
   softcap?: SerializedBigNumber
   hardcap?: SerializedBigNumber
   presalePrice?: SerializedBigNumber
@@ -210,12 +210,11 @@ export interface SerializedLaunchpad extends SerializedLaunchpadConfig {
   presaleStatus?: number
   startDate?: number
   endDate?: number
-
   userData?: SerializedLaunchpadUserData
 }
 
 export interface DeserializedLaunchpad extends DeserializedLaunchpadConfig {
-  liquidityPercent?: number
+  // liquidityPercent?: number
   softcap?: BigNumber
   hardcap?: BigNumber
   presalePrice?: BigNumber

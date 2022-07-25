@@ -72,7 +72,7 @@ const deserializeLaunchpad = (launchpad: SerializedLaunchpad): DeserializedLaunc
     token: deserializeToken(launchpad.token),
     currency: launchpad.currency ? deserializeToken(launchpad.currency) : undefined,
     userData: deserializeLaunchpadUserData(launchpad),
-    liquidityPercent: launchpad.liquidityPercent ?? 0,
+    // liquidityPercent: launchpad.liquidityPercent ?? 0,
     softcap: launchpad.softcap ? new BigNumber(launchpad.softcap) : BIG_ZERO,
     hardcap: launchpad.hardcap ? new BigNumber(launchpad.hardcap) : BIG_ZERO,
     presalePrice: launchpad.presalePrice ? new BigNumber(launchpad.presalePrice) : BIG_ZERO,

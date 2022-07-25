@@ -2126,6 +2126,14 @@ export const mainnetTokens = defineTokens({
     'Ankr BNB Reward Bearing Certificate',
     'https://www.ankr.com/',
   ),
+  presaleTemp: new Token(
+    MAINNET,
+    '0xE85aFCcDaFBE7F2B096f268e31ccE3da8dA2990A',
+    18,
+    'aBNBc',
+    'Ankr BNB Reward Bearing Certificate',
+    'https://www.ankr.com/',
+  ),
   ankr: new Token(MAINNET, '0xf307910A4c7bbc79691fD374889b36d8531B08e3', 18, 'ANKR', 'Ankr', 'https://www.ankr.com/'),
 } as const)
 
@@ -2148,10 +2156,18 @@ export const testnetTokens = defineTokens({
   ),
   busd: new Token(
     TESTNET,
-    '0x2995bD504647b5EeE414A78be1d7b24f49f00FFE',
+    '0x37be299867CBE501140d95D4FD5d1a4c55969b7B',
     18,
     'BUSD',
     'Binance USD',
+    'https://www.paxos.com/busd/',
+  ),
+  presaleTemp: new Token(
+    TESTNET,
+    '0x1e957Dec5960478f2dbeF5ccA2f82FE0Bdd11911',
+    18,
+    'PresaleTest',
+    'PTest',
     'https://www.paxos.com/busd/',
   ),
   usdibs: new Token(

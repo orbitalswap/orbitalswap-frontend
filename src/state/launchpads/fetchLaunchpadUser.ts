@@ -78,7 +78,8 @@ export const fetchLaunchpadUserContributedAmounts = async (
       ...acc,
       [launchpad.id]: {
         amount: getBalanceAmount(new BigNumber(rawContributedAmounts[index].amount._hex), launchpad.currency?.decimals ?? 18).toJSON(),
-        claimed: rawContributedAmounts[index].claimed,
+        claimed_amount: getBalanceAmount(new BigNumber(rawContributedAmounts[index].claimed_amount._hex), launchpad.currency?.decimals ?? 18).toJSON(),
+        // claimed: rawContributedAmounts[index].claimed_amount,
       },
     })},
     {},
