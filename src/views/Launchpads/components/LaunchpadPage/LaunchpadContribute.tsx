@@ -68,9 +68,9 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   }
 
   const isFinished = status === 'upcoming'
-  const percentOfUserContribution = contributedAmount.div(totalRaised).times(100)
+  const percentOfUserContribution = +totalRaised === 0 ? 0 : contributedAmount.div(totalRaised).times(100)
 
-  if(allowance.lt(minPerTx)) {
+  if (allowance.lt(minPerTx)) {
     return (
       <>
         <LabelButton

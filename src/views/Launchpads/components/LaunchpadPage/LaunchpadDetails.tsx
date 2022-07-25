@@ -33,8 +33,6 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ launchpad }) => {
     token,
   } = launchpad
 
-  console.log('launchpad', launchpad)
-
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
   const presaleTokenSymbol = token.symbol
 
@@ -68,7 +66,7 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ launchpad }) => {
         <Item>
           <Display>{t('TokenPrice')}</Display>
           <Text>
-            {presalePrice.toNumber().toLocaleString('en-US', { maximumFractionDigits: 9 })} {presaleTokenSymbol}
+            {+presalePrice.toLocaleString('en-US', { maximumFractionDigits: 3 })} {presaleTokenSymbol}
           </Text>
         </Item>
         <Item>
