@@ -10,6 +10,7 @@ import { DeserializedLaunchpad } from 'state/types'
 import useLaunchpadAllowance from 'views/Launchpads/hooks/useLaunchpadAllowance'
 import useApproveLaunchpad from 'views/Launchpads/hooks/useApproveLaunchpad'
 import unserializedTokens from 'config/constants/tokens'
+import BigNumber from 'bignumber.js'
 
 export interface Props {
   launchpad: DeserializedLaunchpad
@@ -19,7 +20,7 @@ export interface Props {
 
 const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus }) => {
   const [pendingTx, setPendingTx] = useState(false)
-  const { address, minPerTx, maxPerUser, totalRaised, currency } = launchpad
+  const { address, minPerTx, maxPerUser, totalRaised, currency, hardcap } = launchpad
   const { contributedAmount, claimed } = launchpad.userData
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
@@ -35,7 +36,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
     <ContributeModal
       launchpadId={launchpad.id}
       launchpadContract={launchpadContract}
-      contributeLimit={maxPerUser.minus(contributedAmount)}
+      contributeLimit={BigNumber.min(maxPerUser.minus(contributedAmount), hardcap.minus(contributedAmount))}
       minPerTx={minPerTx}
       currency={currency}
       toggleStatus={toggleStatus}
@@ -94,7 +95,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
     return (
       <>
         <LabelButton
-          disabled={claimed}
+          disabled={claimed || pendingTx}
           buttonLabel={`Buy with ${buyTokenSymbol}`}
           label={`Your contribution (${buyTokenSymbol})`}
           value={
@@ -136,7 +137,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
     return (
       <>
         <LabelButton
-          disabled={!claimable}
+          disabled={!claimable || pendingTx}
           buttonLabel={!noContribute ? (claimable ? 'Claim' : 'Claimed') : `Buy with ${buyTokenSymbol}`}
           label={`Your contribution (${buyTokenSymbol})`}
           value={
@@ -155,14 +156,14 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   return (
     <>
       <LabelButton
-        disabled={isFinished}
+        disabled={isFinished || pendingTx}
         buttonLabel={!isFinished ? (claimed ? 'Claimed' : 'Claim') : `Buy with ${buyTokenSymbol}`}
         label={`Your contribution (${buyTokenSymbol})`}
         value={
           // eslint-disable-next-line no-nested-ternary
           contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
         }
-        onClick={isFinished ? claim : onPresentContributeModal}
+        onClick={!isFinished ? claim : onPresentContributeModal}
       />
       <Text fontSize="14px" color="textSubtle">
         {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}

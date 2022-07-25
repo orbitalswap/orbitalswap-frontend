@@ -99,6 +99,7 @@ const ContributeModal: React.FC<Props> = ({
             } finally {
               toggleStatus()
               setPendingTx(false)
+              onDismiss()
             }
           }}
         >
