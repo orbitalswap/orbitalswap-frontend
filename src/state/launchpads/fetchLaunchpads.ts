@@ -16,7 +16,7 @@ const fetchLaunchpads = async (launchpadsToFetch: SerializedLaunchpadConfig[]): 
       presalePrice,
       minPerTx,
       maxPerUser,
-      liquidityPercent,
+      // liquidityPercent,
       totalSold,
       totalRaised,
       status,
@@ -42,7 +42,6 @@ const fetchLaunchpads = async (launchpadsToFetch: SerializedLaunchpadConfig[]): 
         new BigNumber(maxPerUser),
         launchpad.currency ? launchpad.currency.decimals : 18,
       ).toJSON(),
-      liquidityPercent: new BigNumber(liquidityPercent).toNumber(),
       fundersCounter: new BigNumber(fundersCounter).toNumber(),
       totalSold: getBalanceAmount(new BigNumber(totalSold), launchpad.token.decimals).toJSON(),
       totalRaised: getBalanceAmount(

@@ -36,7 +36,6 @@ export const fetchLaunchpadsPublicDataAsync = createAsyncThunk<
 >('launchpads/fetchLaunchpadsPublicDataAsync', async (pids) => {
   const launchpadsToFetch = launchpadsConfig.filter((launchpadConfig) => pids.includes(launchpadConfig.id))
   const launchpads = await fetchLaunchpads(launchpadsToFetch)
-  
   return launchpads
 })
 

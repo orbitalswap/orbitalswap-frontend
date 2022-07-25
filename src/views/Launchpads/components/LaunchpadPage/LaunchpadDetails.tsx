@@ -33,6 +33,8 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ launchpad }) => {
     token,
   } = launchpad
 
+  console.log('launchpad', launchpad)
+
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
   const presaleTokenSymbol = token.symbol
 
@@ -48,29 +50,38 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ launchpad }) => {
               hour: 'numeric',
               minute: '2-digit',
               timeZone: 'America/Toronto',
-            })} (EDT)`
-            }
+            })} (EDT)`}
           </Text>
         </Item>
         <Item>
           <Display>{t('Hardcap')}</Display>
-          <Text>{hardcap.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}</Text>
+          <Text>
+            {hardcap.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}
+          </Text>
         </Item>
         <Item>
           <Display>{t('Softcap')}</Display>
-          <Text>{softcap.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}</Text>
+          <Text>
+            {softcap.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}
+          </Text>
         </Item>
         <Item>
           <Display>{t('TokenPrice')}</Display>
-          <Text>{presalePrice.toNumber().toLocaleString('en-US', { maximumFractionDigits: 9 })} {presaleTokenSymbol}</Text>
+          <Text>
+            {presalePrice.toNumber().toLocaleString('en-US', { maximumFractionDigits: 9 })} {presaleTokenSymbol}
+          </Text>
         </Item>
         <Item>
           <Display>{t('Min Buy')}</Display>
-          <Text>{minPerTx.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}</Text>
+          <Text>
+            {minPerTx.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}
+          </Text>
         </Item>
         <Item>
           <Display>{t('Max Buy')}</Display>
-          <Text>{maxPerUser.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}</Text>
+          <Text>
+            {maxPerUser.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}
+          </Text>
         </Item>
         <Item>
           <Display>{t('Total raised (% of target)')}</Display>
@@ -79,7 +90,6 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ launchpad }) => {
             {`(${totalRaised.div(hardcap).times(100).toFixed(2)}%)`}
           </Text>
         </Item>
-
       </StyledLaunchpadDetails>
       <LinkExternal href={projectSiteUrl} style={{ margin: 'auto' }}>
         {t('View project site')}
