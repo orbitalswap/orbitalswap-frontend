@@ -156,8 +156,9 @@
     "name": "funders",
     "outputs": [
       { "internalType": "uint256", "name": "amount", "type": "uint256" },
-      { "internalType": "uint256", "name": "claimed_amount", "type": "uint256" },
-      { "internalType": "uint256", "name": "first_claim_time", "type": "uint256" },
+      { "internalType": "uint256", "name": "totalClaimAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "claimedAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "claimedTime", "type": "uint256" },
       { "internalType": "enum ObitalPresaleBUSD.FunderStatus", "name": "status", "type": "uint8" }
     ],
     "stateMutability": "view",

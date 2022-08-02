@@ -52,7 +52,8 @@ const deserializeLaunchpadUserData = (launchpad: SerializedLaunchpad): Deseriali
     tokenBalance: launchpad.userData ? new BigNumber(launchpad.userData.tokenBalance) : BIG_ZERO,
     contributedAmount: launchpad.userData ? new BigNumber(launchpad.userData.contributedAmount) : BIG_ZERO,
     earnings: launchpad.userData ? new BigNumber(launchpad.userData.earnings) : BIG_ZERO,
-    claimed: launchpad.userData ? launchpad.userData.claimed : false,
+    totalClaimAmount: launchpad.userData ? new BigNumber(launchpad.userData.totalClaimAmount) : BIG_ZERO,
+    claimedAmount: launchpad.userData ? new BigNumber(launchpad.userData.claimedAmount) : BIG_ZERO,
   }
 }
 

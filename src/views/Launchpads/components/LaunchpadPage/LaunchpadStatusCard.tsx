@@ -23,10 +23,12 @@ const Display = styled(Text)`
 const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status }) => {
   const { t } = useTranslation()
   const { presalePrice, minPerTx, maxPerUser, fundersCounter, currency, token } = launchpad
-  const { contributedAmount } = launchpad.userData
+  const { totalClaimAmount, claimedAmount } = launchpad.userData
+  console.log('launchpad.userData', launchpad.userData)
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
-  const purchaseTokenAmount = contributedAmount?.toNumber() / presalePrice.toNumber() || 0
+  const purchaseTokenAmount = totalClaimAmount?.toNumber() || 0
+  const claimTokenAmount = claimedAmount?.toNumber() || 0
   return (
     <>
       <StyledLaunchpadStatus>
@@ -55,9 +57,15 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status
           <Text>{fundersCounter}</Text>
         </Item>
         <Item>
-          <Display>{t('You Purchased')}</Display>
+          <Display>{t('Your Withdrawable Amount')}</Display>
           <Text>
             {purchaseTokenAmount.toFixed(2) || 0} {token?.symbol}
+          </Text>
+        </Item>
+        <Item>
+          <Display>{t('You Claimed Purchased')}</Display>
+          <Text>
+            {claimTokenAmount.toFixed(2) || 0} {token?.symbol}
           </Text>
         </Item>
       </StyledLaunchpadStatus>

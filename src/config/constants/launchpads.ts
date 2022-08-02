@@ -38,7 +38,7 @@ const launchpads: SerializedLaunchpadConfig[] = [
   {
     id: 1,
     address: {
-      97: '0x781f5A8F1EfCaC13711d7A1253D40edf54F1124E',
+      97: '0xA8929a655303AB9f236C1CAa3C21c44F8204adB8',
       56: '0xBa809c35E9314E89a82de6d7Ccf9DC3f4C0CA28E',
     },
     isActive: true,

@@ -45,13 +45,16 @@ export const fetchLaunchpadUserDataAsync = (account: string, pids) => async (dis
   const userLaunchpadTokenBalances = await fetchLaunchpadUserTokenBalances(account, launchpadsToFetch)
   const userLaunchpadContributedAmounts = await fetchLaunchpadUserContributedAmounts(account, launchpadsToFetch)
 
+  console.log('userLaunchpadContributedAmounts', userLaunchpadContributedAmounts)
+
   const data = launchpadsToFetch.map((launchpadConfig) => ({
     id: launchpadConfig.id,
     userData: {
       allowance: userLaunchpadAllowances[launchpadConfig.id],
       tokenBalance: userLaunchpadTokenBalances[launchpadConfig.id],
       contributedAmount: userLaunchpadContributedAmounts[launchpadConfig.id].amount,
-      claimed: userLaunchpadContributedAmounts[launchpadConfig.id].claimed,
+      totalClaimAmount: userLaunchpadContributedAmounts[launchpadConfig.id].totalClaimAmount,
+      claimedAmount: userLaunchpadContributedAmounts[launchpadConfig.id].claimedAmount,
     },
   }))
 

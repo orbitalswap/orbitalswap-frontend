@@ -186,7 +186,8 @@ interface SerializedLaunchpadUserData {
   tokenBalance: string
   contributedAmount: string
   earnings: string
-  claimed: boolean
+  totalClaimAmount: string
+  claimedAmount: string
 }
 
 export interface DeserializedLaunchpadUserData {
@@ -194,7 +195,8 @@ export interface DeserializedLaunchpadUserData {
   tokenBalance: BigNumber
   contributedAmount: BigNumber
   earnings: BigNumber
-  claimed: boolean
+  totalClaimAmount: BigNumber
+  claimedAmount: BigNumber
 }
 
 export interface SerializedLaunchpad extends SerializedLaunchpadConfig {
