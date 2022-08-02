@@ -26,7 +26,7 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status
   const { contributedAmount } = launchpad.userData
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
-  const purchaseTokenAmount = presalePrice.toNumber() * contributedAmount?.toNumber() || 0
+  const purchaseTokenAmount = contributedAmount?.toNumber() / presalePrice.toNumber() || 0
   return (
     <>
       <StyledLaunchpadStatus>
