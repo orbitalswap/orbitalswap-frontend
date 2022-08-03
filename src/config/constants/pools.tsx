@@ -35,8 +35,8 @@ export const vaultPoolConfig = {
     },
   },
   [VaultKey.CakeFlexibleSideVault]: {
-    name: <Trans>Flexible ORB (Unstake)</Trans>,
-    description: <Trans>Secondary flexible pool (unstake)</Trans>,
+    name: <Trans>Flexible ORB</Trans>,
+    description: <Trans>Secondary flexible pool</Trans>,
     autoCompoundFrequency: 5000,
     gasLimit: 800000,
     tokenImage: {
