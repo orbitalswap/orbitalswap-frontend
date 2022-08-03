@@ -18,5 +18,6 @@ export interface PublicLaunchpadData extends SerializedLaunchpadConfig {
 
 export interface UserLaunchpadData {
   contributedAmount: BigNumber
-  claimed: boolean
+  withdrawableAmount: BigNumber
+  claimedAmount: BigNumber
 }

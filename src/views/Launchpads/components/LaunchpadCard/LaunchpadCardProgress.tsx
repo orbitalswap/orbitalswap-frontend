@@ -4,13 +4,13 @@ import { Progress, Text } from '@pancakeswap/uikit'
 import { Token } from '@orbitalswap/sdk'
 
 interface LaunchpadProgressProps {
-  softcap: number,
-  hardcap: number,
-  raised: number,
-  liquidityPercent: number
+  softcap: number
+  hardcap: number
+  raised: number
+  // liquidityPercent: number
   currency?: Token
   isTombFork?: boolean
-  liquidityLockupTime?: number
+  // liquidityLockupTime?: number
 }
 
 const StyledProgress = styled.div`
@@ -32,12 +32,11 @@ const ProgressBar = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
 `
-const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised, liquidityPercent, currency, isTombFork, liquidityLockupTime }) => {
-  const progress1 = raised / (hardcap ?? 1) * 100
+const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hardcap, raised, currency }) => {
+  const progress1 = (raised / (hardcap ?? 1)) * 100
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
-  
 
-  const lockupDays = liquidityLockupTime / 86400
+  // const lockupDays = liquidityLockupTime / 86400
 
   return (
     <StyledProgress>
@@ -45,7 +44,9 @@ const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hard
         <Display>Soft/Hard Cap:</Display>
       </Item>
       <Item>
-        <Text color='failure'>{softcap} {buyTokenSymbol} - {hardcap} {buyTokenSymbol}</Text>
+        <Text color="failure">
+          {softcap} {buyTokenSymbol} - {hardcap} {buyTokenSymbol}
+        </Text>
       </Item>
       <Item>
         <Text>Progress ({progress1.toFixed(2)}%)</Text>
@@ -54,17 +55,21 @@ const LaunchpadCardProgress: React.FC<LaunchpadProgressProps> = ({ softcap, hard
         <Progress primaryStep={progress1} />
       </ProgressBar>
       <Item>
-        <Display>{raised} {buyTokenSymbol}</Display>
-        <Text fontSize='14px'>{hardcap} {buyTokenSymbol}</Text>
+        <Display>
+          {raised} {buyTokenSymbol}
+        </Display>
+        <Text fontSize="14px">
+          {hardcap} {buyTokenSymbol}
+        </Text>
       </Item>
-      <Item>
+      {/* <Item>
         <Display>Liquidity %</Display>
         <Text>{isTombFork? '-' : liquidityPercent} %</Text>
-      </Item>
-      <Item>
+      </Item> */}
+      {/* <Item>
         <Display>Liquidity Lockup Time</Display>
         <Text>{lockupDays > 0 ? `${lockupDays} days` : '-'}</Text>
-      </Item>
+      </Item> */}
     </StyledProgress>
   )
 }

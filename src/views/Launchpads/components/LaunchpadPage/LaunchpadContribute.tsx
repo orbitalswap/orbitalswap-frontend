@@ -20,7 +20,8 @@ export interface Props {
 const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus }) => {
   const [pendingTx, setPendingTx] = useState(false)
   const { address, minPerTx, maxPerUser, totalRaised, currency, isPrivatesale } = launchpad
-  const { contributedAmount, claimed, whitelisted } = launchpad.userData
+  console.log('currency', currency)
+  const { contributedAmount, withdrawableAmount, claimedAmount, whitelisted } = launchpad.userData
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 
   const launchpadContractAddress = getAddress(address)
@@ -29,7 +30,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   const allowance = useLaunchpadAllowance(launchpadContractAddress, currency)
 
   const onClaim = useLaunchpadClaim(launchpadContract)
-  const onApprove = useApproveLaunchpad(currency ?? unserializedTokens.wbnb, launchpadContractAddress)
+  const onApprove = useApproveLaunchpad(currency ?? unserializedTokens.mockBUSD, launchpadContractAddress)
 
   const [onPresentContributeModal] = useModal(
     <ContributeModal
@@ -70,7 +71,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   const isFinished = status === 'upcoming'
   const percentOfUserContribution = contributedAmount.div(totalRaised).times(100)
 
-  if(status === 'live' && allowance.lt(minPerTx)) {
+  if (status === 'live' && allowance.lt(minPerTx)) {
     return (
       <>
         <LabelButton
@@ -83,10 +84,17 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
           }
           onClick={handleApprove}
         />
-          
-          {// eslint-disable-next-line react/no-unescaped-entities
-            isPrivatesale && !whitelisted ? (<Text fontSize="14px" color="failure">You're not whitelisted</Text>):''
-          }
+
+        {
+          // eslint-disable-next-line react/no-unescaped-entities
+          isPrivatesale && !whitelisted ? (
+            <Text fontSize="14px" color="failure">
+              You're not whitelisted
+            </Text>
+          ) : (
+            ''
+          )
+        }
         <Text fontSize="14px" color="textSubtle">
           {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
@@ -98,14 +106,15 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
     return (
       <>
         <LabelButton
-          disabled={claimed}
+          // disabled={claimed}
           buttonLabel={`Buy with ${buyTokenSymbol}`}
           label={`Your contribution (${buyTokenSymbol})`}
           value={
             // eslint-disable-next-line no-nested-ternary
             contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
           }
-          onClick={claimed ? claim : onPresentContributeModal}
+          // onClick={claimed ? claim : onPresentContributeModal}
+          onClikc={claim}
         />
         <Text fontSize="14px" color="textSubtle">
           {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
@@ -115,7 +124,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   }
 
   if (status === 'filled') {
-    const claimable = contributedAmount.toNumber() > 0 && !claimed
+    const claimable = contributedAmount.toNumber() > 0
     return (
       <>
         <LabelButton
@@ -136,7 +145,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   }
 
   if (status === 'ended') {
-    const claimable = contributedAmount.toNumber() > 0 && !claimed
+    const claimable = contributedAmount.toNumber() > 0
     const noContribute = contributedAmount.toNumber() === 0
     return (
       <>
@@ -158,7 +167,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
   }
 
   if (status === 'cancelled') {
-    const claimable = contributedAmount.toNumber() > 0 && !claimed
+    const claimable = contributedAmount.toNumber() > 0
     const noContribute = contributedAmount.toNumber() === 0
     return (
       <>
@@ -183,7 +192,8 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
     <>
       <LabelButton
         disabled={isFinished}
-        buttonLabel={!isFinished ? (claimed ? 'Claimed' : 'Claim') : `Buy with ${buyTokenSymbol}`}
+        // buttonLabel={!isFinished ? (claimed ? 'Claimed' : 'Claim') : `Buy with ${buyTokenSymbol}`}
+        buttonLabel={!isFinished ? 'Claim' : `Buy with ${buyTokenSymbol}`}
         label={`Your contribution (${buyTokenSymbol})`}
         value={
           // eslint-disable-next-line no-nested-ternary

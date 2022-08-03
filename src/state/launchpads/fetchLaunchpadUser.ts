@@ -8,7 +8,10 @@ import multicall from 'utils/multicall'
 import { simpleRpcProvider } from 'utils/providers'
 import { getBalanceAmount } from 'utils/formatBalance'
 
-export const fetchLaunchpadUserTokenAllowances = async (account: string, launchpadsToFetch: SerializedLaunchpadConfig[]) => {
+export const fetchLaunchpadUserTokenAllowances = async (
+  account: string,
+  launchpadsToFetch: SerializedLaunchpadConfig[],
+) => {
   const bnbLaunchpads = launchpadsToFetch.filter((launchpad) => !launchpad.currency)
   const tokenLaundpads = launchpadsToFetch.filter((launchpad) => launchpad.currency)
 
@@ -72,17 +75,25 @@ export const fetchLaunchpadUserContributedAmounts = async (
   })
 
   const rawContributedAmounts = await multicall(launchpadABI, calls)
-  const parsedStakedBalances = launchpadsToFetch.reduce(
-    (acc, launchpad, index) => { 
-      return ({
+  const parsedStakedBalances = launchpadsToFetch.reduce((acc, launchpad, index) => {
+    return {
       ...acc,
       [launchpad.id]: {
-        amount: getBalanceAmount(new BigNumber(rawContributedAmounts[index].amount._hex), launchpad.currency?.decimals ?? 18).toJSON(),
-        claimed: rawContributedAmounts[index].claimed,
+        amount: getBalanceAmount(
+          new BigNumber(rawContributedAmounts[index].amount._hex),
+          launchpad.currency?.decimals ?? 18,
+        ).toJSON(),
+        withdrawableAmount: getBalanceAmount(
+          new BigNumber(rawContributedAmounts[index].totalClaimAmount._hex),
+          launchpad.currency?.decimals ?? 18,
+        ).toJSON(),
+        claimedAmount: getBalanceAmount(
+          new BigNumber(rawContributedAmounts[index].claimedAmount._hex),
+          launchpad.currency?.decimals ?? 18,
+        ).toJSON(),
       },
-    })},
-    {},
-  )
+    }
+  }, {})
   return parsedStakedBalances
 }
 
@@ -91,7 +102,7 @@ export const fetchLaunchpadUserWhitelisted = async (
   launchpadsToFetch: SerializedLaunchpadConfig[],
 ) => {
   const calls = launchpadsToFetch.map((launchpad) => {
-    if(launchpad.isPrivatesale) {
+    if (launchpad.isPrivatesale) {
       return {
         address: getAddress(launchpad.address),
         name: 'whitelisted',
@@ -107,7 +118,10 @@ export const fetchLaunchpadUserWhitelisted = async (
 
   const rawWhitelisted = await multicall(launchpadABI, calls)
   const parsedWhitelisted = launchpadsToFetch.reduce(
-    (acc, launchpad, index) => ({ ...acc, [launchpad.id]:  launchpad.isPrivatesale?rawWhitelisted[index][0] : rawWhitelisted[index].claimed}),
+    (acc, launchpad, index) => ({
+      ...acc,
+      [launchpad.id]: launchpad.isPrivatesale ? rawWhitelisted[index][0] : rawWhitelisted[index].claimed,
+    }),
     {},
   )
   return parsedWhitelisted

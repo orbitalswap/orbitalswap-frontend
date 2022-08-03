@@ -2183,6 +2183,22 @@ export const mainnetTokens = defineTokens({
     'https://www.ankr.com/',
   ),
   ankr: new Token(MAINNET, '0xf307910A4c7bbc79691fD374889b36d8531B08e3', 18, 'ANKR', 'Ankr', 'https://www.ankr.com/'),
+  mockBUSD: new Token(
+    MAINNET,
+    '0x37f6bde962E640fb2Fd8DB93b934e73baDA9beBd',
+    18,
+    'MBUSD',
+    'MBUSD',
+    'https://www.riptidefi.com/',
+  ),
+  mockPresale: new Token(
+    MAINNET,
+    '0xb4f5D87f5F9A2a086f17ED8802de9C896b098725',
+    18,
+    'presale',
+    'Mockedpresale',
+    'https://www.riptidefi.com/',
+  ),
 } as const)
 
 export const testnetTokens = defineTokens({

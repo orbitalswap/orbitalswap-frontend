@@ -185,7 +185,8 @@ interface SerializedLaunchpadUserData {
   tokenBalance: string
   contributedAmount: string
   earnings: string
-  claimed: boolean
+  withdrawableAmount: string
+  claimedAmount: string
   whitelisted: boolean
 }
 
@@ -194,12 +195,13 @@ export interface DeserializedLaunchpadUserData {
   tokenBalance: BigNumber
   contributedAmount: BigNumber
   earnings: BigNumber
-  claimed: boolean
+  withdrawableAmount: BigNumber
+  claimedAmount: BigNumber
   whitelisted: boolean
 }
 
 export interface SerializedLaunchpad extends SerializedLaunchpadConfig {
-  liquidityPercent?: number
+  // liquidityPercent?: number
   softcap?: SerializedBigNumber
   hardcap?: SerializedBigNumber
   presalePrice?: SerializedBigNumber
@@ -211,13 +213,13 @@ export interface SerializedLaunchpad extends SerializedLaunchpadConfig {
   presaleStatus?: number
   startDate?: number
   endDate?: number
-  liquidityLockupTime?: number
+  // liquidityLockupTime?: number
 
   userData?: SerializedLaunchpadUserData
 }
 
 export interface DeserializedLaunchpad extends DeserializedLaunchpadConfig {
-  liquidityPercent?: number
+  // liquidityPercent?: number
   softcap?: BigNumber
   hardcap?: BigNumber
   presalePrice?: BigNumber
@@ -229,7 +231,7 @@ export interface DeserializedLaunchpad extends DeserializedLaunchpadConfig {
   presaleStatus?: number
   startDate?: number
   endDate?: number
-  liquidityLockupTime?: number
+  // liquidityLockupTime?: number
 
   userData?: DeserializedLaunchpadUserData
 }

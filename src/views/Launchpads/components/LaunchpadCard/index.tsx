@@ -40,7 +40,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
     id,
     name,
     subTitle,
-    liquidityPercent,
+    // liquidityPercent,
     softcap,
     hardcap,
     totalRaised,
@@ -50,7 +50,7 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
     presaleStatus,
     currency,
     isTomFork,
-    liquidityLockupTime
+    // liquidityLockupTime
   } = launchpad
 
   const [state, setState] = useState({
@@ -101,10 +101,10 @@ const LaunchpadCard: React.FC<LaunchpadCardProps> = ({ launchpad }) => {
           softcap={softcap.toNumber()}
           hardcap={hardcap.toNumber()}
           raised={totalRaised.toNumber()}
-          liquidityPercent={liquidityPercent ?? 0}
+          // liquidityPercent={liquidityPercent ?? 0}
           currency={currency}
           isTombFork={isTomFork}
-          liquidityLockupTime={liquidityLockupTime}
+          // liquidityLockupTime={liquidityLockupTime}
         />
         <LaunchpadCardDetails
           launchpad={launchpad}

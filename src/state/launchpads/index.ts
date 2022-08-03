@@ -1,4 +1,3 @@
-
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { AppState } from 'state'
 import { launchpadsConfig } from 'config/constants'
@@ -9,7 +8,7 @@ import {
   fetchLaunchpadUserContributedAmounts,
   fetchLaunchpadUserTokenAllowances,
   fetchLaunchpadUserTokenBalances,
-  fetchLaunchpadUserWhitelisted
+  fetchLaunchpadUserWhitelisted,
 } from './fetchLaunchpadUser'
 
 const noAccountLaunchpadConfig = launchpadsConfig.map((launchpad) => ({
@@ -19,7 +18,8 @@ const noAccountLaunchpadConfig = launchpadsConfig.map((launchpad) => ({
     tokenBalance: '0',
     contributedAmount: '0',
     earnings: '0',
-    claimed: false,
+    withdrawableAmount: '0',
+    claimedAmount: '0',
     whitelisted: false,
   },
 }))
@@ -55,7 +55,8 @@ export const fetchLaunchpadUserDataAsync = (account: string, pids) => async (dis
       allowance: userLaunchpadAllowances[launchpadConfig.id],
       tokenBalance: userLaunchpadTokenBalances[launchpadConfig.id],
       contributedAmount: userLaunchpadContributedAmounts[launchpadConfig.id].amount,
-      claimed: userLaunchpadContributedAmounts[launchpadConfig.id].claimed,
+      withdrawableAmount: userLaunchpadContributedAmounts[launchpadConfig.id].withdrawableAmount,
+      claimedAmount: userLaunchpadContributedAmounts[launchpadConfig.id].claimedAmount,
       whitelisted: userLaunchpadWhitelisted[launchpadConfig.id],
     },
   }))
@@ -71,7 +72,7 @@ export const launchpadsSlice = createSlice({
       const userData = action.payload
       state.data = state.data.map((launchpad) => {
         const userLaunchpadData = userData.find((entry) => entry.id === launchpad.id)
-        return { ...launchpad, userData: { ...launchpad.userData, ...userLaunchpadData?.userData} }
+        return { ...launchpad, userData: { ...launchpad.userData, ...userLaunchpadData?.userData } }
       })
       state.userDataLoaded = true
     },
@@ -83,7 +84,7 @@ export const launchpadsSlice = createSlice({
         ...state.data[launchpadIndex]?.userData,
         ...action.payload.userData,
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(resetUserState, (state) => {
@@ -96,7 +97,8 @@ export const launchpadsSlice = createSlice({
             tokenBalance: '0',
             contributedAmount: '0',
             earnings: '0',
-            claimed: false,
+            withdrawableAmount: '0',
+            claimedAmount: '0',
             whitelisted: false,
           },
         }

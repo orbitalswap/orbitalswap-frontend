@@ -35,18 +35,18 @@ const Launchpads = () => {
       <SubMenuItems
           items={[
             {
-              label: t('Finished Presale'),
+              label: t('Current Presale'),
               href: '/launchpads',
             },
             {
-              label: t('Cancelled Presale'),
+              label: t('Finished Presale'),
               href: '/launchpads/history',
             },
           ]}
           activeItem={isExact ? '/launchpads/history' : '/launchpads'}
         />
         <PageHeader>  
-          <Heading scale="xl">{t('Cancelled Presale')}</Heading>
+          <Heading scale="xl">{t('Finished Presale')}</Heading>
         </PageHeader>
           <PageSection
           innerProps={{ style: { margin: '0', width: '100%' } }}
