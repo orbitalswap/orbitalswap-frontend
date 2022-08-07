@@ -113,7 +113,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
             contributedAmount?.toNumber().toLocaleString('en-US', { maximumFractionDigits: 5 }) || '0'
           }
           // onClick={claimed ? claim : onPresentContributeModal}
-          onClick={claim}
+          onClick={onPresentContributeModal}
         />
         <Text fontSize="14px" color="textSubtle">
           {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
