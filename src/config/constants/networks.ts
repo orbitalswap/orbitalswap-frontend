@@ -5,4 +5,5 @@ export const NETWORK_LABLES = {
   56: 'BSC',
   97: 'BSC',
   25: 'Cronos',
+  43114: 'AVAX',
 }

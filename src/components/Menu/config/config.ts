@@ -34,89 +34,89 @@ const config: (t: ContextApi['t'], isDark: boolean, languageCode?: string) => Co
     showItemsOnMobile: false,
     items: []
   },
-  {
-    label: t('Trade'),
-    icon: SwapIcon,
-    fillIcon: SwapFillIcon,
-    href: '/swap',
-    showItemsOnMobile: false,
-    items: [
-      {
-        label: t('Swap'),
-        href: '/swap',
-      },
-      {
-        label: t('Liquidity'),
-        href: '/liquidity',
-      },
-    ],
-  },
-  {
-    label: t('Earn'),
-    href: '/farms',
-    icon: EarnIcon,
-    fillIcon: EarnFillIcon,
-    items: [
-      {
-        label: t('Farms'),
-        href: '/farms',
-      },
-      {
-        label: t('Pools'),
-        href: '/pools',
-      },
-    ],
-  },
-  {
-    label: t('Win'),
-    href: '/lottery',
-    icon: TrophyIcon,
-    fillIcon: TrophyFillIcon,
-    items: [
-      // {
-      //   label: t('Trading Competition'),
-      //   href: '/competition',
-      //   hideSubNav: true,
-      // },
-      // {
-      //   label: t('Prediction'),
-      //   href: '/prediction',
-      // },
-      {
-        label: t('Lottery'),
-        href: '/lottery',
-      },
-    ],
-  },
-  {
-    label: '',
-    href: '/info',
-    icon: MoreIcon,
-    hideSubNav: true,
-    items: [
-      {
-        label: t('Info'),
-        href: '/info',
-      },
-      {
-        type: DropdownMenuItemType.DIVIDER,
-      },
-      // {
-      //   label: t('Blog'),
-      //   href: 'https://medium.com/orbitalswap',
-      //   type: DropdownMenuItemType.EXTERNAL_LINK,
-      // },
-      // {
-      //   label: t('Voting'),
-      //   href: '/voting',
-      // },
-      {
-        label: t('Docs'),
-        href: 'https://docs.tytan.finance',
-        type: DropdownMenuItemType.EXTERNAL_LINK,
-      },
-    ],
-  },
+  // {
+  //   label: t('Trade'),
+  //   icon: SwapIcon,
+  //   fillIcon: SwapFillIcon,
+  //   href: '/swap',
+  //   showItemsOnMobile: false,
+  //   items: [
+  //     {
+  //       label: t('Swap'),
+  //       href: '/swap',
+  //     },
+  //     {
+  //       label: t('Liquidity'),
+  //       href: '/liquidity',
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: t('Earn'),
+  //   href: '/farms',
+  //   icon: EarnIcon,
+  //   fillIcon: EarnFillIcon,
+  //   items: [
+  //     {
+  //       label: t('Farms'),
+  //       href: '/farms',
+  //     },
+  //     {
+  //       label: t('Pools'),
+  //       href: '/pools',
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: t('Win'),
+  //   href: '/lottery',
+  //   icon: TrophyIcon,
+  //   fillIcon: TrophyFillIcon,
+  //   items: [
+  //     // {
+  //     //   label: t('Trading Competition'),
+  //     //   href: '/competition',
+  //     //   hideSubNav: true,
+  //     // },
+  //     // {
+  //     //   label: t('Prediction'),
+  //     //   href: '/prediction',
+  //     // },
+  //     {
+  //       label: t('Lottery'),
+  //       href: '/lottery',
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: '',
+  //   href: '/info',
+  //   icon: MoreIcon,
+  //   hideSubNav: true,
+  //   items: [
+  //     {
+  //       label: t('Info'),
+  //       href: '/info',
+  //     },
+  //     {
+  //       type: DropdownMenuItemType.DIVIDER,
+  //     },
+  //     // {
+  //     //   label: t('Blog'),
+  //     //   href: 'https://medium.com/orbitalswap',
+  //     //   type: DropdownMenuItemType.EXTERNAL_LINK,
+  //     // },
+  //     // {
+  //     //   label: t('Voting'),
+  //     //   href: '/voting',
+  //     // },
+  //     {
+  //       label: t('Docs'),
+  //       href: 'https://docs.tytan.finance',
+  //       type: DropdownMenuItemType.EXTERNAL_LINK,
+  //     },
+  //   ],
+  // },
 ]
 
 export default config

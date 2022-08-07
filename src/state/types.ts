@@ -56,10 +56,10 @@ export const EMPTY_LIST: TokenAddressMap = {
 }
 
 export enum GAS_PRICE {
-  default = '5',
-  fast = '6',
-  instant = '7',
-  testnet = '10',
+  default = '15',
+  fast = '18',
+  instant = '25',
+  testnet = '25',
 }
 
 export const GAS_PRICE_GWEI = {

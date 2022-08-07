@@ -23,8 +23,8 @@ const priceHelperLps: SerializedFarmConfig[] = [
     pid: null,
     lpSymbol: 'USDibs-BUSD LP',
     lpAddresses: {
-      97: '',
-      56: '0xADB3C33d435cEFd6A43e802cae917D9f9EE15A0b',
+      43113: '',
+      43114: '0xADB3C33d435cEFd6A43e802cae917D9f9EE15A0b',
     },
     token: tokens.usdibs,
     quoteToken: tokens.busd,

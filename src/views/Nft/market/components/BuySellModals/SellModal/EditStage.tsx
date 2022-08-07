@@ -1,4 +1,4 @@
-import { Flex, Grid, Text, Button, Link, LinkExternal, BinanceIcon } from '@pancakeswap/uikit'
+import { Flex, Grid, Text, Button, Link, LinkExternal, AvaxIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
 import { NftToken } from 'state/nftMarket/types'
@@ -44,7 +44,7 @@ const EditStage: React.FC<EditStageProps> = ({
               </Text>
 
               <Flex alignItems="center" justifyContent="flex-end">
-                <BinanceIcon width={16} height={16} mr="4px" />
+                <AvaxIcon width={16} height={16} mr="4px" />
                 <Text small>{lowestPrice}</Text>
               </Flex>
             </>
@@ -53,7 +53,7 @@ const EditStage: React.FC<EditStageProps> = ({
             {t('Your price')}
           </Text>
           <Flex alignItems="center" justifyContent="flex-end">
-            <BinanceIcon width={16} height={16} mr="4px" />
+            <AvaxIcon width={16} height={16} mr="4px" />
             <Text small>{nftToSell?.marketData?.currentAskPrice}</Text>
           </Flex>
         </Grid>

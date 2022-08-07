@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Flex, Grid, Box, Text, Button, BinanceIcon, ErrorIcon, useTooltip, Skeleton } from '@pancakeswap/uikit'
+import { Flex, Grid, Box, Text, Button, AvaxIcon, ErrorIcon, useTooltip, Skeleton } from '@pancakeswap/uikit'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { escapeRegExp } from 'utils'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
@@ -96,7 +96,7 @@ const SetPriceStage: React.FC<SetPriceStageProps> = ({
         </Text>
         <Flex>
           <Flex flex="1" alignItems="center">
-            <BinanceIcon width={24} height={24} mr="4px" />
+            <AvaxIcon width={24} height={24} mr="4px" />
             <Text bold>WBNB</Text>
           </Flex>
           <Flex flex="2">

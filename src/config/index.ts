@@ -10,8 +10,8 @@ BigNumber.config({
 export const BSC_BLOCK_TIME = 3
 
 export const BASE_BSC_SCAN_URLS = {
-  [ChainId.MAINNET]: 'https://bscscan.com',
-  [ChainId.TESTNET]: 'https://testnet.bscscan.com',
+  [ChainId.MAINNET]: 'https://snowtrace.com',
+  [ChainId.TESTNET]: 'https://testnet.snowtrace.com',
 }
 
 // CAKE_PER_BLOCK details

@@ -7,13 +7,13 @@ import { BASE_BSC_SCAN_URLS } from 'config'
 import { nodes } from './getRpcUrl'
 
 const NETWORK_CONFIG = {
-  [ChainId.MAINNET]: {
+  [43114]: {
     name: 'BNB Smart Chain Mainnet',
-    scanURL: BASE_BSC_SCAN_URLS[ChainId.MAINNET],
+    scanURL: BASE_BSC_SCAN_URLS[43114],
   },
-  [ChainId.TESTNET]: {
+  [43113]: {
     name: 'BNB Smart Chain Testnet',
-    scanURL: BASE_BSC_SCAN_URLS[ChainId.TESTNET],
+    scanURL: BASE_BSC_SCAN_URLS[43113],
   },
 }
 
@@ -23,6 +23,7 @@ const NETWORK_CONFIG = {
  */
 export const setupNetwork = async (externalProvider?: ExternalProvider) => {
   const provider = externalProvider || window.ethereum
+  console.log('process.env.NEXT_PUBLIC_CHAIN_ID', process.env.NEXT_PUBLIC_CHAIN_ID)
   const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID, 10) as keyof typeof NETWORK_CONFIG
   if (!NETWORK_CONFIG[chainId]) {
     console.error('Invalid chain id')

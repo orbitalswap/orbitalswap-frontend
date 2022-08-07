@@ -2185,7 +2185,7 @@ export const mainnetTokens = defineTokens({
   ankr: new Token(MAINNET, '0xf307910A4c7bbc79691fD374889b36d8531B08e3', 18, 'ANKR', 'Ankr', 'https://www.ankr.com/'),
   mockBUSD: new Token(
     MAINNET,
-    '0x37f6bde962E640fb2Fd8DB93b934e73baDA9beBd',
+    '0x6Dd61494806CFdF64AB2b56e984Bc7765B62C9bd',
     18,
     'MBUSD',
     'MBUSD',
@@ -2193,7 +2193,7 @@ export const mainnetTokens = defineTokens({
   ),
   mockPresale: new Token(
     MAINNET,
-    '0xb4f5D87f5F9A2a086f17ED8802de9C896b098725',
+    '0x0697EbF639409E33F25e343Dfe3A24EE1d49D9B1',
     18,
     'presale',
     'Mockedpresale',

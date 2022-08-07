@@ -6,7 +6,7 @@ import {
   UserMenuItem,
   UserMenuVariant,
   Box,
-  CronosIcon,
+  BinanceChainIcon,
 } from '@pancakeswap/uikit'
 import Trans from 'components/Trans'
 import { usePendingTransactions } from 'state/transactions/hooks'
@@ -40,9 +40,9 @@ const ChainMenu = () => {
   const UserMenuItems = () => {
     return (
       <>
-        <UserMenuItem as="a" disabled={isWrongNetwork} href="https://cro.orbitalswap.com">
-          <CronosIcon />
-          {t('Cronos Chain')}
+        <UserMenuItem as="a" disabled={isWrongNetwork} href="https://orbitalswap.com">
+          <BinanceChainIcon />
+          {t('Binance Chain')}
         </UserMenuItem>
       </>
     )

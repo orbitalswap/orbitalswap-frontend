@@ -1,4 +1,4 @@
-import { Flex, Grid, Text, Button, Link, BinanceIcon, LinkExternal, useModal } from '@pancakeswap/uikit'
+import { Flex, Grid, Text, Button, Link, AvaxIcon, LinkExternal, useModal } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { nftsBaseUrl, pancakeBunniesAddress } from 'views/Nft/market/constants'
 import { NftToken } from 'state/nftMarket/types'
@@ -47,7 +47,7 @@ const SellStage: React.FC<SellStageProps> = ({
                 {t('Lowest price')}
               </Text>
               <Flex alignItems="center" justifyContent="flex-end">
-                <BinanceIcon width={16} height={16} mr="4px" />
+                <AvaxIcon width={16} height={16} mr="4px" />
                 <Text small>
                   {lowestPrice.toLocaleString(undefined, {
                     minimumFractionDigits: 3,

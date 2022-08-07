@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { Price } from '@orbitalswap/sdk'
-import { Button, Grid, Text, Flex, Box, BinanceIcon, useModal, Skeleton } from '@pancakeswap/uikit'
+import { Button, Grid, Text, Flex, Box, AvaxIcon, useModal, Skeleton } from '@pancakeswap/uikit'
 import { formatNumber } from 'utils/formatBalance'
 import { ContextApi } from 'contexts/Localization/types'
 import { useTranslation } from 'contexts/Localization'
@@ -44,7 +44,7 @@ const Row: React.FC<RowProps> = ({ t, nft, bnbBusdPrice, account, onSuccessSale 
     <>
       <Box pl="24px">
         <Flex justifySelf="flex-start" alignItems="center" width="max-content">
-          <BinanceIcon width="24px" height="24px" mr="8px" />
+          <AvaxIcon width="24px" height="24px" mr="8px" />
           <Text bold>{formatNumber(parseFloat(nft?.marketData?.currentAskPrice), 0, 5)}</Text>
         </Flex>
         {bnbBusdPrice ? (

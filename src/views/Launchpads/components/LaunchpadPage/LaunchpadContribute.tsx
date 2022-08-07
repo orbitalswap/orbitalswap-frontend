@@ -20,7 +20,6 @@ export interface Props {
 const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus }) => {
   const [pendingTx, setPendingTx] = useState(false)
   const { address, minPerTx, maxPerUser, totalRaised, currency, isPrivatesale } = launchpad
-  console.log('currency', currency)
   const { contributedAmount, withdrawableAmount, claimedAmount, whitelisted } = launchpad.userData
   const buyTokenSymbol = currency?.symbol ?? 'BNB'
 

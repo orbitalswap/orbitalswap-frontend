@@ -85,13 +85,13 @@ const launchpads: SerializedLaunchpadConfig[] = [
   {
     id: 1,
     address: {
-      97: '',
-      56: '0xE90081540dF2824ef28Bc81D21381D4DfF90598B',
+      43113: '',
+      43114: '0x466d7949a04919Fe7b6A441f10e9d114362824cb',
     },
     isActive: true,
-    name: 'Test',
-    subTitle: 'Test presale',
-    description: 'Test presale',
+    name: 'Test Avax',
+    subTitle: 'Test presale Avax',
+    description: 'Test presale Avax',
     projectSiteUrl: 'https://www.riptidefi.com/',
     releaseAt: 1659424433,
     currency: serializedTokens.mockBUSD,

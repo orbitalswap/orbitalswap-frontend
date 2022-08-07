@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 import {
   Card,
-  BinanceIcon,
+  AvaxIcon,
   Box,
   BoxProps,
   CameraIcon,
@@ -29,7 +29,7 @@ interface BNBAmountLabelProps extends FlexProps {
 
 export const BNBAmountLabel: React.FC<BNBAmountLabelProps> = ({ amount, ...props }) => (
   <Flex alignItems="center" {...props}>
-    <BinanceIcon width="16px" mx="4px" />
+    <AvaxIcon width="16px" mx="4px" />
     <Text fontWeight="600">
       {amount.toLocaleString(undefined, {
         minimumFractionDigits: 0,
