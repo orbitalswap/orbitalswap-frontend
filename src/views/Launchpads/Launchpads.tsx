@@ -24,8 +24,6 @@ const Launchpads = () => {
 
   useLaunchpadsPageFetch()
 
-  // console.log('launchpads', launchpads)
-
   const router = useRouter()
   const isExact = router.route === '/launchpads'
 
