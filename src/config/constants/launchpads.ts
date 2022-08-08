@@ -86,7 +86,7 @@ const launchpads: SerializedLaunchpadConfig[] = [
     id: 1,
     address: {
       43113: '',
-      43114: '0x466d7949a04919Fe7b6A441f10e9d114362824cb',
+      43114: '0x4bF23a5B759FDb394364c89141010299C4556D05',
     },
     isActive: true,
     name: 'Test Avax',
