@@ -35,10 +35,12 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status
           <Display>{t('Status')}</Display>
           <Text>{status}</Text>
         </Item>
-        <Item>
+       <Item>
           <Display>{t('Sale type')}</Display>
+
           <Text>{isPrivatesale ? 'Private' : 'Public'}</Text>
         </Item>
+
         <Item>
           <Display>{t('Minimum Buy')}</Display>
           <Text>
@@ -55,18 +57,20 @@ const LaunchpadStatusCard: React.FC<LaunchpadStatusProps> = ({ launchpad, status
           <Display>{t('Total Contributors')}</Display>
           <Text>{fundersCounter}</Text>
         </Item>
+
         <Item>
           <Display>{t('You Purchased')}</Display>
           <Text>{contributedAmount.toFixed(2) || 0}</Text>
         </Item>
         <Item>
-          <Display>{t('Total Withrawable')}</Display>
-          <Text>{+withdrawableAmount || 0}</Text>
+          <Display>{t('Total Tokens Bought')}</Display>
+          <Text>{+withdrawableAmount.toFixed(2) || 0}</Text>
         </Item>
-        <Item>
+        {/*<Item>
           <Display>{t('You Claimed')}</Display>
           <Text>{+claimedAmount || 0}</Text>
-        </Item>
+  </Item>*/}
+
       </StyledLaunchpadStatus>
     </>
   )

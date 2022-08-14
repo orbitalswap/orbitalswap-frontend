@@ -56,10 +56,11 @@ const LaunchpadDetails: React.FC<LaunchpadDetailsProps> = ({ launchpad }) => {
           <Display>{t('Hardcap')}</Display>
           <Text>{hardcap.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}</Text>
         </Item>
-        <Item>
+        {/*<Item>
           <Display>{t('Softcap')}</Display>
+
           <Text>{softcap.toNumber().toLocaleString('en-US', { maximumFractionDigits: 3 })} {buyTokenSymbol}</Text>
-        </Item>
+          </Item>*/}
         <Item>
           <Display>{t('TokenPrice')}</Display>
           <Text>{presalePrice.toNumber().toLocaleString('en-US', { maximumFractionDigits: 2 })} {presaleTokenSymbol}</Text>

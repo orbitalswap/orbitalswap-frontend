@@ -96,7 +96,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
           )
         }
         <Text fontSize="14px" color="textSubtle">
-          {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
+          {isFinished ? `Tokens will be airdropped on Avax` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
       </>
     )
@@ -117,7 +117,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
           onClick={onPresentContributeModal}
         />
         <Text fontSize="14px" color="textSubtle">
-          {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
+          {isFinished ? `Tokens will be airdropped on Avax` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
       </>
     )
@@ -138,7 +138,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
           onClick={claim}
         />
         <Text fontSize="14px" color="textSubtle">
-          {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
+          {isFinished ? `Tokens will be airdropped on Avax` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
       </>
     )
@@ -160,7 +160,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
           onClick={claim}
         />
         <Text fontSize="14px" color="textSubtle">
-          {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
+          {isFinished ? `Tokens will be airdropped on Avax` : `${percentOfUserContribution.toFixed(5)}% of total`}
         </Text>
       </>
     )
@@ -202,7 +202,7 @@ const LaunchpadContribute: React.FC<Props> = ({ launchpad, status, toggleStatus 
         onClick={isFinished ? claim : onPresentContributeModal}
       />
       <Text fontSize="14px" color="textSubtle">
-        {isFinished ? `You'll get tokens when you claim` : `${percentOfUserContribution.toFixed(5)}% of total`}
+        {isFinished ? `Tokens will be airdropped on Avax` : `${percentOfUserContribution.toFixed(5)}% of total`}
       </Text>
     </>
   )

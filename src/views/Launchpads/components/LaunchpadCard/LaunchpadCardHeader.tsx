@@ -39,7 +39,7 @@ const Item = styled.div`
   margin-bottom: 4px;
 `
 const LogoItem = styled.div<{ isDark: boolean, launchpadId: number }>`
-  background-image: ${({ isDark, launchpadId }) => (isDark ? `url(/images/launchpads/${launchpadId}.svg)` : `url(/images/launchpads/${launchpadId}-white.svg)`)};
+  background-image: ${({ isDark, launchpadId }) => (isDark ? `url(/images/launchpads/${launchpadId}.png)` : `url(/images/launchpads/${launchpadId}-white.png)`)};
   width: 158px;
   height: 35px;
   background-size: contain;
@@ -51,15 +51,14 @@ const LaunchpadCardHeader: React.FC<LaunchpadCardHeaderProps> = ({ launchpadId, 
   const theme = useTheme();
   return (
     <StyledLaunchpadCardHeader mb="24px">
-      {theme.isDark ? (
-        <img src={`/images/launchpads/${launchpadId}.png`} alt="logo" style={{height: '29px'}} />
-      ) : (
-        <img src={`/images/launchpads/${launchpadId}-white.png`} alt="logo" style={{height: '29px'}} />
-      )}
+     <LogoItem isDark={theme.isDark} launchpadId={launchpadId}/>
+      <Description>{subTitle}</Description>
       <Item>
         <LaunchpadStateTag launchpadState={status} />
       </Item>
+      
     </StyledLaunchpadCardHeader>
+    
   )
 }
 
