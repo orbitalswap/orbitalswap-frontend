@@ -4,7 +4,7 @@ import { SerializedLaunchpadConfig } from './types'
 const serializedTokens = serializeTokens()
 
 const launchpads: SerializedLaunchpadConfig[] = [
-  {
+  /*{
     id: 1,
     address: {
 
@@ -39,7 +39,7 @@ const launchpads: SerializedLaunchpadConfig[] = [
     currency: serializedTokens.busd,
     token: serializedTokens.busd,
 
-  },
+  },*/
 ]
 
 export default launchpads
